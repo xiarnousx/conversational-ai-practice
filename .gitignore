@@ -27,3 +27,25 @@
 # OS
 .DS_Store
 **/Thumbs.db
+
+# devsnap (Next.js)
+devsnap/node_modules/
+devsnap/.next/
+devsnap/out/
+devsnap/build/
+devsnap/coverage/
+devsnap/.pnp
+devsnap/.pnp.*
+devsnap/.yarn/*
+!devsnap/.yarn/patches
+!devsnap/.yarn/plugins
+!devsnap/.yarn/releases
+!devsnap/.yarn/versions
+devsnap/*.pem
+devsnap/npm-debug.log*
+devsnap/yarn-debug.log*
+devsnap/yarn-error.log*
+devsnap/.pnpm-debug.log*
+devsnap/.vercel
+devsnap/*.tsbuildinfo
+devsnap/next-env.d.ts
