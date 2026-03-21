@@ -1,20 +1,27 @@
 # Current Feature
 
-<!-- Feature Name -->
+Prisma + Docker PostgreSQL Setup
 
 ## Status
 
-<!-- Not Started|In Progress|Completed -->
-
-Not Started
+In Progress
 
 ## Goals
 
-<!-- Goals & requirements -->
+- Set up Prisma ORM with Docker PostgreSQL database
+- Create initial schema based on data models in project-overview.md
+- Include NextAuth models (Account, Session, VerificationToken)
+- Add appropriate indexes and cascade deletes
+- Use Prisma 7 (breaking changes — follow upgrade guide)
+- Always create migrations, never push directly
 
 ## Notes
 
-<!-- Any extra notes -->
+- Reference: `@context/features/database-spec.md`
+- Uses the PostgreSQL service defined in `docker-compose.yaml`
+- Use `prisma migrate dev` for all schema changes (via `npm run db:migrate`)
+- DATABASE_URL points to development branch; production branch separate
+- Requires Node.js 22 (Prisma 7 minimum is 20.19+) — use `nvm use 22`
 
 ## History
 
