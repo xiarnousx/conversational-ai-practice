@@ -18,7 +18,7 @@ const typeIconMap: Record<string, LucideIcon> = {
   note: FileText,
   file: File,
   image: ImageIcon,
-  url: Link,
+  link: Link,
 };
 
 interface Collection {

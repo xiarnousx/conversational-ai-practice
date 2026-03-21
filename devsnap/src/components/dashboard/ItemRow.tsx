@@ -10,13 +10,13 @@ import {
 } from "lucide-react";
 
 const typeIconMap: Record<string, { icon: LucideIcon; color: string }> = {
-  Snippet: { icon: Code, color: "text-violet-400" },
-  Prompt: { icon: Sparkles, color: "text-blue-400" },
-  Command: { icon: Terminal, color: "text-emerald-400" },
-  Note: { icon: FileText, color: "text-yellow-400" },
-  File: { icon: File, color: "text-red-400" },
-  Image: { icon: ImageIcon, color: "text-orange-400" },
-  URL: { icon: Link, color: "text-sky-400" },
+  snippet: { icon: Code, color: "text-violet-400" },
+  prompt: { icon: Sparkles, color: "text-blue-400" },
+  command: { icon: Terminal, color: "text-emerald-400" },
+  note: { icon: FileText, color: "text-yellow-400" },
+  file: { icon: File, color: "text-red-400" },
+  image: { icon: ImageIcon, color: "text-orange-400" },
+  link: { icon: Link, color: "text-sky-400" },
 };
 
 interface Item {
