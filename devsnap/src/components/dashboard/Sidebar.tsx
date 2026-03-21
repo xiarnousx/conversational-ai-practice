@@ -19,12 +19,8 @@ import {
 } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import {
-  mockItemTypes,
-  mockCollections,
-  mockUser,
-  mockTypeCounts,
-} from "@/lib/mock-data";
+import type { SidebarItemType } from "@/lib/db/items";
+import type { SidebarCollection } from "@/lib/db/collections";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   code: Code,
@@ -40,26 +36,19 @@ function getTypeSlug(name: string) {
   return name.toLowerCase() + "s";
 }
 
-function getUserInitials(name: string) {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-}
-
 interface SidebarContentProps {
   collapsed?: boolean;
   onToggleCollapse?: () => void;
+  itemTypes: SidebarItemType[];
+  collections: SidebarCollection[];
 }
 
-function SidebarContent({ collapsed = false, onToggleCollapse }: SidebarContentProps) {
+function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collections }: SidebarContentProps) {
   const [typesOpen, setTypesOpen] = useState(true);
   const [collectionsOpen, setCollectionsOpen] = useState(true);
 
-  const favoriteCollections = mockCollections.filter((c) => c.isFavorite);
-  const recentCollections = mockCollections.filter((c) => !c.isFavorite);
+  const favoriteCollections = collections.filter((c) => c.isFavorite);
+  const recentCollections = collections.filter((c) => !c.isFavorite);
 
   return (
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
@@ -106,9 +95,8 @@ function SidebarContent({ collapsed = false, onToggleCollapse }: SidebarContentP
 
           {(typesOpen || collapsed) && (
             <ul className="mt-1 space-y-0.5">
-              {mockItemTypes.map((type) => {
-                const Icon = iconMap[type.icon] ?? File;
-                const count = mockTypeCounts[type.name] ?? 0;
+              {itemTypes.map((type) => {
+                const Icon = iconMap[type.icon.toLowerCase()] ?? File;
                 return (
                   <li key={type.id}>
                     <Link
@@ -127,7 +115,7 @@ function SidebarContent({ collapsed = false, onToggleCollapse }: SidebarContentP
                         <>
                           <span className="flex-1 truncate">{type.name}</span>
                           <span className="text-xs text-sidebar-foreground/40 tabular-nums">
-                            {count}
+                            {type.itemCount}
                           </span>
                         </>
                       )}
@@ -197,7 +185,10 @@ function SidebarContent({ collapsed = false, onToggleCollapse }: SidebarContentP
                             href={`/collections/${col.id}`}
                             className="group flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
                           >
-                            <span className="h-3.5 w-3.5 shrink-0" />
+                            <span
+                              className="h-3.5 w-3.5 shrink-0 rounded-full"
+                              style={{ backgroundColor: col.dominantColor }}
+                            />
                             <span className="flex-1 truncate">{col.name}</span>
                             <span className="text-xs text-sidebar-foreground/40 tabular-nums">
                               {col.itemCount}
@@ -208,6 +199,14 @@ function SidebarContent({ collapsed = false, onToggleCollapse }: SidebarContentP
                     </ul>
                   </div>
                 )}
+
+                {/* View all collections */}
+                <Link
+                  href="/collections"
+                  className="flex items-center gap-2.5 rounded-md px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+                >
+                  View all collections
+                </Link>
               </div>
             )}
           </div>
@@ -220,13 +219,13 @@ function SidebarContent({ collapsed = false, onToggleCollapse }: SidebarContentP
         collapsed && "justify-center"
       )}>
         <div className="h-8 w-8 shrink-0 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground text-xs font-semibold">
-          {getUserInitials(mockUser.name)}
+          DS
         </div>
         {!collapsed && (
           <>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium leading-tight truncate">{mockUser.name}</p>
-              <p className="text-xs text-sidebar-foreground/50 truncate">{mockUser.email}</p>
+              <p className="text-sm font-medium leading-tight truncate">Demo User</p>
+              <p className="text-xs text-sidebar-foreground/50 truncate">demo@devstash.io</p>
             </div>
             <button className="h-7 w-7 flex items-center justify-center rounded-md text-sidebar-foreground/50 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
               <Settings className="h-4 w-4" />
@@ -241,9 +240,11 @@ function SidebarContent({ collapsed = false, onToggleCollapse }: SidebarContentP
 interface SidebarProps {
   mobileOpen: boolean;
   onMobileClose: () => void;
+  itemTypes: SidebarItemType[];
+  collections: SidebarCollection[];
 }
 
-export default function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
+export default function Sidebar({ mobileOpen, onMobileClose, itemTypes, collections }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -258,13 +259,15 @@ export default function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
         <SidebarContent
           collapsed={collapsed}
           onToggleCollapse={() => setCollapsed((c) => !c)}
+          itemTypes={itemTypes}
+          collections={collections}
         />
       </aside>
 
       {/* Mobile drawer */}
       <Sheet open={mobileOpen} onOpenChange={(open) => !open && onMobileClose()}>
         <SheetContent side="left" className="w-60 p-0 border-r border-border bg-sidebar">
-          <SidebarContent />
+          <SidebarContent itemTypes={itemTypes} collections={collections} />
         </SheetContent>
       </Sheet>
     </>

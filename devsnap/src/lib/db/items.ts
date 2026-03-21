@@ -50,3 +50,29 @@ export async function getRecentItems(userId: string): Promise<ItemCardData[]> {
   const items = await fetchItems(userId, { take: 10 });
   return items.map(toCardData);
 }
+
+export interface SidebarItemType {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+  itemCount: number;
+}
+
+export async function getSystemItemTypes(userId: string): Promise<SidebarItemType[]> {
+  const types = await prisma.itemType.findMany({
+    where: { isSystem: true },
+    include: {
+      _count: { select: { items: { where: { userId } } } },
+    },
+    orderBy: { name: "asc" },
+  });
+
+  return types.map((t) => ({
+    id: t.id,
+    name: t.name,
+    icon: t.icon ?? "file",
+    color: t.color ?? "#6b7280",
+    itemCount: t._count.items,
+  }));
+}
