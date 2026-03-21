@@ -28,6 +28,7 @@ interface Collection {
   itemCount: number;
   isFavorite: boolean;
   icons: string[];
+  borderColor: string;
 }
 
 interface CollectionsGridProps {
@@ -47,7 +48,8 @@ export default function CollectionsGrid({ collections }: CollectionsGridProps) {
         {collections.map((col) => (
           <div
             key={col.id}
-            className="group rounded-lg border border-border bg-card p-4 hover:border-border/80 cursor-pointer transition-colors"
+            style={{ borderColor: col.borderColor }}
+            className="group rounded-lg border bg-card p-4 cursor-pointer transition-colors"
           >
             <div className="mb-1 flex items-start justify-between gap-2">
               <div className="flex items-center gap-1.5 min-w-0">

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getCollectionsForUser } from "@/lib/db/collections";
 import StatsCards from "@/components/dashboard/StatsCards";
 import CollectionsGrid from "@/components/dashboard/CollectionsGrid";
 import PinnedItems from "@/components/dashboard/PinnedItems";
@@ -11,17 +12,13 @@ export default async function DashboardPage() {
     select: { id: true },
   });
 
-  const [totalItems, totalCollections, favoriteItems, favoriteCollections, collections, pinnedItems, recentItems] =
+  const [totalItems, totalCollections, favoriteItems, favoriteCollections, collectionsData, pinnedItems, recentItems] =
     await Promise.all([
       prisma.item.count({ where: { userId: user.id } }),
       prisma.collection.count({ where: { userId: user.id } }),
       prisma.item.count({ where: { userId: user.id, isFavorite: true } }),
       prisma.collection.count({ where: { userId: user.id, isFavorite: true } }),
-      prisma.collection.findMany({
-        where: { userId: user.id },
-        include: { items: { include: { type: { select: { name: true } } } } },
-        orderBy: { createdAt: "desc" },
-      }),
+      getCollectionsForUser(user.id),
       prisma.item.findMany({
         where: { userId: user.id, isPinned: true },
         include: {
@@ -40,15 +37,6 @@ export default async function DashboardPage() {
         take: 10,
       }),
     ]);
-
-  const collectionsData = collections.map((col) => ({
-    id: col.id,
-    name: col.name,
-    description: col.description ?? "",
-    itemCount: col.items.length,
-    isFavorite: col.isFavorite,
-    icons: [...new Set(col.items.map((item) => item.type.name))].slice(0, 4),
-  }));
 
   const mapItem = (item: (typeof pinnedItems)[number]) => ({
     id: item.id,
