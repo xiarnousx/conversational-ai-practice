@@ -20,4 +20,4 @@ Not Started
 
 <!-- Keep this updated. Earliest to latest -->
 
-- Project setup and boilerplate cleanup
+- 2026-03-19: Initial Next.js project setup and boilerplate cleanup
