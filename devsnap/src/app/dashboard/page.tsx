@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getCollectionsForUser } from "@/lib/db/collections";
+import { getPinnedItems, getRecentItems } from "@/lib/db/items";
 import StatsCards from "@/components/dashboard/StatsCards";
 import CollectionsGrid from "@/components/dashboard/CollectionsGrid";
 import PinnedItems from "@/components/dashboard/PinnedItems";
@@ -19,34 +20,9 @@ export default async function DashboardPage() {
       prisma.item.count({ where: { userId: user.id, isFavorite: true } }),
       prisma.collection.count({ where: { userId: user.id, isFavorite: true } }),
       getCollectionsForUser(user.id),
-      prisma.item.findMany({
-        where: { userId: user.id, isPinned: true },
-        include: {
-          type: { select: { name: true } },
-          tags: { include: { tag: { select: { name: true } } } },
-        },
-        orderBy: { updatedAt: "desc" },
-      }),
-      prisma.item.findMany({
-        where: { userId: user.id },
-        include: {
-          type: { select: { name: true } },
-          tags: { include: { tag: { select: { name: true } } } },
-        },
-        orderBy: { createdAt: "desc" },
-        take: 10,
-      }),
+      getPinnedItems(user.id),
+      getRecentItems(user.id),
     ]);
-
-  const mapItem = (item: (typeof pinnedItems)[number]) => ({
-    id: item.id,
-    title: item.title,
-    description: item.description ?? "",
-    typeName: item.type.name,
-    tags: item.tags.map((t) => t.tag.name),
-    isPinned: item.isPinned,
-    createdAt: item.createdAt.toISOString(),
-  });
 
   return (
     <div className="space-y-6">
@@ -64,9 +40,9 @@ export default async function DashboardPage() {
 
       <CollectionsGrid collections={collectionsData} />
 
-      <PinnedItems items={pinnedItems.map(mapItem)} />
+      <PinnedItems items={pinnedItems} />
 
-      <RecentItems items={recentItems.map(mapItem)} />
+      <RecentItems items={recentItems} />
     </div>
   );
 }

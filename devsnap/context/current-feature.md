@@ -1,7 +1,5 @@
 # Current Feature
 
-<!-- Feature Name -->
-
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
@@ -10,11 +8,7 @@ Not Started
 
 ## Goals
 
-<!-- Goals & requirements -->
-
 ## Notes
-
-<!-- Any extra notes -->
 
 ## History
 
@@ -27,3 +21,4 @@ Not Started
 - 2026-03-21: Prisma + Docker PostgreSQL setup completed — Prisma 7.5.0 with driver adapter, full schema (all app models + NextAuth v5 models), initial migration applied, db scripts added to package.json
 - 2026-03-21: Seed data script completed — prisma/seed.ts with demo user, 7 system item types, 5 collections and 15 items; dashboard updated to use Prisma instead of mock data
 - 2026-03-21: Dashboard Collections real data — created src/lib/db/collections.ts, collection cards now use real DB data with border color derived from most-used item type per collection
+- 2026-03-21: Dashboard Items real data — created src/lib/db/items.ts, item cards now use real DB data with type-colored left border, type badge, and fixed icon lookup case sensitivity
