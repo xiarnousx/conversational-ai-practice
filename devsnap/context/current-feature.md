@@ -1,23 +1,14 @@
-# Current Feature: Add Pro Badge to Sidebar
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add a "PRO" badge next to the File and Image item types in the sidebar
-- Use the ShadCN UI Badge component
-- Badge should be clean and subtle in appearance
-- "PRO" text must be all uppercase with a small font size
-
 ## Notes
-
-- Only applies to the File and Image item types (pro-only features per project spec)
-- Use ShadCN Badge component — install if not already present
-- Keep the badge minimal so it doesn't clutter the sidebar layout
 
 ## History
 
@@ -32,3 +23,4 @@ In Progress
 - 2026-03-21: Dashboard Collections real data — created src/lib/db/collections.ts, collection cards now use real DB data with border color derived from most-used item type per collection
 - 2026-03-21: Dashboard Items real data — created src/lib/db/items.ts, item cards now use real DB data with type-colored left border, type badge, and fixed icon lookup case sensitivity
 - 2026-03-21: Stats & Sidebar real data — sidebar item types and collections now use DB data; colored circle for recent collections based on dominant item type; "View all collections" link added; mock-data.ts deleted; layout refactored to server component
+- 2026-03-23: Pro badge in sidebar — added ShadCN Badge component; subtle uppercase PRO badge rendered next to File and Image item types in sidebar navigation
