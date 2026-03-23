@@ -18,9 +18,12 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { SidebarItemType } from "@/lib/db/items";
 import type { SidebarCollection } from "@/lib/db/collections";
+
+const PRO_TYPES = new Set(["file", "image"]);
 
 const iconMap: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   code: Code,
@@ -114,6 +117,14 @@ function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collec
                       {!collapsed && (
                         <>
                           <span className="flex-1 truncate">{type.name}</span>
+                          {PRO_TYPES.has(type.name) && (
+                            <Badge
+                              variant="outline"
+                              className="text-[9px] font-semibold uppercase tracking-wide px-1 py-0 h-4 border-sidebar-foreground/20 text-sidebar-foreground/40 leading-none"
+                            >
+                              Pro
+                            </Badge>
+                          )}
                           <span className="text-xs text-sidebar-foreground/40 tabular-nums">
                             {type.itemCount}
                           </span>
