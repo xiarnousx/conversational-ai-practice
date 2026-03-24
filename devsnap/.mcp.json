@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "postgres": {
+      "type": "sse",
+      "url": "http://localhost:9000/sse"
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "ctx7sk-931e11b2-e660-4388-a53e-3c5bff84843c"
+      ],
+      "env": {}
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ],
+      "env": {}
+    }
+  }
+}

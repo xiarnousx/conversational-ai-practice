@@ -28,6 +28,18 @@ services:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
       - postgres
+  
+  # claude mcp add --transport sse postgres http://localhost:9000/sse
+  dbmcp:
+    image: crystaldba/postgres-mcp
+    command: ["--transport", "sse", "--sse-host", "0.0.0.0", "--sse-port", "8000"]
+    environment:
+      - DATABASE_URI=postgresql://postgres:postgres@postgres:5432/devsnap
+    ports:
+      - "9000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:
