@@ -10,6 +10,7 @@ import {
   MoreHorizontal,
   LucideIcon,
 } from "lucide-react";
+import type { CollectionCardData } from "@/lib/db/collections";
 
 const typeIconMap: Record<string, LucideIcon> = {
   snippet: Code,
@@ -21,18 +22,8 @@ const typeIconMap: Record<string, LucideIcon> = {
   link: Link,
 };
 
-interface Collection {
-  id: string;
-  name: string;
-  description: string;
-  itemCount: number;
-  isFavorite: boolean;
-  icons: string[];
-  borderColor: string;
-}
-
 interface CollectionsGridProps {
-  collections: Collection[];
+  collections: CollectionCardData[];
 }
 
 export default function CollectionsGrid({ collections }: CollectionsGridProps) {

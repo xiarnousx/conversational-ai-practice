@@ -6,6 +6,8 @@ interface RecentItemsProps {
 }
 
 export default function RecentItems({ items }: RecentItemsProps) {
+  if (items.length === 0) return null;
+
   return (
     <section>
       <h2 className="mb-3 font-semibold text-foreground">Recent Items</h2>

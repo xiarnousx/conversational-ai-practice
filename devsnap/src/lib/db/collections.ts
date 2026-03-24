@@ -15,6 +15,7 @@ export async function getCollectionsForUser(userId: string): Promise<CollectionC
     where: { userId },
     include: {
       items: {
+        take: 50,
         include: {
           type: { select: { name: true, color: true } },
         },
@@ -63,6 +64,7 @@ export async function getSidebarCollections(userId: string): Promise<SidebarColl
     where: { userId },
     include: {
       items: {
+        take: 50,
         include: {
           type: { select: { name: true, color: true } },
         },

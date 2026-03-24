@@ -117,7 +117,7 @@ function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collec
                       {!collapsed && (
                         <>
                           <span className="flex-1 truncate">{type.name}</span>
-                          {PRO_TYPES.has(type.name) && (
+                          {PRO_TYPES.has(type.name.toLowerCase()) && (
                             <Badge
                               variant="outline"
                               className="text-[9px] font-semibold uppercase tracking-wide px-1 py-0 h-4 border-sidebar-foreground/20 text-sidebar-foreground/40 leading-none"

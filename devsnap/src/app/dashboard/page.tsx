@@ -1,17 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import { getCollectionsForUser } from "@/lib/db/collections";
 import { getPinnedItems, getRecentItems } from "@/lib/db/items";
+import { getDemoUser } from "@/lib/db/user";
 import StatsCards from "@/components/dashboard/StatsCards";
 import CollectionsGrid from "@/components/dashboard/CollectionsGrid";
 import PinnedItems from "@/components/dashboard/PinnedItems";
 import RecentItems from "@/components/dashboard/RecentItems";
 
 export default async function DashboardPage() {
-  // Temporary: use the demo user until auth is wired up
-  const user = await prisma.user.findUniqueOrThrow({
-    where: { email: "demo@devstash.io" },
-    select: { id: true },
-  });
+  const user = await getDemoUser();
 
   const [totalItems, totalCollections, favoriteItems, favoriteCollections, collectionsData, pinnedItems, recentItems] =
     await Promise.all([
