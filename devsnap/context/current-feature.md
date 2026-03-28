@@ -1,27 +1,14 @@
-# Current Feature: Auth Credentials — Email/Password Provider
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add Credentials provider for email/password authentication
-- Add `password` field to User model via migration (if not present)
-- Update `auth.config.ts` with Credentials provider placeholder (`authorize: () => null`)
-- Update `auth.ts` to override Credentials with bcrypt validation
-- Create `POST /api/auth/register` route (name, email, password, confirmPassword)
-- GitHub OAuth continues to work after changes
-
 ## Notes
-
-- Use `bcryptjs` for hashing (already installed as a dependency)
-- Split auth config pattern: placeholder in `auth.config.ts`, real logic in `auth.ts`
-- Registration route must: validate passwords match, check duplicate email, hash password, create user
-- Return `{ success, error }` pattern from registration API
-- Test via curl + `/api/auth/signin` built-in NextAuth page
 
 ## History
 
@@ -37,3 +24,4 @@ In Progress
 - 2026-03-23: Pro badge in sidebar — added ShadCN Badge component; subtle uppercase PRO badge rendered next to File and Image item types in sidebar navigation
 - 2026-03-24: Codebase quick wins — getDemoUser() with React cache() in src/lib/db/user.ts; DEMO_USER_EMAIL constant extracted to src/lib/constants.ts; take: 50 cap on nested items in collections queries; empty-state guard in RecentItems; PRO_TYPES lowercase normalization in Sidebar; CollectionsGrid uses imported CollectionCardData type; dashboard loading.tsx skeleton added; bcryptjs moved to dependencies
 - 2026-03-28: Auth Setup — NextAuth v5 (beta) + GitHub OAuth; split auth config for edge compatibility; Prisma adapter with JWT strategy; /dashboard/* protected via src/proxy.ts middleware; session type extended with user.id
+- 2026-03-28: Auth Credentials — Credentials provider added with bcrypt validation; POST /api/auth/register route with password hashing, duplicate check, and input validation; password field was already in User model
