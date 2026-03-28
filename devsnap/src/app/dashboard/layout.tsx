@@ -1,6 +1,7 @@
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import { getSystemItemTypes } from "@/lib/db/items";
 import { getSidebarCollections } from "@/lib/db/collections";
-import { getDemoUser } from "@/lib/db/user";
 import DashboardLayoutClient from "@/components/dashboard/DashboardLayoutClient";
 
 export default async function DashboardLayout({
@@ -8,15 +9,25 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getDemoUser();
+  const session = await auth();
+  if (!session?.user?.id) redirect("/sign-in");
 
+  const userId = session.user.id;
   const [itemTypes, collections] = await Promise.all([
-    getSystemItemTypes(user.id),
-    getSidebarCollections(user.id),
+    getSystemItemTypes(userId),
+    getSidebarCollections(userId),
   ]);
 
   return (
-    <DashboardLayoutClient itemTypes={itemTypes} collections={collections}>
+    <DashboardLayoutClient
+      itemTypes={itemTypes}
+      collections={collections}
+      user={{
+        name: session.user.name,
+        email: session.user.email,
+        image: session.user.image,
+      }}
+    >
       {children}
     </DashboardLayoutClient>
   );

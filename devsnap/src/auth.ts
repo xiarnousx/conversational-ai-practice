@@ -8,6 +8,17 @@ import authConfig from "./auth.config"
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
+  pages: { signIn: "/sign-in" },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user?.id) token.sub = user.id
+      return token
+    },
+    session({ session, token }) {
+      if (token.sub) session.user.id = token.sub
+      return session
+    },
+  },
   ...authConfig,
   providers: [
     ...authConfig.providers,
