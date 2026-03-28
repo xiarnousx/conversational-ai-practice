@@ -1,25 +1,14 @@
-# Current Feature: Auth UI — Sign In, Register & Sign Out
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
-- Create custom `/sign-in` page (email/password fields, GitHub button, link to register)
-- Create custom `/register` page (name, email, password, confirmPassword, submit to `/api/auth/register`, redirect to sign-in)
-- Update sidebar bottom: user avatar (GitHub image or initials fallback), user name, dropdown with Sign Out, clicking avatar goes to `/profile`
-- Form validation and error display on both pages
-- Reusable avatar component handling both image and initials cases
-
 ## Notes
-
-- Replace NextAuth default pages with custom UI
-- Avatar logic: use `image` from session if available (GitHub), otherwise generate initials from name (e.g. "Brad Traversy" → "BT")
-- Initials avatar component should be reusable
-- Middleware must allow `/sign-in` and `/register` without auth
 
 ## History
 
@@ -36,3 +25,4 @@ In Progress
 - 2026-03-24: Codebase quick wins — getDemoUser() with React cache() in src/lib/db/user.ts; DEMO_USER_EMAIL constant extracted to src/lib/constants.ts; take: 50 cap on nested items in collections queries; empty-state guard in RecentItems; PRO_TYPES lowercase normalization in Sidebar; CollectionsGrid uses imported CollectionCardData type; dashboard loading.tsx skeleton added; bcryptjs moved to dependencies
 - 2026-03-28: Auth Setup — NextAuth v5 (beta) + GitHub OAuth; split auth config for edge compatibility; Prisma adapter with JWT strategy; /dashboard/* protected via src/proxy.ts middleware; session type extended with user.id
 - 2026-03-28: Auth Credentials — Credentials provider added with bcrypt validation; POST /api/auth/register route with password hashing, duplicate check, and input validation; password field was already in User model
+- 2026-03-28: Auth UI — Custom /sign-in and /register pages; UserAvatar component (GitHub image or initials); sidebar bottom updated with real user, sign-out dropdown, profile link; JWT/session callbacks for user.id; success toast + auto sign-in on register
