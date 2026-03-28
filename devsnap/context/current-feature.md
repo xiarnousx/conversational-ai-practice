@@ -1,14 +1,27 @@
-# Current Feature
+# Current Feature: Auth Credentials — Email/Password Provider
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-Not Started
+In Progress
 
 ## Goals
 
+- Add Credentials provider for email/password authentication
+- Add `password` field to User model via migration (if not present)
+- Update `auth.config.ts` with Credentials provider placeholder (`authorize: () => null`)
+- Update `auth.ts` to override Credentials with bcrypt validation
+- Create `POST /api/auth/register` route (name, email, password, confirmPassword)
+- GitHub OAuth continues to work after changes
+
 ## Notes
+
+- Use `bcryptjs` for hashing (already installed as a dependency)
+- Split auth config pattern: placeholder in `auth.config.ts`, real logic in `auth.ts`
+- Registration route must: validate passwords match, check duplicate email, hash password, create user
+- Return `{ success, error }` pattern from registration API
+- Test via curl + `/api/auth/signin` built-in NextAuth page
 
 ## History
 
