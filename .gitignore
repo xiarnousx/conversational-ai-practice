@@ -49,3 +49,4 @@ devsnap/.pnpm-debug.log*
 devsnap/.vercel
 devsnap/*.tsbuildinfo
 devsnap/next-env.d.ts
+**/.mcp.json
