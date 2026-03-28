@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Code,
@@ -14,14 +15,29 @@ import {
   ChevronDown,
   PanelLeftClose,
   PanelLeft,
-  Settings,
   ChevronRight,
+  LogOut,
 } from "lucide-react";
+import { signOut } from "next-auth/react";
+
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import UserAvatar from "@/components/UserAvatar";
 import { cn } from "@/lib/utils";
 import type { SidebarItemType } from "@/lib/db/items";
 import type { SidebarCollection } from "@/lib/db/collections";
+
+interface SidebarUser {
+  name?: string | null
+  email?: string | null
+  image?: string | null
+}
 
 const PRO_TYPES = new Set(["file", "image"]);
 
@@ -44,11 +60,13 @@ interface SidebarContentProps {
   onToggleCollapse?: () => void;
   itemTypes: SidebarItemType[];
   collections: SidebarCollection[];
+  user: SidebarUser;
 }
 
-function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collections }: SidebarContentProps) {
+function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collections, user }: SidebarContentProps) {
   const [typesOpen, setTypesOpen] = useState(true);
   const [collectionsOpen, setCollectionsOpen] = useState(true);
+  const router = useRouter();
 
   const favoriteCollections = collections.filter((c) => c.isFavorite);
   const recentCollections = collections.filter((c) => !c.isFavorite);
@@ -226,23 +244,35 @@ function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collec
 
       {/* User area */}
       <div className={cn(
-        "border-t border-sidebar-border p-3 flex items-center gap-2.5",
-        collapsed && "justify-center"
+        "border-t border-sidebar-border p-3",
+        collapsed ? "flex justify-center" : "block"
       )}>
-        <div className="h-8 w-8 shrink-0 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground text-xs font-semibold">
-          DS
-        </div>
-        {!collapsed && (
-          <>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium leading-tight truncate">Demo User</p>
-              <p className="text-xs text-sidebar-foreground/50 truncate">demo@devstash.io</p>
-            </div>
-            <button className="h-7 w-7 flex items-center justify-center rounded-md text-sidebar-foreground/50 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
-              <Settings className="h-4 w-4" />
-            </button>
-          </>
-        )}
+        <DropdownMenu>
+          <DropdownMenuTrigger className={cn(
+            "flex items-center gap-2.5 w-full rounded-md hover:bg-sidebar-accent transition-colors p-1.5 text-left",
+            collapsed && "justify-center p-1"
+          )}>
+            <UserAvatar name={user.name} image={user.image} />
+            {!collapsed && (
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium leading-tight truncate">{user.name ?? "User"}</p>
+                <p className="text-xs text-sidebar-foreground/50 truncate">{user.email}</p>
+              </div>
+            )}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="top" align={collapsed ? "center" : "end"} className="w-48">
+            <DropdownMenuItem onClick={() => router.push("/profile")}>
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() => signOut({ callbackUrl: "/sign-in" })}
+            >
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
@@ -253,9 +283,10 @@ interface SidebarProps {
   onMobileClose: () => void;
   itemTypes: SidebarItemType[];
   collections: SidebarCollection[];
+  user: SidebarUser;
 }
 
-export default function Sidebar({ mobileOpen, onMobileClose, itemTypes, collections }: SidebarProps) {
+export default function Sidebar({ mobileOpen, onMobileClose, itemTypes, collections, user }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -272,13 +303,14 @@ export default function Sidebar({ mobileOpen, onMobileClose, itemTypes, collecti
           onToggleCollapse={() => setCollapsed((c) => !c)}
           itemTypes={itemTypes}
           collections={collections}
+          user={user}
         />
       </aside>
 
       {/* Mobile drawer */}
       <Sheet open={mobileOpen} onOpenChange={(open) => !open && onMobileClose()}>
         <SheetContent side="left" className="w-60 p-0 border-r border-border bg-sidebar">
-          <SidebarContent itemTypes={itemTypes} collections={collections} />
+          <SidebarContent itemTypes={itemTypes} collections={collections} user={user} />
         </SheetContent>
       </Sheet>
     </>

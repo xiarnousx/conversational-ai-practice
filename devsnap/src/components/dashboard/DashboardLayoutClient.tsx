@@ -6,16 +6,24 @@ import Sidebar from "@/components/dashboard/Sidebar";
 import type { SidebarItemType } from "@/lib/db/items";
 import type { SidebarCollection } from "@/lib/db/collections";
 
+interface SidebarUser {
+  name?: string | null
+  email?: string | null
+  image?: string | null
+}
+
 interface DashboardLayoutClientProps {
   children: React.ReactNode;
   itemTypes: SidebarItemType[];
   collections: SidebarCollection[];
+  user: SidebarUser;
 }
 
 export default function DashboardLayoutClient({
   children,
   itemTypes,
   collections,
+  user,
 }: DashboardLayoutClientProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -26,6 +34,7 @@ export default function DashboardLayoutClient({
         onMobileClose={() => setMobileOpen(false)}
         itemTypes={itemTypes}
         collections={collections}
+        user={user}
       />
 
       <div className="flex flex-1 flex-col overflow-hidden">
