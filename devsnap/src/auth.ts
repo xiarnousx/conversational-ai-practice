@@ -41,7 +41,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         const passwordMatch = await bcrypt.compare(password, user.password)
         if (!passwordMatch) return null
 
-        if (!user.emailVerified) throw new UnverifiedEmailError()
+        const skipVerification = process.env.SKIP_EMAIL_VERIFICATION === "true"
+        if (!skipVerification && !user.emailVerified) throw new UnverifiedEmailError()
 
         return { id: user.id, email: user.email, name: user.name, image: user.image }
       },

@@ -34,20 +34,28 @@ export async function POST(request: NextRequest) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12)
+    const skipVerification = process.env.SKIP_EMAIL_VERIFICATION === "true"
 
     await prisma.user.create({
-      data: { name, email, password: hashedPassword },
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        emailVerified: skipVerification ? new Date() : null,
+      },
     })
 
-    // Generate a verification token (expires in 24h)
-    const token = crypto.randomUUID()
-    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
+    if (!skipVerification) {
+      // Generate a verification token (expires in 24h)
+      const token = crypto.randomUUID()
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
 
-    await prisma.verificationToken.create({
-      data: { identifier: email, token, expires },
-    })
+      await prisma.verificationToken.create({
+        data: { identifier: email, token, expires },
+      })
 
-    await sendVerificationEmail(email, token)
+      await sendVerificationEmail(email, token)
+    }
 
     return NextResponse.json({ success: true }, { status: 201 })
   } catch (err) {

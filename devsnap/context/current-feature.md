@@ -1,14 +1,28 @@
-# Current Feature
+# Current Feature: Skip Email Verification in Development
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-Not Started
+In Progress
 
 ## Goals
 
+- Add a `SKIP_EMAIL_VERIFICATION` environment variable that bypasses email verification in development
+- When the flag is enabled, credentials sign-in should succeed even if `emailVerified` is null
+- When the flag is enabled, the register flow should not send a verification email and should auto-verify the user
+- Production behavior (verification required) must remain unchanged when the flag is off
+
 ## Notes
+
+- The Resend service currently has no domain configured, making email delivery impossible in development
+- The toggle should be an env var (e.g. `SKIP_EMAIL_VERIFICATION=true`) checked server-side only
+- Add the variable to `.env.local` (or `.env`) with a comment explaining it is dev-only
+- Add to `.env.example` (if it exists) as `SKIP_EMAIL_VERIFICATION=false` with a comment
+- Relevant files to change:
+  - `src/app/api/auth/[...nextauth]/route.ts` or auth config — sign-in blocked for unverified users
+  - `src/app/api/auth/register/route.ts` — sends verification email on register
+  - Possibly `src/lib/auth.ts` or wherever credentials sign-in validation lives
 
 ## History
 
