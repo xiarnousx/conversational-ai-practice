@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
+import { sendVerificationEmail } from "@/lib/email"
 
 export async function POST(request: NextRequest) {
   try {
@@ -38,8 +39,19 @@ export async function POST(request: NextRequest) {
       data: { name, email, password: hashedPassword },
     })
 
+    // Generate a verification token (expires in 24h)
+    const token = crypto.randomUUID()
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
+
+    await prisma.verificationToken.create({
+      data: { identifier: email, token, expires },
+    })
+
+    await sendVerificationEmail(email, token)
+
     return NextResponse.json({ success: true }, { status: 201 })
-  } catch {
+  } catch (err) {
+    console.error("[register]", err)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

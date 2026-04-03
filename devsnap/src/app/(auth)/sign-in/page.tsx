@@ -30,6 +30,11 @@ function SignInForm() {
 
     setLoading(false)
 
+    if (result?.code === "email-not-verified") {
+      router.push(`/verify-email?email=${encodeURIComponent(email)}`)
+      return
+    }
+
     if (result?.error) {
       setError("Invalid email or password.")
     } else {

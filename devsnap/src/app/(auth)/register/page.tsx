@@ -1,10 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
@@ -43,16 +41,8 @@ export default function RegisterPage() {
       return
     }
 
-    toast.success("Account created! Signing you in…")
-
-    const result = await signIn("credentials", { email, password, redirect: false })
     setLoading(false)
-
-    if (result?.error) {
-      router.push("/sign-in")
-    } else {
-      router.push("/dashboard")
-    }
+    router.push(`/verify-email?email=${encodeURIComponent(email)}`)
   }
 
   return (

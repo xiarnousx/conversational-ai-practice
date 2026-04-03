@@ -1,14 +1,17 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 import { getCollectionsForUser } from "@/lib/db/collections";
 import { getPinnedItems, getRecentItems } from "@/lib/db/items";
-import { getDemoUser } from "@/lib/db/user";
 import StatsCards from "@/components/dashboard/StatsCards";
 import CollectionsGrid from "@/components/dashboard/CollectionsGrid";
 import PinnedItems from "@/components/dashboard/PinnedItems";
 import RecentItems from "@/components/dashboard/RecentItems";
 
 export default async function DashboardPage() {
-  const user = await getDemoUser();
+  const session = await auth();
+  if (!session?.user?.id) redirect("/sign-in");
+  const user = { id: session.user.id };
 
   const [totalItems, totalCollections, favoriteItems, favoriteCollections, collectionsData, pinnedItems, recentItems] =
     await Promise.all([
