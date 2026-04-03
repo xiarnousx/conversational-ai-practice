@@ -1,28 +1,14 @@
-# Current Feature: Skip Email Verification in Development
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add a `SKIP_EMAIL_VERIFICATION` environment variable that bypasses email verification in development
-- When the flag is enabled, credentials sign-in should succeed even if `emailVerified` is null
-- When the flag is enabled, the register flow should not send a verification email and should auto-verify the user
-- Production behavior (verification required) must remain unchanged when the flag is off
-
 ## Notes
-
-- The Resend service currently has no domain configured, making email delivery impossible in development
-- The toggle should be an env var (e.g. `SKIP_EMAIL_VERIFICATION=true`) checked server-side only
-- Add the variable to `.env.local` (or `.env`) with a comment explaining it is dev-only
-- Add to `.env.example` (if it exists) as `SKIP_EMAIL_VERIFICATION=false` with a comment
-- Relevant files to change:
-  - `src/app/api/auth/[...nextauth]/route.ts` or auth config — sign-in blocked for unverified users
-  - `src/app/api/auth/register/route.ts` — sends verification email on register
-  - Possibly `src/lib/auth.ts` or wherever credentials sign-in validation lives
 
 ## History
 
@@ -41,3 +27,4 @@ In Progress
 - 2026-03-28: Auth Credentials — Credentials provider added with bcrypt validation; POST /api/auth/register route with password hashing, duplicate check, and input validation; password field was already in User model
 - 2026-03-28: Auth UI — Custom /sign-in and /register pages; UserAvatar component (GitHub image or initials); sidebar bottom updated with real user, sign-out dropdown, profile link; JWT/session callbacks for user.id; success toast + auto sign-in on register
 - 2026-04-03: Email Verification — Resend integration; verification token stored in VerificationToken table (24h expiry); /api/auth/verify-email verifies and sets emailVerified; /verify-email page with resend option; credentials sign-in blocked for unverified users; dashboard page migrated from demo user to real session user
+- 2026-04-03: Skip Email Verification dev flag — SKIP_EMAIL_VERIFICATION=true in .env bypasses email check on sign-in and auto-verifies on register; production flow unchanged when flag is off
