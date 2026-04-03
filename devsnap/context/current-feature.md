@@ -1,28 +1,14 @@
-# Current Feature: Email Verification on Register
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
-- After registration, send a verification email with a unique token link via Resend
-- New accounts are marked as unverified until the link is clicked
-- Clicking the link marks the account as verified and redirects to the dashboard
-- Unverified users are blocked from accessing protected routes (or shown a warning)
-- Resend verification email option available (e.g., on sign-in or a dedicated page)
-
 ## Notes
-
-- Use the `emailVerified` field on the `User` model (already part of NextAuth v5 schema)
-- Generate a secure token (e.g., `crypto.randomUUID()`) stored in the `VerificationToken` table (also already in schema)
-- Send email via the `resend` npm package using `RESEND_API_KEY` from `.env`
-- Token should expire (e.g., 24 hours)
-- The verification link should be something like `/api/auth/verify-email?token=xxx`
-- On successful verification, sign the user in or redirect to sign-in
-- Guard unverified users in middleware or server components
 
 ## History
 
@@ -40,3 +26,4 @@ In Progress
 - 2026-03-28: Auth Setup — NextAuth v5 (beta) + GitHub OAuth; split auth config for edge compatibility; Prisma adapter with JWT strategy; /dashboard/* protected via src/proxy.ts middleware; session type extended with user.id
 - 2026-03-28: Auth Credentials — Credentials provider added with bcrypt validation; POST /api/auth/register route with password hashing, duplicate check, and input validation; password field was already in User model
 - 2026-03-28: Auth UI — Custom /sign-in and /register pages; UserAvatar component (GitHub image or initials); sidebar bottom updated with real user, sign-out dropdown, profile link; JWT/session callbacks for user.id; success toast + auto sign-in on register
+- 2026-04-03: Email Verification — Resend integration; verification token stored in VerificationToken table (24h expiry); /api/auth/verify-email verifies and sets emailVerified; /verify-email page with resend option; credentials sign-in blocked for unverified users; dashboard page migrated from demo user to real session user
