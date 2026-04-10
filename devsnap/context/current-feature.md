@@ -1,14 +1,27 @@
-# Current Feature
+# Current Feature: Forgot Password
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-Not Started
+In Progress
 
 ## Goals
 
+- "Forgot password?" link on the sign-in page opens a request form
+- User submits their email; a reset email is sent via Resend with a time-limited token link (1h expiry)
+- Clicking the link opens a reset-password page where the user sets a new password
+- Token is validated server-side (exists, not expired, not already used)
+- On success, password is updated and token is invalidated; user is redirected to sign-in
+- Credentials-only flow — GitHub OAuth users without a password are shown a helpful message
+- Error states handled: unknown email (silent/generic), expired token, invalid token
+
 ## Notes
+
+- Reuse the existing `VerificationToken` table (nextauth model) for storing reset tokens — same `identifier` + `token` + `expires` structure; prefix identifier with `reset:` to distinguish from email-verification tokens
+- Send emails via the existing Resend setup (`src/lib/resend.ts` or equivalent)
+- Follow the existing auth page style (`/sign-in`, `/register`, `/verify-email`)
+- No new DB migration needed if reusing `VerificationToken`
 
 ## History
 

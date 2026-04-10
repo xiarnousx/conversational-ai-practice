@@ -11,6 +11,7 @@ function SignInForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard"
+  const passwordReset = searchParams.get("reset") === "1"
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -66,6 +67,11 @@ function SignInForm() {
       </div>
 
       <form onSubmit={handleCredentials} className="space-y-4">
+        {passwordReset && (
+          <p className="text-sm text-green-500 text-center">
+            Password updated. You can now sign in.
+          </p>
+        )}
         {error && (
           <p className="text-sm text-destructive text-center">{error}</p>
         )}
@@ -86,6 +92,11 @@ function SignInForm() {
             required
             autoComplete="current-password"
           />
+        </div>
+        <div className="flex justify-end">
+          <Link href="/forgot-password" className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground">
+            Forgot password?
+          </Link>
         </div>
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? "Signing in…" : "Sign in"}
