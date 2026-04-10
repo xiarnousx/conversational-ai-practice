@@ -1,30 +1,14 @@
-# Current Feature: Populate User mark@gmail with Sample Data
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
-- Find or create the user with email mark@gmail in the database
-- Create several collections for the user (e.g. React Patterns, Python Scripts, AI Prompts, DevOps Commands)
-- Insert a variety of items across all system item types: Snippet, Prompt, Note, Command, URL, File, Image
-- Items should be realistic and varied (code snippets, terminal commands, AI prompts, useful links, notes)
-- Assign items to collections appropriately
-- Some items should be marked as pinned or favorited
-- All operations performed directly via the PostgreSQL MCP server (no UI)
-- Save all executed SQL queries to `context/summary/populate-mark-queries.md`
-
 ## Notes
-
-- Use `mcp__postgres__execute_sql` for all inserts
-- Reuse existing system ItemType records (do not create new ones)
-- User mark@gmail may not exist yet — check first, create if missing (null password is fine for a demo/test user)
-- Respect the schema: Item requires `userId`, `typeId`, `title`, `contentType` (text | file)
-- Tag a few items with relevant tags via the Tag + ItemTag tables
-- All SQL run during this session must be logged to `context/summary/populate-mark-queries.md`
 
 ## History
 
@@ -46,3 +30,4 @@ In Progress
 - 2026-04-03: Skip Email Verification dev flag — SKIP_EMAIL_VERIFICATION=true in .env bypasses email check on sign-in and auto-verifies on register; production flow unchanged when flag is off
 - 2026-04-10: Forgot Password — /forgot-password request form and /reset-password page; POST /api/auth/forgot-password creates 1h token in VerificationToken (reset: prefix) and sends email via Resend; POST /api/auth/reset-password validates token, hashes new password, invalidates token; "Forgot password?" link on sign-in; GitHub OAuth-only accounts shown helpful message; unknown emails handled silently; reset URL logged to console in development (Resend skipped)
 - 2026-04-10: Profile Page — /profile route (protected); user info card with avatar, name, email, member since date; usage stats (total items, collections, breakdown by item type); change password form (email users only, hidden for OAuth); delete account with shadcn Dialog confirmation; POST /api/auth/change-password and DELETE /api/auth/delete-account API routes
+- 2026-04-10: Seed mark@gmail.com — seeded 7 system item types, 5 collections (React Patterns, Python Scripts, AI Prompts, DevOps Commands, Useful Links), 29 items across all 7 type categories, 9 tags, 21 tag associations via PostgreSQL MCP; query log saved to summaries/2026-04-10.mark-data.md
