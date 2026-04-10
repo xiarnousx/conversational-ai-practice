@@ -1,14 +1,30 @@
-# Current Feature
+# Current Feature: Populate User mark@gmail with Sample Data
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-Not Started
+In Progress
 
 ## Goals
 
+- Find or create the user with email mark@gmail in the database
+- Create several collections for the user (e.g. React Patterns, Python Scripts, AI Prompts, DevOps Commands)
+- Insert a variety of items across all system item types: Snippet, Prompt, Note, Command, URL, File, Image
+- Items should be realistic and varied (code snippets, terminal commands, AI prompts, useful links, notes)
+- Assign items to collections appropriately
+- Some items should be marked as pinned or favorited
+- All operations performed directly via the PostgreSQL MCP server (no UI)
+- Save all executed SQL queries to `context/summary/populate-mark-queries.md`
+
 ## Notes
+
+- Use `mcp__postgres__execute_sql` for all inserts
+- Reuse existing system ItemType records (do not create new ones)
+- User mark@gmail may not exist yet — check first, create if missing (null password is fine for a demo/test user)
+- Respect the schema: Item requires `userId`, `typeId`, `title`, `contentType` (text | file)
+- Tag a few items with relevant tags via the Tag + ItemTag tables
+- All SQL run during this session must be logged to `context/summary/populate-mark-queries.md`
 
 ## History
 
