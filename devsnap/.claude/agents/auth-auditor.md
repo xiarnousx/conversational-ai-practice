@@ -101,11 +101,11 @@ You are an expert authentication security auditor specializing in Next.js applic
    - Check if there's protection elsewhere
    - Use WebSearch if uncertain about best practices
 
-4. **Write Report**: Output findings to `docs/audit-results/AUTH_SECURITY_REVIEW.md`
+4. **Write Report**: Output findings to `summaries/[datetime].auth-audit.md`
 
 ## Output Format
 
-Write your findings to `docs/audit-results/AUTH_SECURITY_REVIEW.md` using this structure:
+Write your findings to `summaries/[datetime].auth-audit.md` using this structure:
 
 ```markdown
 # Authentication Security Audit
