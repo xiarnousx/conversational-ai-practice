@@ -1,39 +1,14 @@
-# Current Feature: Rate Limiting for Auth
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add rate limiting to all auth-related API routes to prevent brute force and abuse
-- Create a reusable `src/lib/rate-limit.ts` utility backed by Redis
-- Use sliding window algorithm with IP and email-based keying
-- Return 429 responses with `Retry-After` header and user-friendly error messages
-- Display rate limit errors via toast on the frontend
-- Fail open (allow requests) when Redis is unavailable
-
 ## Notes
-
-### Endpoints to Protect
-
-| Endpoint | Limit | Window | Key By |
-|----------|-------|--------|--------|
-| `/api/auth/callback/credentials` (login) | 5 attempts | 15 min | IP + email |
-| `/api/auth/register` | 3 attempts | 1 hour | IP |
-| `/api/auth/forgot-password` | 3 attempts | 1 hour | IP |
-| `/api/auth/reset-password` | 5 attempts | 15 min | IP |
-| `/api/auth/resend-verification` | 3 attempts | 15 min | IP + email |
-
-### Implementation Details
-
-- Redis docker-compose service added for local development
-- Environment variable: `REDIS_REST_URL`
-- Rate limit utility returns `{ success, remaining, reset }`
-- Extract IP from `x-forwarded-for` header (Vercel) or request
-- Login limiting with NextAuth credentials may need a custom sign-in handler
 
 ## History
 
@@ -56,3 +31,4 @@ In Progress
 - 2026-04-10: Forgot Password — /forgot-password request form and /reset-password page; POST /api/auth/forgot-password creates 1h token in VerificationToken (reset: prefix) and sends email via Resend; POST /api/auth/reset-password validates token, hashes new password, invalidates token; "Forgot password?" link on sign-in; GitHub OAuth-only accounts shown helpful message; unknown emails handled silently; reset URL logged to console in development (Resend skipped)
 - 2026-04-10: Profile Page — /profile route (protected); user info card with avatar, name, email, member since date; usage stats (total items, collections, breakdown by item type); change password form (email users only, hidden for OAuth); delete account with shadcn Dialog confirmation; POST /api/auth/change-password and DELETE /api/auth/delete-account API routes
 - 2026-04-10: Seed mark@gmail.com — seeded 7 system item types, 5 collections (React Patterns, Python Scripts, AI Prompts, DevOps Commands, Useful Links), 29 items across all 7 type categories, 9 tags, 21 tag associations via PostgreSQL MCP; query log saved to summaries/2026-04-10.mark-data.md
+- 2026-04-10: Rate Limiting for Auth — sliding window Redis rate limiting on all auth endpoints (login 5/15min IP+email, register/forgot-password 3/1hr IP, reset-password 5/15min IP, resend-verification 3/15min IP+email); src/lib/rate-limit.ts utility with ioredis; 429 + Retry-After header; fail-open when Redis unavailable; sign-in page handles rate-limited error code
