@@ -15,6 +15,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - devsnap-network
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -28,7 +30,9 @@ services:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
       - postgres
-  
+    networks:
+      - devsnap-network
+
   # claude mcp add --transport sse postgres http://localhost:9000/sse
   dbmcp:
     image: crystaldba/postgres-mcp
@@ -40,7 +44,29 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - devsnap-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: devsnap-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - devsnap-network
+
+networks:
+  devsnap-network:
+    driver: bridge
 
 volumes:
   postgres_data:
   pgadmin_data:
+  redis_data:

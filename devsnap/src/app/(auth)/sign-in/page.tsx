@@ -36,6 +36,11 @@ function SignInForm() {
       return
     }
 
+    if (result?.code === "rate-limited") {
+      setError("Too many sign-in attempts. Please try again in 15 minutes.")
+      return
+    }
+
     if (result?.error) {
       setError("Invalid email or password.")
     } else {

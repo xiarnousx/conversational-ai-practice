@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
+import { rateLimit, getIp, rateLimitResponse } from "@/lib/rate-limit"
 
 export async function POST(request: NextRequest) {
+  const ip = getIp(request)
+  const rl = await rateLimit({ key: `reset-password:${ip}`, limit: 5, windowSeconds: 15 * 60 })
+  if (!rl.success) return rateLimitResponse(rl.reset)
+
   try {
     const { email, token, password } = (await request.json()) as {
       email: string

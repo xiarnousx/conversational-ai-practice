@@ -1,14 +1,24 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendVerificationEmail } from "@/lib/email"
+import { rateLimit, getIp, rateLimitResponse } from "@/lib/rate-limit"
 
 export async function POST(request: NextRequest) {
+  const ip = getIp(request)
+
   try {
     const { email } = (await request.json()) as { email: string }
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
     }
+
+    const rl = await rateLimit({
+      key: `resend-verification:${ip}:${email}`,
+      limit: 3,
+      windowSeconds: 15 * 60,
+    })
+    if (!rl.success) return rateLimitResponse(rl.reset)
 
     const user = await prisma.user.findUnique({ where: { email } })
 

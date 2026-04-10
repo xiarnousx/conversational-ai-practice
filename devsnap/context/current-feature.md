@@ -1,14 +1,39 @@
-# Current Feature
+# Current Feature: Rate Limiting for Auth
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-Not Started
+In Progress
 
 ## Goals
 
+- Add rate limiting to all auth-related API routes to prevent brute force and abuse
+- Create a reusable `src/lib/rate-limit.ts` utility backed by Redis
+- Use sliding window algorithm with IP and email-based keying
+- Return 429 responses with `Retry-After` header and user-friendly error messages
+- Display rate limit errors via toast on the frontend
+- Fail open (allow requests) when Redis is unavailable
+
 ## Notes
+
+### Endpoints to Protect
+
+| Endpoint | Limit | Window | Key By |
+|----------|-------|--------|--------|
+| `/api/auth/callback/credentials` (login) | 5 attempts | 15 min | IP + email |
+| `/api/auth/register` | 3 attempts | 1 hour | IP |
+| `/api/auth/forgot-password` | 3 attempts | 1 hour | IP |
+| `/api/auth/reset-password` | 5 attempts | 15 min | IP |
+| `/api/auth/resend-verification` | 3 attempts | 15 min | IP + email |
+
+### Implementation Details
+
+- Redis docker-compose service added for local development
+- Environment variable: `REDIS_REST_URL`
+- Rate limit utility returns `{ success, remaining, reset }`
+- Extract IP from `x-forwarded-for` header (Vercel) or request
+- Login limiting with NextAuth credentials may need a custom sign-in handler
 
 ## History
 
