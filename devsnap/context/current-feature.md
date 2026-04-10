@@ -1,27 +1,14 @@
-# Current Feature: Forgot Password
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
-- "Forgot password?" link on the sign-in page opens a request form
-- User submits their email; a reset email is sent via Resend with a time-limited token link (1h expiry)
-- Clicking the link opens a reset-password page where the user sets a new password
-- Token is validated server-side (exists, not expired, not already used)
-- On success, password is updated and token is invalidated; user is redirected to sign-in
-- Credentials-only flow — GitHub OAuth users without a password are shown a helpful message
-- Error states handled: unknown email (silent/generic), expired token, invalid token
-
 ## Notes
-
-- Reuse the existing `VerificationToken` table (nextauth model) for storing reset tokens — same `identifier` + `token` + `expires` structure; prefix identifier with `reset:` to distinguish from email-verification tokens
-- Send emails via the existing Resend setup (`src/lib/resend.ts` or equivalent)
-- Follow the existing auth page style (`/sign-in`, `/register`, `/verify-email`)
-- No new DB migration needed if reusing `VerificationToken`
 
 ## History
 
@@ -41,3 +28,4 @@ In Progress
 - 2026-03-28: Auth UI — Custom /sign-in and /register pages; UserAvatar component (GitHub image or initials); sidebar bottom updated with real user, sign-out dropdown, profile link; JWT/session callbacks for user.id; success toast + auto sign-in on register
 - 2026-04-03: Email Verification — Resend integration; verification token stored in VerificationToken table (24h expiry); /api/auth/verify-email verifies and sets emailVerified; /verify-email page with resend option; credentials sign-in blocked for unverified users; dashboard page migrated from demo user to real session user
 - 2026-04-03: Skip Email Verification dev flag — SKIP_EMAIL_VERIFICATION=true in .env bypasses email check on sign-in and auto-verifies on register; production flow unchanged when flag is off
+- 2026-04-10: Forgot Password — /forgot-password request form and /reset-password page; POST /api/auth/forgot-password creates 1h token in VerificationToken (reset: prefix) and sends email via Resend; POST /api/auth/reset-password validates token, hashes new password, invalidates token; "Forgot password?" link on sign-in; GitHub OAuth-only accounts shown helpful message; unknown emails handled silently; reset URL logged to console in development (Resend skipped)
