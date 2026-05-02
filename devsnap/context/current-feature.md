@@ -1,33 +1,14 @@
-# Current Feature: Item Drawer — Edit Mode
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
-- Edit button in the item drawer action bar toggles inline edit mode (same drawer stays open)
-- In edit mode, action bar is replaced with Save and Cancel buttons
-- Cancel discards changes and returns to view mode
-- Save persists changes via server action, returns to view mode, refreshes drawer data, and shows a toast
-- Editable fields for all types: Title (required), Description, Tags (comma-separated input)
-- Type-specific editable fields: Content (snippet/prompt/command/note), Language (snippet/command), URL (link)
-- Non-editable in edit mode: item type, collections, created/updated dates
-- Zod validation in server action: title non-empty, url valid if present, tags as trimmed string array
-- `updateItem(itemId, data)` server action in `src/actions/items.ts` with auth ownership check
-- `updateItem` query function in `src/lib/db/items.ts` — disconnect/connect-or-create tags, return updated `ItemDetail`
-- Save button disabled client-side when title is empty
-- Call `router.refresh()` after save so the underlying item list reflects changes
-
 ## Notes
-
-- No form library — use controlled inputs with local state
-- Content textarea does not need to be a code editor (that comes later)
-- Zod is the source of truth for validation; client-side disable is only a UX guard
-- Tag handling: disconnect all existing tags on update, then connect-or-create new ones
-- Return updated `ItemDetail` from the server action so drawer can refresh without a second fetch
 
 ## History
 
@@ -55,3 +36,4 @@ In Progress
 - 2026-05-02: Vitest setup — vitest + vite-tsconfig-paths + @vitest/coverage-v8 installed; vitest.config.mts with node environment and @/* path alias; npm test / test:watch / test:coverage scripts; example tests for cn() and rate-limit pure functions in src/lib/__tests__/; ai-interaction.md workflow updated to include npm test in the Test step
 - 2026-05-02: Item List 3-Column Grid — items listing grid at /items/[type] updated to 3 columns on lg screens; responsive: 1-col mobile, 2-col md, 3-col lg
 - 2026-05-02: Item Drawer — right-side Sheet opens on ItemRow click; GET /api/items/[id] with auth; getItemById() in src/lib/db/items.ts; ItemDrawerProvider manages state; action bar (Favorite/Pin/Copy/Edit/Delete); detail sections (description, content, url, tags, collections, dates); loading skeleton; 8 unit tests for getItemById transformation
+- 2026-05-02: Item Drawer Edit Mode — Edit button toggles inline edit mode in same drawer; Save/Cancel replace action bar; controlled inputs for title, description, tags (all types) + content/language/url (type-specific); updateItem server action in src/actions/items.ts with Zod validation and auth ownership check; updateItem db query in src/lib/db/items.ts with tag disconnect/connect-or-create; router.refresh() syncs item list; shadcn textarea+label added; zod installed; 15 new unit tests
