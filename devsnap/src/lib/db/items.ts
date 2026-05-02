@@ -111,6 +111,70 @@ export async function getItemById(userId: string, itemId: string): Promise<ItemD
   }
 }
 
+export interface UpdateItemData {
+  title: string
+  description?: string | null
+  content?: string | null
+  language?: string | null
+  url?: string | null
+  tags: string[]
+}
+
+export async function updateItem(
+  userId: string,
+  itemId: string,
+  data: UpdateItemData
+): Promise<ItemDetail | null> {
+  const existing = await prisma.item.findFirst({ where: { id: itemId, userId } })
+  if (!existing) return null
+
+  const updated = await prisma.item.update({
+    where: { id: itemId },
+    data: {
+      title: data.title,
+      description: data.description ?? null,
+      content: data.content ?? null,
+      language: data.language ?? null,
+      url: data.url ?? null,
+      tags: {
+        deleteMany: {},
+        create: data.tags.map((name) => ({
+          tag: {
+            connectOrCreate: {
+              where: { userId_name: { name, userId } },
+              create: { name, userId },
+            },
+          },
+        })),
+      },
+    },
+    include: {
+      type: { select: { name: true, color: true } },
+      tags: { include: { tag: { select: { name: true } } } },
+      collection: { select: { id: true, name: true } },
+    },
+  })
+
+  return {
+    id: updated.id,
+    title: updated.title,
+    description: updated.description,
+    content: updated.content,
+    language: updated.language,
+    url: updated.url,
+    typeName: updated.type.name,
+    typeColor: updated.type.color ?? "#6b7280",
+    tags: updated.tags.map((t) => t.tag.name),
+    collections: updated.collection
+      ? [{ id: updated.collection.id, name: updated.collection.name }]
+      : [],
+    isFavorite: updated.isFavorite,
+    isPinned: updated.isPinned,
+    createdAt: updated.createdAt.toISOString(),
+    updatedAt: updated.updatedAt.toISOString(),
+  }
+}
+
 export interface SidebarItemType {
   id: string;
   name: string;
