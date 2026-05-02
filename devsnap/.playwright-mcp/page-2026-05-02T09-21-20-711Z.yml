@@ -1,0 +1,229 @@
+- generic [ref=e1]:
+  - generic [ref=e32]:
+    - complementary [ref=e33]:
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - generic [ref=e36]: DevSnap
+          - button [ref=e37]:
+            - img [ref=e38]
+        - navigation [ref=e41]:
+          - generic [ref=e42]:
+            - button [ref=e232]:
+              - generic [ref=e44]: Types
+              - img [ref=e45]
+            - list [ref=e47]:
+              - listitem [ref=e48]:
+                - link [ref=e233] [cursor=pointer]:
+                  - /url: /items/commands
+                  - img [ref=e50]
+                  - generic [ref=e52]: command
+                  - generic [ref=e53]: "8"
+              - listitem [ref=e54]:
+                - link [ref=e234] [cursor=pointer]:
+                  - /url: /items/files
+                  - img [ref=e56]
+                  - generic [ref=e59]: file
+                  - generic [ref=e60]: Pro
+                  - generic [ref=e61]: "1"
+              - listitem [ref=e62]:
+                - link [ref=e235] [cursor=pointer]:
+                  - /url: /items/images
+                  - img [ref=e64]
+                  - generic [ref=e68]: image
+                  - generic [ref=e69]: Pro
+                  - generic [ref=e70]: "1"
+              - listitem [ref=e71]:
+                - link [ref=e236] [cursor=pointer]:
+                  - /url: /items/links
+                  - img [ref=e73]
+                  - generic [ref=e76]: link
+                  - generic [ref=e77]: "5"
+              - listitem [ref=e78]:
+                - link [ref=e237] [cursor=pointer]:
+                  - /url: /items/notes
+                  - img [ref=e80]
+                  - generic [ref=e83]: note
+                  - generic [ref=e84]: "3"
+              - listitem [ref=e85]:
+                - link [ref=e238] [cursor=pointer]:
+                  - /url: /items/prompts
+                  - img [ref=e87]
+                  - generic [ref=e90]: prompt
+                  - generic [ref=e91]: "5"
+              - listitem [ref=e92]:
+                - link [ref=e239] [cursor=pointer]:
+                  - /url: /items/snippets
+                  - img [ref=e94]
+                  - generic [ref=e97]: snippet
+                  - generic [ref=e98]: "6"
+          - generic [ref=e100]:
+            - button [ref=e240]:
+              - generic [ref=e102]: Collections
+              - img [ref=e103]
+            - generic [ref=e105]:
+              - generic [ref=e106]:
+                - paragraph [ref=e107]: Favorites
+                - list [ref=e108]:
+                  - listitem [ref=e109]:
+                    - link [ref=e241] [cursor=pointer]:
+                      - /url: /collections/01804a73-88a9-434b-990e-8851cc81d7e9
+                      - img [ref=e111]
+                      - generic [ref=e113]: React Patterns
+                      - generic [ref=e114]: "5"
+                  - listitem [ref=e115]:
+                    - link [ref=e242] [cursor=pointer]:
+                      - /url: /collections/907c9ca1-8d55-4abe-a58f-cf0f76399549
+                      - img [ref=e117]
+                      - generic [ref=e119]: AI Prompts
+                      - generic [ref=e120]: "6"
+              - generic [ref=e121]:
+                - paragraph [ref=e122]: Recent
+                - list [ref=e123]:
+                  - listitem [ref=e124]:
+                    - link [ref=e243] [cursor=pointer]:
+                      - /url: /collections/dcdbe604-0b4a-4239-bdae-37744fe1b8c7
+                      - generic [ref=e127]: Python Scripts
+                      - generic [ref=e128]: "5"
+                  - listitem [ref=e129]:
+                    - link [ref=e244] [cursor=pointer]:
+                      - /url: /collections/131678b1-d01f-47bb-b38f-993aaf7adf3d
+                      - generic [ref=e132]: DevOps Commands
+                      - generic [ref=e133]: "7"
+                  - listitem [ref=e134]:
+                    - link [ref=e245] [cursor=pointer]:
+                      - /url: /collections/26ed3379-6555-433f-a7bb-33cc84e06e24
+                      - generic [ref=e137]: Useful Links
+                      - generic [ref=e138]: "5"
+              - link [ref=e246] [cursor=pointer]:
+                - /url: /collections
+                - text: View all collections
+        - button [ref=e247]:
+          - generic [ref=e142]: MT
+          - generic [ref=e143]:
+            - paragraph [ref=e144]: Mark Twain
+            - paragraph [ref=e145]: mark@gmail.com
+    - generic [ref=e146]:
+      - banner [ref=e147]:
+        - generic [ref=e148]:
+          - img [ref=e149]
+          - textbox [ref=e248]:
+            - /placeholder: Search items...
+        - generic [ref=e153]:
+          - button [ref=e249]: New Collection
+          - button [ref=e250]:
+            - img
+            - text: New Item
+      - main [ref=e156]:
+        - generic [ref=e157]:
+          - generic [ref=e158]:
+            - heading [level=1] [ref=e251]: Snippets
+            - paragraph [ref=e160]: 6 items
+          - generic [ref=e161]:
+            - generic [ref=e162] [cursor=pointer]:
+              - img [ref=e164]
+              - generic [ref=e167]:
+                - paragraph [ref=e168]: Batch File Rename
+                - generic [ref=e169]:
+                  - generic [ref=e170]: snippet
+                  - generic [ref=e171]: python
+              - generic [ref=e172]: Apr 10
+            - generic [ref=e173] [cursor=pointer]:
+              - img [ref=e175]
+              - generic [ref=e178]:
+                - paragraph [ref=e179]: Flatten Nested Dict
+                - generic [ref=e180]:
+                  - generic [ref=e181]: snippet
+                  - generic [ref=e182]: python
+              - generic [ref=e183]: Apr 10
+            - generic [ref=e184] [cursor=pointer]:
+              - img [ref=e186]
+              - generic [ref=e189]:
+                - paragraph [ref=e190]: useLocalStorage Hook
+                - generic [ref=e191]:
+                  - generic [ref=e192]: snippet
+                  - generic [ref=e193]: react
+                  - generic [ref=e194]: hooks
+                  - generic [ref=e195]: typescript
+              - generic [ref=e196]: Apr 10
+            - generic [ref=e197] [cursor=pointer]:
+              - img [ref=e199]
+              - generic [ref=e202]:
+                - paragraph [ref=e203]: useDebounce Hook
+                - generic [ref=e204]:
+                  - generic [ref=e205]: snippet
+                  - generic [ref=e206]: react
+                  - generic [ref=e207]: hooks
+              - generic [ref=e208]: Apr 10
+            - generic [ref=e209] [cursor=pointer]:
+              - img [ref=e211]
+              - generic [ref=e214]:
+                - paragraph [ref=e215]: React Error Boundary
+                - generic [ref=e217]: snippet
+              - generic [ref=e218]: Apr 10
+            - generic [ref=e219] [cursor=pointer]:
+              - img [ref=e221]
+              - generic [ref=e224]:
+                - paragraph [ref=e225]: useFetch Hook
+                - generic [ref=e226]:
+                  - generic [ref=e227]: snippet
+                  - generic [ref=e228]: react
+                  - generic [ref=e229]: hooks
+                  - generic [ref=e230]: typescript
+              - generic [ref=e231]: Apr 10
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e26] [cursor=pointer]:
+    - img [ref=e27]
+  - alert [ref=e30]
+  - dialog "Batch File Rename" [ref=e255]:
+    - generic [ref=e256]:
+      - heading "Batch File Rename" [level=2] [ref=e257]
+      - generic [ref=e258]:
+        - generic [ref=e259]: snippet
+        - generic [ref=e260]: python
+    - generic [ref=e261]:
+      - button "Favorite" [ref=e262]:
+        - img
+        - text: Favorite
+      - button "Pin" [ref=e263]:
+        - img
+        - text: Pin
+      - button "Copy" [ref=e264]:
+        - img
+        - text: Copy
+      - button "Edit" [ref=e265]:
+        - img
+        - text: Edit
+      - button "Delete" [ref=e266]:
+        - img
+        - text: Delete
+    - generic [ref=e267]:
+      - generic [ref=e268]:
+        - heading "Description" [level=3] [ref=e269]
+        - paragraph [ref=e270]: Rename files in a folder using regex pattern matching
+      - generic [ref=e271]:
+        - heading "Content" [level=3] [ref=e272]
+        - generic [ref=e273]: "import os import re def batch_rename(folder: str, pattern: str, replacement: str): for filename in os.listdir(folder): new_name = re.sub(pattern, replacement, filename) if new_name != filename: os.rename( os.path.join(folder, filename), os.path.join(folder, new_name) ) print(f\"Renamed: {filename} -> {new_name}\") # Example: remove spaces from all filenames batch_rename(\"./downloads\", r\"\\s+\", \"_\")"
+      - generic [ref=e274]:
+        - heading "Tags" [level=3] [ref=e275]:
+          - img [ref=e276]
+          - text: Tags
+        - generic [ref=e280]: python
+      - generic [ref=e281]:
+        - heading "Collections" [level=3] [ref=e282]:
+          - img [ref=e283]
+          - text: Collections
+        - generic [ref=e288]: Python Scripts
+      - generic [ref=e289]:
+        - heading "Details" [level=3] [ref=e290]:
+          - img [ref=e291]
+          - text: Details
+        - generic [ref=e293]:
+          - generic [ref=e294]:
+            - term [ref=e295]: Created
+            - definition [ref=e296]: April 10, 2026
+          - generic [ref=e297]:
+            - term [ref=e298]: Updated
+            - definition [ref=e299]: April 10, 2026
+    - button "Close" [active] [ref=e300]:
+      - img
+      - generic [ref=e301]: Close
