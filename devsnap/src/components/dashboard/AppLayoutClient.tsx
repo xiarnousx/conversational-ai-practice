@@ -12,19 +12,19 @@ interface SidebarUser {
   image?: string | null
 }
 
-interface DashboardLayoutClientProps {
+interface AppLayoutClientProps {
   children: React.ReactNode;
   itemTypes: SidebarItemType[];
   collections: SidebarCollection[];
   user: SidebarUser;
 }
 
-export default function DashboardLayoutClient({
+export default function AppLayoutClient({
   children,
   itemTypes,
   collections,
   user,
-}: DashboardLayoutClientProps) {
+}: AppLayoutClientProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (

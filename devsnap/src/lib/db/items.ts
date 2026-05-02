@@ -41,6 +41,21 @@ function toCardData(item: ItemWithRelations): ItemCardData {
   };
 }
 
+export async function getItemsByType(userId: string, typeName: string): Promise<ItemCardData[]> {
+  const items = await prisma.item.findMany({
+    where: {
+      userId,
+      type: { name: { equals: typeName, mode: "insensitive" } },
+    },
+    include: {
+      type: { select: { name: true, color: true } },
+      tags: { include: { tag: { select: { name: true } } } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  return items.map(toCardData);
+}
+
 export async function getPinnedItems(userId: string): Promise<ItemCardData[]> {
   const items = await fetchItems(userId, { pinnedOnly: true });
   return items.map(toCardData);

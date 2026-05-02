@@ -2,9 +2,9 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { getSystemItemTypes } from "@/lib/db/items";
 import { getSidebarCollections } from "@/lib/db/collections";
-import DashboardLayoutClient from "@/components/dashboard/DashboardLayoutClient";
+import AppLayoutClient from "@/components/dashboard/AppLayoutClient";
 
-export default async function DashboardLayout({
+export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ export default async function DashboardLayout({
   ]);
 
   return (
-    <DashboardLayoutClient
+    <AppLayoutClient
       itemTypes={itemTypes}
       collections={collections}
       user={{
@@ -29,6 +29,6 @@ export default async function DashboardLayout({
       }}
     >
       {children}
-    </DashboardLayoutClient>
+    </AppLayoutClient>
   );
 }
