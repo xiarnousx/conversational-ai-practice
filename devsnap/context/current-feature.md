@@ -1,24 +1,14 @@
-# Current Feature: Items List View
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
-- Create dynamic route `/items/[type]` (e.g., /items/snippets, /items/notes)
-- Fetch and display items filtered by item type
-- Responsive grid of ItemCard components (two columns on medium+)
-- Each card has left border colored by item type
-- Follow existing codebase patterns
-
 ## Notes
-
-- Route: `/items/[type]` — type param is the item type name (e.g., "snippet", "note")
-- Use existing `ItemCard` component if it exists, or follow its patterns
-- Fetch data server-side via Prisma, filtered by the session user and item type
 
 ## History
 
@@ -42,3 +32,4 @@ In Progress
 - 2026-04-10: Profile Page — /profile route (protected); user info card with avatar, name, email, member since date; usage stats (total items, collections, breakdown by item type); change password form (email users only, hidden for OAuth); delete account with shadcn Dialog confirmation; POST /api/auth/change-password and DELETE /api/auth/delete-account API routes
 - 2026-04-10: Seed mark@gmail.com — seeded 7 system item types, 5 collections (React Patterns, Python Scripts, AI Prompts, DevOps Commands, Useful Links), 29 items across all 7 type categories, 9 tags, 21 tag associations via PostgreSQL MCP; query log saved to summaries/2026-04-10.mark-data.md
 - 2026-04-10: Rate Limiting for Auth — sliding window Redis rate limiting on all auth endpoints (login 5/15min IP+email, register/forgot-password 3/1hr IP, reset-password 5/15min IP, resend-verification 3/15min IP+email); src/lib/rate-limit.ts utility with ioredis; 429 + Retry-After header; fail-open when Redis unavailable; sign-in page handles rate-limited error code
+- 2026-05-02: Items List View — dynamic /items/[type] route with type-filtered items grid (2-col on md+); getItemsByType() added to src/lib/db/items.ts; dashboard layout refactored into shared (app) route group; DashboardLayoutClient renamed to AppLayoutClient; /items/* added to middleware protection
