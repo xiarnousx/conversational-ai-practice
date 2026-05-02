@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Code,
   Sparkles,
@@ -8,6 +10,7 @@ import {
   Link,
   LucideIcon,
 } from "lucide-react";
+import { useItemDrawer } from "@/components/item-drawer";
 
 const typeIconMap: Record<string, { icon: LucideIcon; color: string }> = {
   snippet: { icon: Code, color: "text-violet-400" },
@@ -41,6 +44,7 @@ function formatDate(iso: string) {
 }
 
 export default function ItemRow({ item }: ItemRowProps) {
+  const { openDrawer } = useItemDrawer();
   const typeKey = item.typeName.toLowerCase();
   const typeEntry = typeIconMap[typeKey];
   const Icon = typeEntry?.icon ?? File;
@@ -48,6 +52,7 @@ export default function ItemRow({ item }: ItemRowProps) {
 
   return (
     <div
+      onClick={() => openDrawer(item.id)}
       className="flex items-start gap-3 rounded-lg border border-border bg-card px-4 py-3 hover:border-border/80 cursor-pointer transition-colors border-l-2"
       style={{ borderLeftColor: item.typeColor }}
     >

@@ -66,6 +66,51 @@ export async function getRecentItems(userId: string): Promise<ItemCardData[]> {
   return items.map(toCardData);
 }
 
+export interface ItemDetail {
+  id: string
+  title: string
+  description: string | null
+  content: string | null
+  language: string | null
+  url: string | null
+  typeName: string
+  typeColor: string
+  tags: string[]
+  collections: { id: string; name: string }[]
+  isFavorite: boolean
+  isPinned: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export async function getItemById(userId: string, itemId: string): Promise<ItemDetail | null> {
+  const item = await prisma.item.findFirst({
+    where: { id: itemId, userId },
+    include: {
+      type: { select: { name: true, color: true } },
+      tags: { include: { tag: { select: { name: true } } } },
+      collection: { select: { id: true, name: true } },
+    },
+  })
+  if (!item) return null
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    content: item.content,
+    language: item.language,
+    url: item.url,
+    typeName: item.type.name,
+    typeColor: item.type.color ?? "#6b7280",
+    tags: item.tags.map((t) => t.tag.name),
+    collections: item.collection ? [{ id: item.collection.id, name: item.collection.name }] : [],
+    isFavorite: item.isFavorite,
+    isPinned: item.isPinned,
+    createdAt: item.createdAt.toISOString(),
+    updatedAt: item.updatedAt.toISOString(),
+  }
+}
+
 export interface SidebarItemType {
   id: string;
   name: string;

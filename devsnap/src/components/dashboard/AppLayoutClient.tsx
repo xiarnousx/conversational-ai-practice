@@ -3,6 +3,7 @@
 import { useState } from "react";
 import TopBar from "@/components/dashboard/TopBar";
 import Sidebar from "@/components/dashboard/Sidebar";
+import { ItemDrawerProvider } from "@/components/item-drawer";
 import type { SidebarItemType } from "@/lib/db/items";
 import type { SidebarCollection } from "@/lib/db/collections";
 
@@ -39,7 +40,9 @@ export default function AppLayoutClient({
 
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopBar onMenuClick={() => setMobileOpen(true)} />
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 overflow-auto p-6">
+          <ItemDrawerProvider>{children}</ItemDrawerProvider>
+        </main>
       </div>
     </div>
   );
