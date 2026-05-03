@@ -1,0 +1,349 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]: DevSnap
+          - button [ref=e7]:
+            - img [ref=e8]
+        - navigation [ref=e11]:
+          - generic [ref=e12]:
+            - button [ref=e443]:
+              - generic [ref=e14]: Types
+              - img [ref=e15]
+            - list [ref=e17]:
+              - listitem [ref=e18]:
+                - link [ref=e444] [cursor=pointer]:
+                  - /url: /items/commands
+                  - img [ref=e20]
+                  - generic [ref=e22]: command
+                  - generic [ref=e23]: "8"
+              - listitem [ref=e24]:
+                - link [ref=e445] [cursor=pointer]:
+                  - /url: /items/files
+                  - img [ref=e26]
+                  - generic [ref=e29]: file
+                  - generic [ref=e30]: Pro
+                  - generic [ref=e31]: "1"
+              - listitem [ref=e32]:
+                - link [ref=e446] [cursor=pointer]:
+                  - /url: /items/images
+                  - img [ref=e34]
+                  - generic [ref=e38]: image
+                  - generic [ref=e39]: Pro
+                  - generic [ref=e40]: "1"
+              - listitem [ref=e41]:
+                - link [ref=e447] [cursor=pointer]:
+                  - /url: /items/links
+                  - img [ref=e43]
+                  - generic [ref=e46]: link
+                  - generic [ref=e47]: "5"
+              - listitem [ref=e48]:
+                - link [ref=e448] [cursor=pointer]:
+                  - /url: /items/notes
+                  - img [ref=e50]
+                  - generic [ref=e53]: note
+                  - generic [ref=e54]: "2"
+              - listitem [ref=e55]:
+                - link [ref=e449] [cursor=pointer]:
+                  - /url: /items/prompts
+                  - img [ref=e57]
+                  - generic [ref=e60]: prompt
+                  - generic [ref=e61]: "5"
+              - listitem [ref=e62]:
+                - link [ref=e450] [cursor=pointer]:
+                  - /url: /items/snippets
+                  - img [ref=e64]
+                  - generic [ref=e67]: snippet
+                  - generic [ref=e68]: "6"
+          - generic [ref=e70]:
+            - button [ref=e451]:
+              - generic [ref=e72]: Collections
+              - img [ref=e73]
+            - generic [ref=e75]:
+              - generic [ref=e76]:
+                - paragraph [ref=e77]: Favorites
+                - list [ref=e78]:
+                  - listitem [ref=e79]:
+                    - link [ref=e452] [cursor=pointer]:
+                      - /url: /collections/01804a73-88a9-434b-990e-8851cc81d7e9
+                      - img [ref=e81]
+                      - generic [ref=e83]: React Patterns
+                      - generic [ref=e84]: "5"
+                  - listitem [ref=e85]:
+                    - link [ref=e453] [cursor=pointer]:
+                      - /url: /collections/907c9ca1-8d55-4abe-a58f-cf0f76399549
+                      - img [ref=e87]
+                      - generic [ref=e89]: AI Prompts
+                      - generic [ref=e90]: "5"
+              - generic [ref=e91]:
+                - paragraph [ref=e92]: Recent
+                - list [ref=e93]:
+                  - listitem [ref=e94]:
+                    - link [ref=e454] [cursor=pointer]:
+                      - /url: /collections/dcdbe604-0b4a-4239-bdae-37744fe1b8c7
+                      - generic [ref=e97]: Python Scripts
+                      - generic [ref=e98]: "5"
+                  - listitem [ref=e99]:
+                    - link [ref=e455] [cursor=pointer]:
+                      - /url: /collections/131678b1-d01f-47bb-b38f-993aaf7adf3d
+                      - generic [ref=e102]: DevOps Commands
+                      - generic [ref=e103]: "7"
+                  - listitem [ref=e104]:
+                    - link [ref=e456] [cursor=pointer]:
+                      - /url: /collections/26ed3379-6555-433f-a7bb-33cc84e06e24
+                      - generic [ref=e107]: Useful Links
+                      - generic [ref=e108]: "5"
+              - link [ref=e457] [cursor=pointer]:
+                - /url: /collections
+                - text: View all collections
+        - button [ref=e458]:
+          - generic [ref=e112]: MT
+          - generic [ref=e113]:
+            - paragraph [ref=e114]: Mark Twain
+            - paragraph [ref=e115]: mark@gmail.com
+    - generic [ref=e116]:
+      - banner [ref=e117]:
+        - generic [ref=e118]:
+          - img [ref=e119]
+          - textbox [ref=e459]:
+            - /placeholder: Search items...
+        - button [ref=e460]:
+          - img
+          - text: New Item
+      - main [ref=e125]:
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - heading [level=1] [ref=e461]: Dashboard
+            - paragraph [ref=e129]: Your developer knowledge hub
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - generic [ref=e132]:
+                - img [ref=e133]
+                - generic [ref=e137]: Total Items
+              - paragraph [ref=e138]: "28"
+            - generic [ref=e139]:
+              - generic [ref=e140]:
+                - img [ref=e141]
+                - generic [ref=e143]: Collections
+              - paragraph [ref=e144]: "5"
+            - generic [ref=e145]:
+              - generic [ref=e146]:
+                - img [ref=e147]
+                - generic [ref=e149]: Favorite Items
+              - paragraph [ref=e150]: "11"
+            - generic [ref=e151]:
+              - generic [ref=e152]:
+                - img [ref=e153]
+                - generic [ref=e156]: Favorite Collections
+              - paragraph [ref=e157]: "2"
+          - generic [ref=e158]:
+            - generic [ref=e159]:
+              - heading [level=2] [ref=e462]: Collections
+              - button [ref=e463]: View all
+            - generic [ref=e162]:
+              - generic [ref=e163] [cursor=pointer]:
+                - generic [ref=e164]:
+                  - generic [ref=e165]:
+                    - generic [ref=e166]: React Patterns
+                    - img [ref=e167]
+                  - button [ref=e169]:
+                    - img [ref=e170]
+                - paragraph [ref=e174]: 5 items
+                - paragraph [ref=e175]: Reusable React hooks, components and patterns
+                - generic [ref=e176]:
+                  - img [ref=e178]
+                  - img [ref=e182]
+              - generic [ref=e185] [cursor=pointer]:
+                - generic [ref=e186]:
+                  - generic [ref=e188]: Python Scripts
+                  - button [ref=e189]:
+                    - img [ref=e190]
+                - paragraph [ref=e194]: 5 items
+                - paragraph [ref=e195]: Handy Python utilities and automation scripts
+                - generic [ref=e196]:
+                  - img [ref=e198]
+                  - img [ref=e202]
+                  - img [ref=e205]
+              - generic [ref=e208] [cursor=pointer]:
+                - generic [ref=e209]:
+                  - generic [ref=e210]:
+                    - generic [ref=e211]: AI Prompts
+                    - img [ref=e212]
+                  - button [ref=e214]:
+                    - img [ref=e215]
+                - paragraph [ref=e219]: 5 items
+                - paragraph [ref=e220]: Curated prompts for coding, writing and research
+                - img [ref=e223]
+              - generic [ref=e226] [cursor=pointer]:
+                - generic [ref=e227]:
+                  - generic [ref=e229]: DevOps Commands
+                  - button [ref=e230]:
+                    - img [ref=e231]
+                - paragraph [ref=e235]: 7 items
+                - paragraph [ref=e236]: Docker, git, kubectl and server management
+                - generic [ref=e237]:
+                  - img [ref=e239]
+                  - img [ref=e242]
+              - generic [ref=e245] [cursor=pointer]:
+                - generic [ref=e246]:
+                  - generic [ref=e248]: Useful Links
+                  - button [ref=e249]:
+                    - img [ref=e250]
+                - paragraph [ref=e254]: 5 items
+                - paragraph [ref=e255]: Docs, tools and references I keep coming back to
+                - img [ref=e258]
+          - generic [ref=e261]:
+            - heading [level=2] [ref=e464]: Pinned
+            - generic [ref=e263]:
+              - generic [ref=e264] [cursor=pointer]:
+                - img [ref=e266]
+                - generic [ref=e268]:
+                  - paragraph [ref=e269]: Docker System Cleanup
+                  - generic [ref=e270]:
+                    - generic [ref=e271]: command
+                    - generic [ref=e272]: docker
+                    - generic [ref=e273]: devops
+                - generic [ref=e274]: Apr 10
+              - generic [ref=e275] [cursor=pointer]:
+                - img [ref=e277]
+                - generic [ref=e279]:
+                  - paragraph [ref=e280]: Kill Port Process
+                  - generic [ref=e282]: command
+                - generic [ref=e283]: Apr 10
+              - generic [ref=e284] [cursor=pointer]:
+                - img [ref=e286]
+                - generic [ref=e289]:
+                  - paragraph [ref=e290]: Code Review Assistant
+                  - generic [ref=e291]:
+                    - generic [ref=e292]: prompt
+                    - generic [ref=e293]: ai
+                - generic [ref=e294]: Apr 10
+              - generic [ref=e295] [cursor=pointer]:
+                - img [ref=e297]
+                - generic [ref=e300]:
+                  - paragraph [ref=e301]: Refactor for Readability
+                  - generic [ref=e303]: prompt
+                - generic [ref=e304]: Apr 10
+              - generic [ref=e305] [cursor=pointer]:
+                - img [ref=e307]
+                - generic [ref=e309]:
+                  - paragraph [ref=e310]: Quick HTTP Server
+                  - generic [ref=e312]: command
+                - generic [ref=e313]: Apr 10
+              - generic [ref=e314] [cursor=pointer]:
+                - img [ref=e316]
+                - generic [ref=e319]:
+                  - paragraph [ref=e320]: useLocalStorage Hook
+                  - generic [ref=e321]:
+                    - generic [ref=e322]: snippet
+                    - generic [ref=e323]: react
+                    - generic [ref=e324]: hooks
+                    - generic [ref=e325]: typescript
+                - generic [ref=e326]: Apr 10
+          - generic [ref=e327]:
+            - heading [level=2] [ref=e465]: Recent Items
+            - generic [ref=e329]:
+              - generic [ref=e330] [cursor=pointer]:
+                - img [ref=e332]
+                - generic [ref=e335]:
+                  - paragraph [ref=e336]: Python Environment Cheatsheet
+                  - generic [ref=e338]: note
+                - generic [ref=e339]: Apr 10
+              - generic [ref=e340] [cursor=pointer]:
+                - img [ref=e342]
+                - generic [ref=e345]:
+                  - paragraph [ref=e346]: Docker Compose Template
+                  - generic [ref=e347]:
+                    - generic [ref=e348]: file
+                    - generic [ref=e349]: docker
+                    - generic [ref=e350]: devops
+                - generic [ref=e351]: Apr 10
+              - generic [ref=e352] [cursor=pointer]:
+                - img [ref=e354]
+                - generic [ref=e357]:
+                  - paragraph [ref=e358]: React 19 Key Changes
+                  - generic [ref=e360]: note
+                - generic [ref=e361]: Apr 10
+              - generic [ref=e362] [cursor=pointer]:
+                - img [ref=e364]
+                - generic [ref=e368]:
+                  - paragraph [ref=e369]: System Architecture Diagram
+                  - generic [ref=e371]: image
+                - generic [ref=e372]: Apr 10
+              - generic [ref=e373] [cursor=pointer]:
+                - img [ref=e375]
+                - generic [ref=e378]:
+                  - paragraph [ref=e379]: Next.js Documentation
+                  - generic [ref=e380]:
+                    - generic [ref=e381]: link
+                    - generic [ref=e382]: nextjs
+                - generic [ref=e383]: Apr 10
+              - generic [ref=e384] [cursor=pointer]:
+                - img [ref=e386]
+                - generic [ref=e389]:
+                  - paragraph [ref=e390]: Tailwind CSS v4 Docs
+                  - generic [ref=e392]: link
+                - generic [ref=e393]: Apr 10
+              - generic [ref=e394] [cursor=pointer]:
+                - img [ref=e396]
+                - generic [ref=e399]:
+                  - paragraph [ref=e400]: Prisma ORM Docs
+                  - generic [ref=e402]: link
+                - generic [ref=e403]: Apr 10
+              - generic [ref=e404] [cursor=pointer]:
+                - img [ref=e406]
+                - generic [ref=e409]:
+                  - paragraph [ref=e410]: TypeScript Handbook
+                  - generic [ref=e412]: link
+                - generic [ref=e413]: Apr 10
+              - generic [ref=e414] [cursor=pointer]:
+                - img [ref=e416]
+                - generic [ref=e419]:
+                  - paragraph [ref=e420]: MDN Web Docs
+                  - generic [ref=e422]: link
+                - generic [ref=e423]: Apr 10
+              - generic [ref=e424] [cursor=pointer]:
+                - img [ref=e426]
+                - generic [ref=e428]:
+                  - paragraph [ref=e429]: Kill Port Process
+                  - generic [ref=e431]: command
+                - generic [ref=e432]: Apr 10
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e438] [cursor=pointer]:
+    - img [ref=e439]
+  - alert [ref=e442]
+  - dialog "New Item" [ref=e469]:
+    - heading "New Item" [level=2] [ref=e471]
+    - generic [ref=e472]:
+      - generic [ref=e473]:
+        - generic [ref=e474]: Type
+        - generic [ref=e475]:
+          - button "snippet" [active] [ref=e476]
+          - button "prompt" [ref=e477]
+          - button "command" [ref=e478]
+          - button "note" [ref=e479]
+          - button "link" [ref=e480]
+      - generic [ref=e481]:
+        - generic [ref=e482]: Title *
+        - textbox "Title *" [ref=e483]:
+          - /placeholder: Item title
+      - generic [ref=e484]:
+        - generic [ref=e485]: Description
+        - textbox "Description" [ref=e486]:
+          - /placeholder: Optional description
+      - generic [ref=e487]:
+        - generic [ref=e488]: Content
+        - textbox "Content" [ref=e489]
+      - generic [ref=e490]:
+        - generic [ref=e491]: Language
+        - textbox "Language" [ref=e492]:
+          - /placeholder: e.g. typescript
+      - generic [ref=e493]:
+        - generic [ref=e494]: Tags
+        - textbox "Tags" [ref=e495]:
+          - /placeholder: react, typescript, hooks
+        - paragraph [ref=e496]: Comma-separated
+      - generic [ref=e497]:
+        - button "Cancel" [ref=e498]
+        - button "Create" [disabled]
