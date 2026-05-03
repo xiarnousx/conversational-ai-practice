@@ -21,8 +21,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Calendar, Copy, Layers, Pencil, Pin, Star, Tag, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { updateItem } from "@/actions/items";
+import { updateItem, deleteItem } from "@/actions/items";
 import type { ItemDetail } from "@/lib/db/items";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 // ─── Context ────────────────────────────────────────────────────────────────
 
@@ -77,7 +88,7 @@ export function ItemDrawerProvider({ children }: { children: ReactNode }) {
           {loading || !item ? (
             <DrawerSkeleton />
           ) : (
-            <DrawerContent item={item} onUpdate={setItem} />
+            <DrawerContent item={item} onUpdate={setItem} onClose={() => setOpenItemId(null)} />
           )}
         </SheetContent>
       </Sheet>
@@ -94,12 +105,14 @@ const URL_TYPES = new Set(["url", "link"]);
 interface DrawerContentProps {
   item: ItemDetail;
   onUpdate: (updated: ItemDetail) => void;
+  onClose: () => void;
 }
 
-function DrawerContent({ item, onUpdate }: DrawerContentProps) {
+function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const typeLower = item.typeName.toLowerCase();
   const showContent = CONTENT_TYPES.has(typeLower);
@@ -157,6 +170,19 @@ function DrawerContent({ item, onUpdate }: DrawerContentProps) {
     onUpdate(result.data);
     setIsEditing(false);
     toast.success("Item saved");
+    router.refresh();
+  }
+
+  async function handleDelete() {
+    setDeleting(true);
+    const result = await deleteItem(item.id);
+    setDeleting(false);
+    if (!result.success) {
+      toast.error(result.error);
+      return;
+    }
+    toast.success("Item deleted");
+    onClose();
     router.refresh();
   }
 
@@ -243,10 +269,38 @@ function DrawerContent({ item, onUpdate }: DrawerContentProps) {
             Edit
           </Button>
           <div className="flex-1" />
-          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
-            <Trash2 />
-            Delete
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-destructive hover:text-destructive"
+                  disabled={deleting}
+                />
+              }
+            >
+              <Trash2 />
+              {deleting ? "Deleting…" : "Delete"}
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete item?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  &ldquo;{item.title}&rdquo; will be permanently deleted. This cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       )}
 

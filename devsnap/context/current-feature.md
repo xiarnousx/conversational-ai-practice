@@ -1,14 +1,28 @@
-# Current Feature
+# Current Feature: Delete Item
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-Not Started
+In Progress
 
 ## Goals
 
+- Delete button in item drawer action bar triggers a ShadCN `AlertDialog` confirmation prompt
+- User confirms deletion; cancelling leaves the item unchanged
+- On confirm, calls a `deleteItem` server action that deletes the item from the DB (auth ownership check)
+- On success: close drawer, refresh item list, show success toast
+- On error: show error toast with message
+- Server action has Zod/auth validation and returns `{ success, error }` pattern
+
 ## Notes
+
+- Use existing ShadCN `AlertDialog` component (add via `shadcn add alert-dialog` if not already present)
+- Toast via existing `sonner` setup already in the project
+- Delete button already exists in the drawer action bar — wire it up
+- Server action lives in `src/actions/items.ts` alongside `updateItem`
+- DB delete in `src/lib/db/items.ts` alongside `getItemById` / `updateItem`
+- Must cascade-delete related records (ItemTag join rows) before deleting the item itself, or rely on Prisma cascade config
 
 ## History
 
