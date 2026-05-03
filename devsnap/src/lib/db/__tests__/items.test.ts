@@ -1,11 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { getItemById, updateItem } from "@/lib/db/items"
+import { getItemById, updateItem, createItemInDb } from "@/lib/db/items"
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     item: {
       findFirst: vi.fn(),
       update: vi.fn(),
+      create: vi.fn(),
+    },
+    itemType: {
+      findFirst: vi.fn(),
     },
   },
 }))
@@ -14,6 +18,8 @@ import { prisma } from "@/lib/prisma"
 
 const mockFindFirst = vi.mocked(prisma.item.findFirst)
 const mockUpdate = vi.mocked(prisma.item.update)
+const mockCreate = vi.mocked(prisma.item.create)
+const mockTypeFindFirst = vi.mocked(prisma.itemType.findFirst)
 
 const BASE_ITEM = {
   id: "item-1",
@@ -188,6 +194,103 @@ describe("updateItem", () => {
         data: expect.objectContaining({
           tags: expect.objectContaining({ deleteMany: {} }),
         }),
+      })
+    )
+  })
+})
+
+// ─── createItemInDb ───────────────────────────────────────────────────────────
+
+const MOCK_TYPE = { id: "type-1", name: "Snippet", color: "#8b5cf6" }
+
+const CREATED_ITEM = {
+  id: "item-new",
+  title: "New Snippet",
+  description: "A new item",
+  content: "const x = 1;",
+  language: "typescript",
+  url: null,
+  isFavorite: false,
+  isPinned: false,
+  contentType: "text",
+  createdAt: new Date("2024-06-01T00:00:00Z"),
+  updatedAt: new Date("2024-06-01T00:00:00Z"),
+  type: { name: "Snippet", color: "#8b5cf6" },
+  tags: [{ tag: { name: "react" } }],
+  collection: null,
+}
+
+describe("createItemInDb", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("returns null when the item type is not found", async () => {
+    mockTypeFindFirst.mockResolvedValue(null)
+    const result = await createItemInDb("user-1", {
+      title: "X",
+      typeName: "snippet",
+      tags: [],
+    })
+    expect(result).toBeNull()
+    expect(mockCreate).not.toHaveBeenCalled()
+  })
+
+  it("creates the item and returns ItemDetail on success", async () => {
+    mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
+    mockCreate.mockResolvedValue(CREATED_ITEM as never)
+
+    const result = await createItemInDb("user-1", {
+      title: "New Snippet",
+      typeName: "snippet",
+      description: "A new item",
+      content: "const x = 1;",
+      language: "typescript",
+      tags: ["react"],
+    })
+
+    expect(result).not.toBeNull()
+    expect(result?.title).toBe("New Snippet")
+    expect(result?.typeName).toBe("Snippet")
+    expect(result?.typeColor).toBe("#8b5cf6")
+    expect(result?.tags).toEqual(["react"])
+  })
+
+  it("returns empty collections when item has no collection", async () => {
+    mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
+    mockCreate.mockResolvedValue({ ...CREATED_ITEM, collection: null } as never)
+
+    const result = await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [] })
+    expect(result?.collections).toEqual([])
+  })
+
+  it("falls back to default typeColor when color is null", async () => {
+    mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
+    mockCreate.mockResolvedValue({
+      ...CREATED_ITEM,
+      type: { name: "Note", color: null },
+    } as never)
+
+    const result = await createItemInDb("user-1", { title: "X", typeName: "note", tags: [] })
+    expect(result?.typeColor).toBe("#6b7280")
+  })
+
+  it("serializes dates to ISO strings", async () => {
+    mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
+    mockCreate.mockResolvedValue(CREATED_ITEM as never)
+
+    const result = await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [] })
+    expect(result?.createdAt).toBe("2024-06-01T00:00:00.000Z")
+    expect(result?.updatedAt).toBe("2024-06-01T00:00:00.000Z")
+  })
+
+  it("passes typeId from the looked-up type to prisma.item.create", async () => {
+    mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
+    mockCreate.mockResolvedValue(CREATED_ITEM as never)
+
+    await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [] })
+
+    expect(mockCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ typeId: "type-1", userId: "user-1" }),
       })
     )
   })

@@ -1,10 +1,10 @@
 "use server";
 
 import { auth } from "@/auth";
-import { updateItem as dbUpdateItem, deleteItemById } from "@/lib/db/items";
+import { updateItem as dbUpdateItem, deleteItemById, createItemInDb } from "@/lib/db/items";
 import type { ItemDetail } from "@/lib/db/items";
-import { updateItemSchema } from "@/lib/validations/items";
-import type { UpdateItemInput } from "@/lib/validations/items";
+import { updateItemSchema, createItemSchema } from "@/lib/validations/items";
+import type { UpdateItemInput, CreateItemInput } from "@/lib/validations/items";
 
 export type UpdateItemResult =
   | { success: true; data: ItemDetail }
@@ -30,6 +30,29 @@ export async function updateItem(
   }
 
   return { success: true, data: updated };
+}
+
+export type CreateItemResult =
+  | { success: true; data: ItemDetail }
+  | { success: false; error: string };
+
+export async function createItem(input: CreateItemInput): Promise<CreateItemResult> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const parsed = createItemSchema.safeParse(input);
+  if (!parsed.success) {
+    return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+
+  const item = await createItemInDb(session.user.id, parsed.data);
+  if (!item) {
+    return { success: false, error: "Failed to create item" };
+  }
+
+  return { success: true, data: item };
 }
 
 export type DeleteItemResult =

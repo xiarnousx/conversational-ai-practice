@@ -1,16 +1,29 @@
-# Current Feature
+# Current Feature: Item Create
 
 ## Status
 
-<!-- Not Started|In Progress|Completed -->
+In Progress
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- "New Item" button in top bar opens a shadcn Dialog modal
+- Type selector lets user pick from: snippet, prompt, command, note, link
+- Fields shown dynamically based on selected type:
+  - All types: title (required), description, tags
+  - snippet / command: content + language
+  - prompt / note: content
+  - link: URL (required)
+- `createItem` server action in `src/actions/items.ts` with Zod validation and auth/ownership
+- `createItem` query function in `src/lib/db/items.ts`
+- On success: close modal, refresh item list, show success toast
+- On error: show error toast
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Use shadcn Dialog component (not Sheet)
+- Type selector drives field visibility — no unnecessary fields rendered
+- URL is required for link type; content is optional for prompt/note
+- Follow existing `updateItem` / `deleteItem` patterns for the server action and db query
 
 ## History
 

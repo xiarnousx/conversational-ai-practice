@@ -175,6 +175,73 @@ export async function updateItem(
   }
 }
 
+export interface CreateItemData {
+  title: string
+  typeName: string
+  description?: string | null
+  content?: string | null
+  language?: string | null
+  url?: string | null
+  tags: string[]
+}
+
+export async function createItemInDb(
+  userId: string,
+  data: CreateItemData
+): Promise<ItemDetail | null> {
+  const type = await prisma.itemType.findFirst({
+    where: { name: { equals: data.typeName, mode: "insensitive" } },
+  })
+  if (!type) return null
+
+  const item = await prisma.item.create({
+    data: {
+      title: data.title,
+      contentType: "text",
+      description: data.description ?? null,
+      content: data.content ?? null,
+      language: data.language ?? null,
+      url: data.url ?? null,
+      userId,
+      typeId: type.id,
+      tags: {
+        create: data.tags.map((name) => ({
+          tag: {
+            connectOrCreate: {
+              where: { userId_name: { name, userId } },
+              create: { name, userId },
+            },
+          },
+        })),
+      },
+    },
+    include: {
+      type: { select: { name: true, color: true } },
+      tags: { include: { tag: { select: { name: true } } } },
+      collection: { select: { id: true, name: true } },
+    },
+  })
+
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    content: item.content,
+    language: item.language,
+    url: item.url,
+    typeName: item.type.name,
+    typeColor: item.type.color ?? "#6b7280",
+    tags: item.tags.map((t) => t.tag.name),
+    collections: item.collection
+      ? [{ id: item.collection.id, name: item.collection.name }]
+      : [],
+    isFavorite: item.isFavorite,
+    isPinned: item.isPinned,
+    createdAt: item.createdAt.toISOString(),
+    updatedAt: item.updatedAt.toISOString(),
+  }
+}
+
 export async function deleteItemById(
   userId: string,
   itemId: string
