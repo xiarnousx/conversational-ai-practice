@@ -1,29 +1,16 @@
-# Current Feature: Item Create
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started|In Progress|Completed -->
 
 ## Goals
 
-- "New Item" button in top bar opens a shadcn Dialog modal
-- Type selector lets user pick from: snippet, prompt, command, note, link
-- Fields shown dynamically based on selected type:
-  - All types: title (required), description, tags
-  - snippet / command: content + language
-  - prompt / note: content
-  - link: URL (required)
-- `createItem` server action in `src/actions/items.ts` with Zod validation and auth/ownership
-- `createItem` query function in `src/lib/db/items.ts`
-- On success: close modal, refresh item list, show success toast
-- On error: show error toast
+<!-- Bullet points of what success looks like -->
 
 ## Notes
 
-- Use shadcn Dialog component (not Sheet)
-- Type selector drives field visibility — no unnecessary fields rendered
-- URL is required for link type; content is optional for prompt/note
-- Follow existing `updateItem` / `deleteItem` patterns for the server action and db query
+<!-- Additional context, constraints, or details from spec -->
 
 ## History
 
@@ -53,3 +40,4 @@ In Progress
 - 2026-05-02: Item Drawer — right-side Sheet opens on ItemRow click; GET /api/items/[id] with auth; getItemById() in src/lib/db/items.ts; ItemDrawerProvider manages state; action bar (Favorite/Pin/Copy/Edit/Delete); detail sections (description, content, url, tags, collections, dates); loading skeleton; 8 unit tests for getItemById transformation
 - 2026-05-02: Item Drawer Edit Mode — Edit button toggles inline edit mode in same drawer; Save/Cancel replace action bar; controlled inputs for title, description, tags (all types) + content/language/url (type-specific); updateItem server action in src/actions/items.ts with Zod validation and auth ownership check; updateItem db query in src/lib/db/items.ts with tag disconnect/connect-or-create; router.refresh() syncs item list; shadcn textarea+label added; zod installed; 15 new unit tests
 - 2026-05-03: Delete Item — Delete button in item drawer opens ShadCN AlertDialog confirmation; on confirm calls deleteItem server action with auth/ownership check and cascade-deletes ItemTag rows before removing the item; on success closes drawer, refreshes list, shows toast; on error shows error toast; deleteItemById in src/lib/db/items.ts; alert-dialog.tsx and src/lib/validations/items.ts added
+- 2026-05-03: Item Create — "New Item" button in top bar opens shadcn Dialog; pill-style type selector (snippet/prompt/command/note/link) drives dynamic fields (content+language for snippet/command, content for prompt/note, required URL for link); createItem server action with Zod validation and auth check; createItemInDb db query; on success closes modal, refreshes list, shows toast; TopBar converted to client component; 14 new unit tests for createItemSchema and createItemInDb
