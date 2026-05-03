@@ -1,28 +1,16 @@
-# Current Feature: Delete Item
+# Current Feature
 
 ## Status
 
 <!-- Not Started|In Progress|Completed -->
 
-In Progress
-
 ## Goals
 
-- Delete button in item drawer action bar triggers a ShadCN `AlertDialog` confirmation prompt
-- User confirms deletion; cancelling leaves the item unchanged
-- On confirm, calls a `deleteItem` server action that deletes the item from the DB (auth ownership check)
-- On success: close drawer, refresh item list, show success toast
-- On error: show error toast with message
-- Server action has Zod/auth validation and returns `{ success, error }` pattern
+<!-- Bullet points of what success looks like -->
 
 ## Notes
 
-- Use existing ShadCN `AlertDialog` component (add via `shadcn add alert-dialog` if not already present)
-- Toast via existing `sonner` setup already in the project
-- Delete button already exists in the drawer action bar — wire it up
-- Server action lives in `src/actions/items.ts` alongside `updateItem`
-- DB delete in `src/lib/db/items.ts` alongside `getItemById` / `updateItem`
-- Must cascade-delete related records (ItemTag join rows) before deleting the item itself, or rely on Prisma cascade config
+<!-- Additional context, constraints, or details from spec -->
 
 ## History
 
@@ -51,3 +39,4 @@ In Progress
 - 2026-05-02: Item List 3-Column Grid — items listing grid at /items/[type] updated to 3 columns on lg screens; responsive: 1-col mobile, 2-col md, 3-col lg
 - 2026-05-02: Item Drawer — right-side Sheet opens on ItemRow click; GET /api/items/[id] with auth; getItemById() in src/lib/db/items.ts; ItemDrawerProvider manages state; action bar (Favorite/Pin/Copy/Edit/Delete); detail sections (description, content, url, tags, collections, dates); loading skeleton; 8 unit tests for getItemById transformation
 - 2026-05-02: Item Drawer Edit Mode — Edit button toggles inline edit mode in same drawer; Save/Cancel replace action bar; controlled inputs for title, description, tags (all types) + content/language/url (type-specific); updateItem server action in src/actions/items.ts with Zod validation and auth ownership check; updateItem db query in src/lib/db/items.ts with tag disconnect/connect-or-create; router.refresh() syncs item list; shadcn textarea+label added; zod installed; 15 new unit tests
+- 2026-05-03: Delete Item — Delete button in item drawer opens ShadCN AlertDialog confirmation; on confirm calls deleteItem server action with auth/ownership check and cascade-deletes ItemTag rows before removing the item; on success closes drawer, refreshes list, shows toast; on error shows error toast; deleteItemById in src/lib/db/items.ts; alert-dialog.tsx and src/lib/validations/items.ts added
