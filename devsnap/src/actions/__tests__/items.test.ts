@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 vi.mock("@/auth", () => ({ auth: vi.fn() }));
 vi.mock("@/lib/db/items", () => ({ updateItem: vi.fn() }));
 
-import { updateItemSchema } from "@/actions/items";
+import { updateItemSchema } from "@/lib/validations/items";
 
 describe("updateItemSchema", () => {
   it("accepts a minimal valid payload", () => {

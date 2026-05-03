@@ -1,20 +1,10 @@
 "use server";
 
-import { z } from "zod";
 import { auth } from "@/auth";
-import { updateItem as dbUpdateItem } from "@/lib/db/items";
+import { updateItem as dbUpdateItem, deleteItemById } from "@/lib/db/items";
 import type { ItemDetail } from "@/lib/db/items";
-
-export const updateItemSchema = z.object({
-  title: z.string().trim().min(1, "Title is required"),
-  description: z.string().trim().nullable().optional(),
-  content: z.string().trim().nullable().optional(),
-  language: z.string().trim().nullable().optional(),
-  url: z.string().trim().url({ message: "Must be a valid URL" }).nullable().optional(),
-  tags: z.array(z.string().trim().min(1)).default([]),
-});
-
-export type UpdateItemInput = z.infer<typeof updateItemSchema>;
+import { updateItemSchema } from "@/lib/validations/items";
+import type { UpdateItemInput } from "@/lib/validations/items";
 
 export type UpdateItemResult =
   | { success: true; data: ItemDetail }
@@ -40,4 +30,22 @@ export async function updateItem(
   }
 
   return { success: true, data: updated };
+}
+
+export type DeleteItemResult =
+  | { success: true }
+  | { success: false; error: string };
+
+export async function deleteItem(itemId: string): Promise<DeleteItemResult> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const deleted = await deleteItemById(session.user.id, itemId);
+  if (!deleted) {
+    return { success: false, error: "Item not found" };
+  }
+
+  return { success: true };
 }
