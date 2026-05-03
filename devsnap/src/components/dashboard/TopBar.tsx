@@ -1,6 +1,8 @@
-import { Button } from "@/components/ui/button";
+"use client";
+
 import { Input } from "@/components/ui/input";
-import { Menu, Plus, Search } from "lucide-react";
+import { Menu, Search } from "lucide-react";
+import { NewItemDialog } from "@/components/item-create";
 
 interface TopBarProps {
   onMenuClick?: () => void;
@@ -9,7 +11,6 @@ interface TopBarProps {
 export default function TopBar({ onMenuClick }: TopBarProps) {
   return (
     <header className="flex h-14 items-center gap-3 border-b border-border bg-background px-4">
-      {/* Mobile menu button */}
       <button
         className="md:hidden flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
         onClick={onMenuClick}
@@ -25,13 +26,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
         />
       </div>
       <div className="ml-auto flex items-center gap-2">
-        <Button variant="outline" size="sm" className="hidden sm:flex">
-          New Collection
-        </Button>
-        <Button size="sm">
-          <Plus className="h-4 w-4 mr-1" />
-          New Item
-        </Button>
+        <NewItemDialog />
       </div>
     </header>
   );
