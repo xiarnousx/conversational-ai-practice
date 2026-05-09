@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { CodeEditor } from "@/components/ui/code-editor";
 import { Calendar, Copy, Layers, Pencil, Pin, Star, Tag, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { updateItem, deleteItem } from "@/actions/items";
@@ -63,13 +64,15 @@ export function ItemDrawerProvider({ children }: { children: ReactNode }) {
       setItem(null);
       return;
     }
+    const controller = new AbortController();
     setLoading(true);
     setItem(null);
-    fetch(`/api/items/${openItemId}`)
+    fetch(`/api/items/${openItemId}`, { signal: controller.signal })
       .then((r) => (r.ok ? r.json() : null))
       .then((data: ItemDetail | null) => setItem(data))
-      .catch(() => setItem(null))
+      .catch((e) => { if (e.name !== "AbortError") setItem(null); })
       .finally(() => setLoading(false));
+    return () => controller.abort();
   }, [openItemId]);
 
   return (
@@ -77,7 +80,10 @@ export function ItemDrawerProvider({ children }: { children: ReactNode }) {
       {children}
       <Sheet
         open={!!openItemId}
-        onOpenChange={(open) => {
+        modal={false}
+        disablePointerDismissal
+        onOpenChange={(open, eventDetails) => {
+          if (!open && eventDetails.reason === "escape-key") return;
           if (!open) setOpenItemId(null);
         }}
       >
@@ -88,7 +94,7 @@ export function ItemDrawerProvider({ children }: { children: ReactNode }) {
           {loading || !item ? (
             <DrawerSkeleton />
           ) : (
-            <DrawerContent item={item} onUpdate={setItem} onClose={() => setOpenItemId(null)} />
+            <DrawerContent key={openItemId} item={item} onUpdate={setItem} onClose={() => setOpenItemId(null)} />
           )}
         </SheetContent>
       </Sheet>
@@ -100,6 +106,7 @@ export function ItemDrawerProvider({ children }: { children: ReactNode }) {
 
 const CONTENT_TYPES = new Set(["snippet", "prompt", "command", "note"]);
 const LANGUAGE_TYPES = new Set(["snippet", "command"]);
+const CODE_TYPES = new Set(["snippet", "command"]);
 const URL_TYPES = new Set(["url", "link"]);
 
 interface DrawerContentProps {
@@ -117,6 +124,7 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
   const typeLower = item.typeName.toLowerCase();
   const showContent = CONTENT_TYPES.has(typeLower);
   const showLanguage = LANGUAGE_TYPES.has(typeLower);
+  const showCode = CODE_TYPES.has(typeLower);
   const showUrl = URL_TYPES.has(typeLower);
 
   const [form, setForm] = useState({
@@ -321,15 +329,22 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
 
             {showContent && (
               <div className="space-y-1.5">
-                <Label htmlFor="item-content">Content</Label>
-                <Textarea
-                  id="item-content"
-                  value={form.content}
-                  onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
-                  placeholder="Content"
-                  rows={8}
-                  className="font-mono text-xs"
-                />
+                <Label>Content</Label>
+                {showCode ? (
+                  <CodeEditor
+                    value={form.content}
+                    language={form.language || "plaintext"}
+                    onChange={(val) => setForm((f) => ({ ...f, content: val }))}
+                  />
+                ) : (
+                  <Textarea
+                    id="item-content"
+                    value={form.content}
+                    onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
+                    placeholder="Content"
+                    rows={8}
+                  />
+                )}
               </div>
             )}
 
@@ -399,9 +414,17 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
             {item.content && (
               <section>
                 <SectionLabel>Content</SectionLabel>
-                <pre className="overflow-x-auto rounded-md bg-muted p-3 text-xs text-foreground whitespace-pre-wrap wrap-break-word">
-                  {item.content}
-                </pre>
+                {showCode ? (
+                  <CodeEditor
+                    value={item.content}
+                    language={item.language ?? "plaintext"}
+                    readOnly
+                  />
+                ) : (
+                  <pre className="overflow-x-auto rounded-md bg-muted p-3 text-xs text-foreground whitespace-pre-wrap wrap-break-word">
+                    {item.content}
+                  </pre>
+                )}
               </section>
             )}
 
