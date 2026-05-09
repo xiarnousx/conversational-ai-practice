@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { CodeEditor } from "@/components/ui/code-editor";
 import {
   Dialog,
   DialogContent,
@@ -18,10 +19,21 @@ import { toast } from "sonner";
 import { createItem } from "@/actions/items";
 
 const ITEM_TYPES = ["snippet", "prompt", "command", "note", "link"] as const;
-type ItemTypeName = (typeof ITEM_TYPES)[number];
+export type ItemTypeName = (typeof ITEM_TYPES)[number];
 
 const CONTENT_TYPES = new Set<ItemTypeName>(["snippet", "prompt", "command", "note"]);
 const LANGUAGE_TYPES = new Set<ItemTypeName>(["snippet", "command"]);
+const CODE_TYPES = new Set<ItemTypeName>(["snippet", "command"]);
+
+// Keys are the plural route slugs produced by Sidebar's getTypeSlug (name.toLowerCase() + "s")
+const ROUTE_TYPE_MAP: Partial<Record<string, ItemTypeName>> = {
+  snippets: "snippet",
+  prompts: "prompt",
+  commands: "command",
+  notes: "note",
+  links: "link",
+  urls: "link",
+};
 
 const INITIAL_FORM = {
   title: "",
@@ -33,7 +45,13 @@ const INITIAL_FORM = {
 };
 
 export function NewItemDialog() {
+  const pathname = usePathname();
   const router = useRouter();
+
+  const segments = pathname.split("/");
+  const defaultType: ItemTypeName =
+    segments[1] === "items" ? (ROUTE_TYPE_MAP[segments[2]] ?? "snippet") : "snippet";
+
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<ItemTypeName>("snippet");
   const [form, setForm] = useState(INITIAL_FORM);
@@ -41,16 +59,24 @@ export function NewItemDialog() {
 
   const showContent = CONTENT_TYPES.has(type);
   const showLanguage = LANGUAGE_TYPES.has(type);
+  const showCode = CODE_TYPES.has(type);
   const isLink = type === "link";
 
-  function reset() {
-    setType("snippet");
+  function handleOpen() {
+    setType(defaultType);
+    setForm(INITIAL_FORM);
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+    setType(defaultType);
     setForm(INITIAL_FORM);
   }
 
   function handleOpenChange(next: boolean) {
-    if (!next) reset();
-    setOpen(next);
+    if (!next) handleClose();
+    else handleOpen();
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -79,8 +105,7 @@ export function NewItemDialog() {
     }
 
     toast.success("Item created");
-    setOpen(false);
-    reset();
+    handleClose();
     router.refresh();
   }
 
@@ -89,7 +114,7 @@ export function NewItemDialog() {
 
   return (
     <>
-      <Button size="sm" onClick={() => setOpen(true)}>
+      <Button size="sm" onClick={handleOpen}>
         <Plus className="h-4 w-4 mr-1" />
         New Item
       </Button>
@@ -149,15 +174,22 @@ export function NewItemDialog() {
             {/* Content */}
             {showContent && (
               <div className="space-y-1.5">
-                <Label htmlFor="new-item-content">Content</Label>
-                <Textarea
-                  id="new-item-content"
-                  value={form.content}
-                  onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
-                  placeholder="Content"
-                  rows={6}
-                  className="font-mono text-xs"
-                />
+                <Label>Content</Label>
+                {showCode ? (
+                  <CodeEditor
+                    value={form.content}
+                    language={form.language || "plaintext"}
+                    onChange={(val) => setForm((f) => ({ ...f, content: val }))}
+                  />
+                ) : (
+                  <Textarea
+                    id="new-item-content"
+                    value={form.content}
+                    onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
+                    placeholder="Content"
+                    rows={6}
+                  />
+                )}
               </div>
             )}
 
@@ -205,7 +237,7 @@ export function NewItemDialog() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => handleOpenChange(false)}
+                onClick={handleClose}
                 disabled={saving}
               >
                 Cancel
