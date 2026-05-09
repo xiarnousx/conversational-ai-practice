@@ -1,27 +1,16 @@
-# Current Feature: Code Editor
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started|In Progress|Completed -->
 
 ## Goals
 
-- Create a `CodeEditor` component using Monaco Editor with dark theme
-- Replace Textarea with CodeEditor in item drawer/edit mode for **snippet** and **command** types only
-- Keep Textarea for notes, prompts, and other non-code types
-- Add macOS-style window dots (red/yellow/green) in the editor header
-- Display the item's language label in the editor header
-- Add a quick copy button in the editor header
-- Support both **display (readonly)** and **edit** modes
-- Make the editor height fluid with a max height of 400px and a themed scrollbar
+<!-- Bullet points of what success looks like -->
 
 ## Notes
 
-- Monaco Editor is the VS Code editor — install `@monaco-editor/react`
-- Only snippet and command item types get the code editor; all others keep the plain textarea
-- The editor header (dots + language + copy) should appear in both readonly and edit modes
-- The copy button copies the editor content to clipboard
-- Scrollbar styling should match the dark theme (custom CSS or Monaco's built-in options)
+<!-- Additional context, constraints, or details from spec -->
 
 ## History
 
@@ -52,3 +41,4 @@ In Progress
 - 2026-05-02: Item Drawer Edit Mode — Edit button toggles inline edit mode in same drawer; Save/Cancel replace action bar; controlled inputs for title, description, tags (all types) + content/language/url (type-specific); updateItem server action in src/actions/items.ts with Zod validation and auth ownership check; updateItem db query in src/lib/db/items.ts with tag disconnect/connect-or-create; router.refresh() syncs item list; shadcn textarea+label added; zod installed; 15 new unit tests
 - 2026-05-03: Delete Item — Delete button in item drawer opens ShadCN AlertDialog confirmation; on confirm calls deleteItem server action with auth/ownership check and cascade-deletes ItemTag rows before removing the item; on success closes drawer, refreshes list, shows toast; on error shows error toast; deleteItemById in src/lib/db/items.ts; alert-dialog.tsx and src/lib/validations/items.ts added
 - 2026-05-03: Item Create — "New Item" button in top bar opens shadcn Dialog; pill-style type selector (snippet/prompt/command/note/link) drives dynamic fields (content+language for snippet/command, content for prompt/note, required URL for link); createItem server action with Zod validation and auth check; createItemInDb db query; on success closes modal, refreshes list, shows toast; TopBar converted to client component; 14 new unit tests for createItemSchema and createItemInDb
+- 2026-05-09: Code Editor — CodeEditor component (Monaco/vs-dark) with macOS traffic-light dots, language label, copy button, fluid height 200–400px; replaces Textarea for snippet/command in item drawer (readonly + edit) and New Item dialog; New Item dialog pre-selects type from /items/{slug} route; Sheet made non-modal so main content stays interactive while drawer is open; drawer only closes via explicit close button (disablePointerDismissal + escape-key filter); AbortController cancels stale fetches on item switch; key={openItemId} resets DrawerContent state on item change
