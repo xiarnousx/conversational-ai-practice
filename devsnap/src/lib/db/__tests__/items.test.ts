@@ -132,14 +132,13 @@ describe("updateItem", () => {
   beforeEach(() => vi.clearAllMocks())
 
   it("returns null when item does not belong to user", async () => {
-    mockFindFirst.mockResolvedValue(null)
+    mockUpdate.mockRejectedValue({ code: "P2025" })
     const result = await updateItem("user-1", "item-99", { title: "X", tags: [] })
     expect(result).toBeNull()
-    expect(mockUpdate).not.toHaveBeenCalled()
+    expect(mockUpdate).toHaveBeenCalled()
   })
 
   it("calls prisma.item.update and returns ItemDetail on success", async () => {
-    mockFindFirst.mockResolvedValue(BASE_ITEM as never)
     mockUpdate.mockResolvedValue(UPDATED_ITEM as never)
 
     const result = await updateItem("user-1", "item-1", {
@@ -158,7 +157,6 @@ describe("updateItem", () => {
   })
 
   it("maps updated item to ItemDetail shape with correct dates", async () => {
-    mockFindFirst.mockResolvedValue(BASE_ITEM as never)
     mockUpdate.mockResolvedValue(UPDATED_ITEM as never)
 
     const result = await updateItem("user-1", "item-1", { title: "t", tags: [] })
@@ -167,7 +165,6 @@ describe("updateItem", () => {
   })
 
   it("returns empty collections array when updated item has no collection", async () => {
-    mockFindFirst.mockResolvedValue(BASE_ITEM as never)
     mockUpdate.mockResolvedValue({ ...UPDATED_ITEM, collection: null } as never)
 
     const result = await updateItem("user-1", "item-1", { title: "t", tags: [] })
@@ -175,7 +172,6 @@ describe("updateItem", () => {
   })
 
   it("falls back to default typeColor when color is null", async () => {
-    mockFindFirst.mockResolvedValue(BASE_ITEM as never)
     mockUpdate.mockResolvedValue({
       ...UPDATED_ITEM,
       type: { name: "Note", color: null },
@@ -186,7 +182,6 @@ describe("updateItem", () => {
   })
 
   it("passes tags as disconnect-all + connect-or-create to prisma", async () => {
-    mockFindFirst.mockResolvedValue(BASE_ITEM as never)
     mockUpdate.mockResolvedValue(UPDATED_ITEM as never)
 
     await updateItem("user-1", "item-1", { title: "t", tags: ["react"] })
@@ -373,14 +368,13 @@ describe("deleteItemById", () => {
   beforeEach(() => vi.clearAllMocks())
 
   it("returns { deleted: false, fileUrl: null } when item is not found", async () => {
-    mockFindFirst.mockResolvedValue(null)
+    mockDelete.mockRejectedValue({ code: "P2025" })
     const result = await deleteItemById("user-1", "missing-id")
     expect(result).toEqual({ deleted: false, fileUrl: null })
-    expect(mockDelete).not.toHaveBeenCalled()
+    expect(mockDelete).toHaveBeenCalled()
   })
 
   it("returns { deleted: true, fileUrl: null } when item has no file", async () => {
-    mockFindFirst.mockResolvedValue(DELETABLE_ITEM as never)
     mockDelete.mockResolvedValue(DELETABLE_ITEM as never)
 
     const result = await deleteItemById("user-1", "item-1")
@@ -388,7 +382,6 @@ describe("deleteItemById", () => {
   })
 
   it("returns { deleted: true, fileUrl } when item has a file", async () => {
-    mockFindFirst.mockResolvedValue(DELETABLE_FILE_ITEM as never)
     mockDelete.mockResolvedValue(DELETABLE_FILE_ITEM as never)
 
     const result = await deleteItemById("user-1", "item-2")
@@ -398,11 +391,10 @@ describe("deleteItemById", () => {
     })
   })
 
-  it("calls prisma.item.delete with the correct item id", async () => {
-    mockFindFirst.mockResolvedValue(DELETABLE_ITEM as never)
+  it("calls prisma.item.delete with the correct item id and userId", async () => {
     mockDelete.mockResolvedValue(DELETABLE_ITEM as never)
 
     await deleteItemById("user-1", "item-1")
-    expect(mockDelete).toHaveBeenCalledWith({ where: { id: "item-1" } })
+    expect(mockDelete).toHaveBeenCalledWith({ where: { id: "item-1", userId: "user-1" } })
   })
 })

@@ -33,10 +33,11 @@ export async function deleteFromS3(key: string): Promise<void> {
 }
 
 export async function getSignedDownloadUrl(key: string, fileName: string): Promise<string> {
+  const safeFileName = fileName.replace(/["\r\n\\]/g, "_");
   const command = new GetObjectCommand({
     Bucket: BUCKET,
     Key: key,
-    ResponseContentDisposition: `attachment; filename="${fileName}"`,
+    ResponseContentDisposition: `attachment; filename="${safeFileName}"`,
   });
   return getSignedUrl(s3, command, { expiresIn: 300 });
 }

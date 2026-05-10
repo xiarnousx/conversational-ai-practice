@@ -6,12 +6,7 @@ import Sidebar from "@/components/dashboard/Sidebar";
 import { ItemDrawerProvider } from "@/components/item-drawer";
 import type { SidebarItemType } from "@/lib/db/items";
 import type { SidebarCollection } from "@/lib/db/collections";
-
-interface SidebarUser {
-  name?: string | null
-  email?: string | null
-  image?: string | null
-}
+import type { SidebarUser } from "@/types/user";
 
 interface AppLayoutClientProps {
   children: React.ReactNode;

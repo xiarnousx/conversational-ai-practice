@@ -48,6 +48,13 @@ export async function createItem(input: CreateItemInput): Promise<CreateItemResu
     return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
 
+  if (parsed.data.fileUrl) {
+    const expectedPrefix = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/uploads/${session.user.id}/`;
+    if (!parsed.data.fileUrl.startsWith(expectedPrefix)) {
+      return { success: false, error: "Invalid file URL" };
+    }
+  }
+
   const item = await createItemInDb(session.user.id, parsed.data);
   if (!item) {
     return { success: false, error: "Failed to create item" };

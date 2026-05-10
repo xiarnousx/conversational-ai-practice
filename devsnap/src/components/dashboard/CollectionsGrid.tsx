@@ -1,3 +1,4 @@
+import NextLink from "next/link";
 import {
   Code,
   Sparkles,
@@ -31,16 +32,20 @@ export default function CollectionsGrid({ collections }: CollectionsGridProps) {
     <section>
       <div className="mb-3 flex items-center justify-between">
         <h2 className="font-semibold text-foreground">Collections</h2>
-        <button className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+        <NextLink
+          href="/collections"
+          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
           View all
-        </button>
+        </NextLink>
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {collections.map((col) => (
-          <div
+          <NextLink
             key={col.id}
+            href={`/collections/${col.id}`}
             style={{ borderColor: col.borderColor }}
-            className="group rounded-lg border bg-card p-4 cursor-pointer transition-colors"
+            className="group rounded-lg border bg-card p-4 cursor-pointer transition-colors block"
           >
             <div className="mb-1 flex items-start justify-between gap-2">
               <div className="flex items-center gap-1.5 min-w-0">
@@ -75,7 +80,7 @@ export default function CollectionsGrid({ collections }: CollectionsGridProps) {
                 );
               })}
             </div>
-          </div>
+          </NextLink>
         ))}
       </div>
     </section>

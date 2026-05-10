@@ -1,17 +1,22 @@
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { getItemsByType } from "@/lib/db/items";
 import ItemRow from "@/components/dashboard/ItemRow";
 import ImageThumbnailCard from "@/components/items/ImageThumbnailCard";
 import FileListRow from "@/components/items/FileListRow";
 
-function slugToTypeName(slug: string): string {
-  return slug.endsWith("s") ? slug.slice(0, -1) : slug;
-}
+const SLUG_TO_TYPE: Record<string, string> = {
+  snippets: "snippet",
+  prompts: "prompt",
+  commands: "command",
+  notes: "note",
+  links: "link",
+  files: "file",
+  images: "image",
+};
 
-function slugToLabel(slug: string): string {
-  const name = slugToTypeName(slug);
-  return name.charAt(0).toUpperCase() + name.slice(1) + "s";
+function slugToLabel(typeName: string): string {
+  return typeName.charAt(0).toUpperCase() + typeName.slice(1) + "s";
 }
 
 export default async function ItemsTypePage({
@@ -23,9 +28,10 @@ export default async function ItemsTypePage({
   if (!session?.user?.id) redirect("/sign-in");
 
   const { type } = await params;
-  const typeName = slugToTypeName(type);
+  const typeName = SLUG_TO_TYPE[type];
+  if (!typeName) notFound();
   const items = await getItemsByType(session.user.id, typeName);
-  const label = slugToLabel(type);
+  const label = slugToLabel(typeName);
 
   return (
     <div className="flex flex-col gap-6 p-6">

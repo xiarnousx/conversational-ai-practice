@@ -1,16 +1,39 @@
-# Current Feature
+# Code Scanner Quick Wins
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- Add feature goals here -->
+### Actionable Improvements (Code Scanner — 2026-05-10)
+
+#### High
+
+- **Unvalidated `fileUrl` in `createItemSchema`** (`src/lib/validations/items.ts`) — any authenticated user can submit a `fileUrl` pointing to another user's S3 object. Fix: add a Zod `.refine()` that validates the key starts with `uploads/${userId}/` before saving.
+- **TOCTOU race + double DB query in `updateItem` / `deleteItemById`** (`src/lib/db/items.ts`) — ownership `findFirst` is separate from the `update`/`delete` call. Collapse to a single `prisma.item.update({ where: { id, userId } })` and catch `P2025`. Atomic and one less round-trip.
+
+#### Medium
+
+- **No rate limiting on `/api/auth/change-password`** — every other auth route has it. Add 5 req/15 min using the existing `rateLimit()` utility.
+- **Collections fetched twice per dashboard load** — layout and page query collections independently. Wrap the shared fetcher with React `cache()` to deduplicate within a single request.
+- **`slugToTypeName` is fragile and unvalidated** (`src/app/(app)/items/[type]/page.tsx`) — unknown slugs silently return empty results. Validate against the canonical type map and call `notFound()` for unrecognized slugs.
+- **Duplicate collection query + dominant-color logic** in `getCollectionsForUser` and `getSidebarCollections` (`src/lib/db/collections.ts`) — extract a shared `fetchCollectionsWithTypes(userId)` + mapper pattern.
+- **Non-functional "View all" button and collection cards** (`src/components/dashboard/CollectionsGrid.tsx`) — clicking does nothing. Replace `<button>` with `<Link href="/collections">` and wrap cards in `<Link href={\`/collections/${col.id}\`}>`.
+
+#### Low
+
+- **Dead code** — `src/lib/db/user.ts` (`getDemoUser`) and `DEMO_USER_EMAIL` in `src/lib/constants.ts` are unused since the real-auth migration. Delete both.
+- **`formatDate` duplicated 3×** — identical private function in `ItemRow.tsx`, `FileListRow.tsx`, and `item-drawer/index.tsx`. Extract to `src/lib/utils.ts`.
+- **`SidebarUser` interface defined twice** — in `AppLayoutClient.tsx` and `Sidebar.tsx`. Deduplicate into `src/types/user.ts`.
+- **`fileName` not sanitized in `getSignedDownloadUrl`** (`src/lib/s3.ts`) — user-supplied name embedded verbatim in `Content-Disposition`. Fix: `fileName.replace(/["\r\n\\]/g, "_")` before interpolation.
+- **`X-Forwarded-For` trusted without proxy validation** (`src/lib/rate-limit.ts`) — clients can spoof IP to bypass rate limits. On Vercel, use `x-vercel-forwarded-for` instead.
 
 ## Notes
 
 <!-- Add notes here -->
+
+
 
 ## History
 

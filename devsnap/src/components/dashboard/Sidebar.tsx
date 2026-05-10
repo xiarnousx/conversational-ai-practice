@@ -32,12 +32,7 @@ import UserAvatar from "@/components/UserAvatar";
 import { cn } from "@/lib/utils";
 import type { SidebarItemType } from "@/lib/db/items";
 import type { SidebarCollection } from "@/lib/db/collections";
-
-interface SidebarUser {
-  name?: string | null
-  email?: string | null
-  image?: string | null
-}
+import type { SidebarUser } from "@/types/user";
 
 const PRO_TYPES = new Set(["file", "image"]);
 

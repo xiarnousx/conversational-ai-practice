@@ -137,35 +137,38 @@ export async function updateItem(
   itemId: string,
   data: UpdateItemData
 ): Promise<ItemDetail | null> {
-  const existing = await prisma.item.findFirst({ where: { id: itemId, userId } })
-  if (!existing) return null
-
-  const updated = await prisma.item.update({
-    where: { id: itemId },
-    data: {
-      title: data.title,
-      description: data.description ?? null,
-      content: data.content ?? null,
-      language: data.language ?? null,
-      url: data.url ?? null,
-      tags: {
-        deleteMany: {},
-        create: data.tags.map((name) => ({
-          tag: {
-            connectOrCreate: {
-              where: { userId_name: { name, userId } },
-              create: { name, userId },
+  let updated
+  try {
+    updated = await prisma.item.update({
+      where: { id: itemId, userId },
+      data: {
+        title: data.title,
+        description: data.description ?? null,
+        content: data.content ?? null,
+        language: data.language ?? null,
+        url: data.url ?? null,
+        tags: {
+          deleteMany: {},
+          create: data.tags.map((name) => ({
+            tag: {
+              connectOrCreate: {
+                where: { userId_name: { name, userId } },
+                create: { name, userId },
+              },
             },
-          },
-        })),
+          })),
+        },
       },
-    },
-    include: {
-      type: { select: { name: true, color: true } },
-      tags: { include: { tag: { select: { name: true } } } },
-      collection: { select: { id: true, name: true } },
-    },
-  })
+      include: {
+        type: { select: { name: true, color: true } },
+        tags: { include: { tag: { select: { name: true } } } },
+        collection: { select: { id: true, name: true } },
+      },
+    })
+  } catch (e: unknown) {
+    if ((e as { code?: string })?.code === "P2025") return null
+    throw e
+  }
 
   return {
     id: updated.id,
@@ -270,10 +273,13 @@ export async function deleteItemById(
   userId: string,
   itemId: string
 ): Promise<{ deleted: boolean; fileUrl: string | null }> {
-  const existing = await prisma.item.findFirst({ where: { id: itemId, userId } })
-  if (!existing) return { deleted: false, fileUrl: null }
-  await prisma.item.delete({ where: { id: itemId } })
-  return { deleted: true, fileUrl: existing.fileUrl }
+  try {
+    const deleted = await prisma.item.delete({ where: { id: itemId, userId } })
+    return { deleted: true, fileUrl: deleted.fileUrl }
+  } catch (e: unknown) {
+    if ((e as { code?: string })?.code === "P2025") return { deleted: false, fileUrl: null }
+    throw e
+  }
 }
 
 export interface SidebarItemType {
