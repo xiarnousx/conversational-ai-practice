@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { getItemsByType } from "@/lib/db/items";
 import ItemRow from "@/components/dashboard/ItemRow";
+import ImageThumbnailCard from "@/components/items/ImageThumbnailCard";
 
 function slugToTypeName(slug: string): string {
   return slug.endsWith("s") ? slug.slice(0, -1) : slug;
@@ -40,9 +41,13 @@ export default async function ItemsTypePage({
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((item) => (
-            <ItemRow key={item.id} item={item} />
-          ))}
+          {items.map((item) =>
+            typeName === "image" ? (
+              <ImageThumbnailCard key={item.id} item={item} />
+            ) : (
+              <ItemRow key={item.id} item={item} />
+            )
+          )}
         </div>
       )}
     </div>

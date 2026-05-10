@@ -1,12 +1,22 @@
-# Current Feature
+# Current Feature: Image Gallery View
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Replace the regular item card with an image thumbnail card for image-type items
+- Display images in a 3-column gallery grid at `/items/image`
+- Image thumbnails use 16:9 aspect ratio (`aspect-video`) with `object-cover`
+- Add a subtle hover zoom effect (5% scale, 300ms transition)
+- Use signed S3 URLs for image sources
+
 ## Notes
+
+- Image cards should be distinct from regular item cards — no text-heavy layout, just the thumbnail with a minimal overlay or caption
+- The grid replaces the existing items grid only for the `image` type route
+- S3 signed URLs are already available via `/api/view/[id]` (inline display proxy)
 
 ## History
 
