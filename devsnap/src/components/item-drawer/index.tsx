@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Sheet,
   SheetContent,
@@ -57,8 +57,13 @@ export function ItemDrawerProvider({ children }: { children: ReactNode }) {
   const [openItemId, setOpenItemId] = useState<string | null>(null);
   const [item, setItem] = useState<ItemDetail | null>(null);
   const [loading, setLoading] = useState(false);
+  const pathname = usePathname();
 
   const openDrawer = useCallback((id: string) => setOpenItemId(id), []);
+
+  useEffect(() => {
+    setOpenItemId(null);
+  }, [pathname]);
 
   useEffect(() => {
     if (!openItemId) {
