@@ -1,0 +1,173 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]: DevSnap
+          - button [ref=e7]:
+            - img [ref=e8]
+        - navigation [ref=e11]:
+          - generic [ref=e12]:
+            - button [ref=e160]:
+              - generic [ref=e14]: Types
+              - img [ref=e15]
+            - list [ref=e17]:
+              - listitem [ref=e18]:
+                - link [ref=e161] [cursor=pointer]:
+                  - /url: /items/commands
+                  - img [ref=e20]
+                  - generic [ref=e22]: command
+                  - generic [ref=e23]: "8"
+              - listitem [ref=e24]:
+                - link [ref=e162] [cursor=pointer]:
+                  - /url: /items/files
+                  - img [ref=e26]
+                  - generic [ref=e29]: file
+                  - generic [ref=e30]: Pro
+                  - generic [ref=e31]: "1"
+              - listitem [ref=e32]:
+                - link [ref=e163] [cursor=pointer]:
+                  - /url: /items/images
+                  - img [ref=e34]
+                  - generic [ref=e38]: image
+                  - generic [ref=e39]: Pro
+                  - generic [ref=e40]: "1"
+              - listitem [ref=e41]:
+                - link [ref=e164] [cursor=pointer]:
+                  - /url: /items/links
+                  - img [ref=e43]
+                  - generic [ref=e46]: link
+                  - generic [ref=e47]: "5"
+              - listitem [ref=e48]:
+                - link [ref=e165] [cursor=pointer]:
+                  - /url: /items/notes
+                  - img [ref=e50]
+                  - generic [ref=e53]: note
+                  - generic [ref=e54]: "2"
+              - listitem [ref=e55]:
+                - link [ref=e166] [cursor=pointer]:
+                  - /url: /items/prompts
+                  - img [ref=e57]
+                  - generic [ref=e60]: prompt
+                  - generic [ref=e61]: "5"
+              - listitem [ref=e62]:
+                - link [ref=e167] [cursor=pointer]:
+                  - /url: /items/snippets
+                  - img [ref=e64]
+                  - generic [ref=e67]: snippet
+                  - generic [ref=e68]: "7"
+          - generic [ref=e70]:
+            - button [ref=e168]:
+              - generic [ref=e72]: Collections
+              - img [ref=e73]
+            - generic [ref=e75]:
+              - generic [ref=e76]:
+                - paragraph [ref=e77]: Favorites
+                - list [ref=e78]:
+                  - listitem [ref=e79]:
+                    - link [ref=e169] [cursor=pointer]:
+                      - /url: /collections/01804a73-88a9-434b-990e-8851cc81d7e9
+                      - img [ref=e81]
+                      - generic [ref=e83]: React Patterns
+                      - generic [ref=e84]: "5"
+                  - listitem [ref=e85]:
+                    - link [ref=e170] [cursor=pointer]:
+                      - /url: /collections/907c9ca1-8d55-4abe-a58f-cf0f76399549
+                      - img [ref=e87]
+                      - generic [ref=e89]: AI Prompts
+                      - generic [ref=e90]: "5"
+              - generic [ref=e91]:
+                - paragraph [ref=e92]: Recent
+                - list [ref=e93]:
+                  - listitem [ref=e94]:
+                    - link [ref=e171] [cursor=pointer]:
+                      - /url: /collections/dcdbe604-0b4a-4239-bdae-37744fe1b8c7
+                      - generic [ref=e97]: Python Scripts
+                      - generic [ref=e98]: "5"
+                  - listitem [ref=e99]:
+                    - link [ref=e172] [cursor=pointer]:
+                      - /url: /collections/131678b1-d01f-47bb-b38f-993aaf7adf3d
+                      - generic [ref=e102]: DevOps Commands
+                      - generic [ref=e103]: "7"
+                  - listitem [ref=e104]:
+                    - link [ref=e173] [cursor=pointer]:
+                      - /url: /collections/26ed3379-6555-433f-a7bb-33cc84e06e24
+                      - generic [ref=e107]: Useful Links
+                      - generic [ref=e108]: "5"
+              - link [ref=e174] [cursor=pointer]:
+                - /url: /collections
+                - text: View all collections
+        - button [ref=e175]:
+          - generic [ref=e112]: MT
+          - generic [ref=e113]:
+            - paragraph [ref=e114]: Mark Twain
+            - paragraph [ref=e115]: mark@gmail.com
+    - generic [ref=e116]:
+      - banner [ref=e117]:
+        - generic [ref=e118]:
+          - img [ref=e119]
+          - textbox [ref=e176]:
+            - /placeholder: Search items...
+        - button [ref=e177]:
+          - img
+          - text: New Item
+      - main [ref=e125]:
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - heading [level=1] [ref=e178]: Notes
+            - paragraph [ref=e129]: 2 items
+          - generic [ref=e130]:
+            - generic [ref=e131] [cursor=pointer]:
+              - img [ref=e133]
+              - generic [ref=e136]:
+                - paragraph [ref=e137]: React 19 Key Changes
+                - generic [ref=e139]: note
+              - generic [ref=e140]: Apr 10
+            - generic [ref=e141] [cursor=pointer]:
+              - img [ref=e143]
+              - generic [ref=e146]:
+                - paragraph [ref=e147]: Python Environment Cheatsheet
+                - generic [ref=e149]: note
+              - generic [ref=e150]: Apr 10
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e156] [cursor=pointer]:
+    - img [ref=e157]
+  - alert [ref=e179]
+  - dialog "New Item" [ref=e183]:
+    - heading "New Item" [level=2] [ref=e185]
+    - generic [ref=e186]:
+      - generic [ref=e187]:
+        - generic [ref=e188]: Type
+        - generic [ref=e189]:
+          - button "snippet" [active] [ref=e190]
+          - button "prompt" [ref=e191]
+          - button "command" [ref=e192]
+          - button "note" [ref=e193]
+          - button "link" [ref=e194]
+      - generic [ref=e195]:
+        - generic [ref=e196]: Title *
+        - textbox "Title *" [ref=e197]:
+          - /placeholder: Item title
+      - generic [ref=e198]:
+        - generic [ref=e199]: Description
+        - textbox "Description" [ref=e200]:
+          - /placeholder: Optional description
+      - generic [ref=e201]:
+        - generic [ref=e202]: Content
+        - generic [ref=e203]:
+          - generic [ref=e209]:
+            - generic [ref=e210]:
+              - button "Write" [ref=e211]
+              - generic [ref=e212]: "|"
+              - button "Preview" [ref=e213]
+            - button "Copy" [ref=e214]:
+              - img [ref=e215]
+          - textbox "Write markdown…" [ref=e219]
+      - generic [ref=e220]:
+        - generic [ref=e221]: Tags
+        - textbox "Tags" [ref=e222]:
+          - /placeholder: react, typescript, hooks
+        - paragraph [ref=e223]: Comma-separated
+      - generic [ref=e224]:
+        - button "Cancel" [ref=e225]
+        - button "Create" [disabled]

@@ -1,0 +1,22 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "Sign in to DevSnap" [level=1] [ref=e5]
+      - paragraph [ref=e6]:
+        - text: Don't have an account?
+        - link "Register" [ref=e7] [cursor=pointer]:
+          - /url: /register
+    - button "Continue with GitHub" [ref=e8]:
+      - img
+      - text: Continue with GitHub
+    - generic [ref=e13]: or
+    - generic [ref=e14]:
+      - generic [ref=e15]:
+        - textbox "Email" [ref=e16]
+        - textbox "Password" [ref=e17]
+      - link "Forgot password?" [ref=e19] [cursor=pointer]:
+        - /url: /forgot-password
+      - button "Sign in" [ref=e20]
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e26] [cursor=pointer]:
+    - img [ref=e27]
