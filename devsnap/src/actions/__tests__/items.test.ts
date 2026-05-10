@@ -167,4 +167,64 @@ describe("createItemSchema", () => {
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.tags).toEqual([]);
   });
+
+  it("accepts file type with fileUrl", () => {
+    const result = createItemSchema.safeParse({
+      title: "My File",
+      typeName: "file",
+      fileUrl: "https://bucket.s3.region.amazonaws.com/uploads/user/file.pdf",
+      fileName: "file.pdf",
+      fileSize: 1024,
+      tags: [],
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects file type when fileUrl is missing", () => {
+    const result = createItemSchema.safeParse({
+      title: "My File",
+      typeName: "file",
+      tags: [],
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain("fileUrl");
+    }
+  });
+
+  it("accepts image type with fileUrl", () => {
+    const result = createItemSchema.safeParse({
+      title: "My Image",
+      typeName: "image",
+      fileUrl: "https://bucket.s3.region.amazonaws.com/uploads/user/photo.png",
+      fileName: "photo.png",
+      fileSize: 204800,
+      tags: [],
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects image type when fileUrl is missing", () => {
+    const result = createItemSchema.safeParse({
+      title: "My Image",
+      typeName: "image",
+      tags: [],
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain("fileUrl");
+    }
+  });
+
+  it("accepts file type with null optional fields", () => {
+    const result = createItemSchema.safeParse({
+      title: "My File",
+      typeName: "file",
+      fileUrl: "https://bucket.s3.region.amazonaws.com/uploads/user/file.txt",
+      fileName: null,
+      fileSize: null,
+      tags: [],
+    });
+    expect(result.success).toBe(true);
+  });
 });

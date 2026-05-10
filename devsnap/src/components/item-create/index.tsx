@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CodeEditor } from "@/components/ui/code-editor";
 import { MarkdownEditor } from "@/components/ui/markdown-editor";
+import { FileUpload } from "@/components/ui/file-upload";
 import {
   Dialog,
   DialogContent,
@@ -19,13 +20,14 @@ import {
 import { toast } from "sonner";
 import { createItem } from "@/actions/items";
 
-const ITEM_TYPES = ["snippet", "prompt", "command", "note", "link"] as const;
+const ITEM_TYPES = ["snippet", "prompt", "command", "note", "link", "file", "image"] as const;
 export type ItemTypeName = (typeof ITEM_TYPES)[number];
 
 const CONTENT_TYPES = new Set<ItemTypeName>(["snippet", "prompt", "command", "note"]);
 const LANGUAGE_TYPES = new Set<ItemTypeName>(["snippet", "command"]);
 const CODE_TYPES = new Set<ItemTypeName>(["snippet", "command"]);
 const MARKDOWN_TYPES = new Set<ItemTypeName>(["note", "prompt"]);
+const FILE_TYPES = new Set<ItemTypeName>(["file", "image"]);
 
 // Keys are the plural route slugs produced by Sidebar's getTypeSlug (name.toLowerCase() + "s")
 const ROUTE_TYPE_MAP: Partial<Record<string, ItemTypeName>> = {
@@ -35,7 +37,15 @@ const ROUTE_TYPE_MAP: Partial<Record<string, ItemTypeName>> = {
   notes: "note",
   links: "link",
   urls: "link",
+  files: "file",
+  images: "image",
 };
+
+interface UploadedFile {
+  url: string;
+  fileName: string;
+  fileSize: number;
+}
 
 const INITIAL_FORM = {
   title: "",
@@ -57,6 +67,7 @@ export function NewItemDialog() {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<ItemTypeName>("snippet");
   const [form, setForm] = useState(INITIAL_FORM);
+  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
   const [saving, setSaving] = useState(false);
 
   const showContent = CONTENT_TYPES.has(type);
@@ -64,10 +75,12 @@ export function NewItemDialog() {
   const showCode = CODE_TYPES.has(type);
   const showMarkdown = MARKDOWN_TYPES.has(type);
   const isLink = type === "link";
+  const isFile = FILE_TYPES.has(type);
 
   function handleOpen() {
     setType(defaultType);
     setForm(INITIAL_FORM);
+    setUploadedFile(null);
     setOpen(true);
   }
 
@@ -75,6 +88,7 @@ export function NewItemDialog() {
     setOpen(false);
     setType(defaultType);
     setForm(INITIAL_FORM);
+    setUploadedFile(null);
   }
 
   function handleOpenChange(next: boolean) {
@@ -97,6 +111,9 @@ export function NewItemDialog() {
       content: form.content || null,
       language: form.language || null,
       url: form.url || null,
+      fileUrl: uploadedFile?.url ?? null,
+      fileName: uploadedFile?.fileName ?? null,
+      fileSize: uploadedFile?.fileSize ?? null,
       tags,
     });
 
@@ -113,7 +130,10 @@ export function NewItemDialog() {
   }
 
   const canSubmit =
-    !!form.title.trim() && (!isLink || !!form.url.trim()) && !saving;
+    !!form.title.trim() &&
+    (!isLink || !!form.url.trim()) &&
+    (!isFile || !!uploadedFile) &&
+    !saving;
 
   return (
     <>
@@ -225,6 +245,18 @@ export function NewItemDialog() {
                   onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))}
                   placeholder="https://…"
                   required
+                />
+              </div>
+            )}
+
+            {/* File / Image upload */}
+            {isFile && (
+              <div className="space-y-1.5">
+                <Label>{type === "image" ? "Image *" : "File *"}</Label>
+                <FileUpload
+                  accept={type === "image" ? "image" : "file"}
+                  value={uploadedFile}
+                  onChange={setUploadedFile}
                 />
               </div>
             )}

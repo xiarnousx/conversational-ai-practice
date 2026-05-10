@@ -73,6 +73,9 @@ export interface ItemDetail {
   content: string | null
   language: string | null
   url: string | null
+  fileUrl: string | null
+  fileName: string | null
+  fileSize: number | null
   typeName: string
   typeColor: string
   tags: string[]
@@ -100,6 +103,9 @@ export async function getItemById(userId: string, itemId: string): Promise<ItemD
     content: item.content,
     language: item.language,
     url: item.url,
+    fileUrl: item.fileUrl,
+    fileName: item.fileName,
+    fileSize: item.fileSize,
     typeName: item.type.name,
     typeColor: item.type.color ?? "#6b7280",
     tags: item.tags.map((t) => t.tag.name),
@@ -162,6 +168,9 @@ export async function updateItem(
     content: updated.content,
     language: updated.language,
     url: updated.url,
+    fileUrl: updated.fileUrl,
+    fileName: updated.fileName,
+    fileSize: updated.fileSize,
     typeName: updated.type.name,
     typeColor: updated.type.color ?? "#6b7280",
     tags: updated.tags.map((t) => t.tag.name),
@@ -182,6 +191,9 @@ export interface CreateItemData {
   content?: string | null
   language?: string | null
   url?: string | null
+  fileUrl?: string | null
+  fileName?: string | null
+  fileSize?: number | null
   tags: string[]
 }
 
@@ -197,11 +209,14 @@ export async function createItemInDb(
   const item = await prisma.item.create({
     data: {
       title: data.title,
-      contentType: "text",
+      contentType: data.fileUrl ? "file" : "text",
       description: data.description ?? null,
       content: data.content ?? null,
       language: data.language ?? null,
       url: data.url ?? null,
+      fileUrl: data.fileUrl ?? null,
+      fileName: data.fileName ?? null,
+      fileSize: data.fileSize ?? null,
       userId,
       typeId: type.id,
       tags: {
@@ -229,6 +244,9 @@ export async function createItemInDb(
     content: item.content,
     language: item.language,
     url: item.url,
+    fileUrl: item.fileUrl,
+    fileName: item.fileName,
+    fileSize: item.fileSize,
     typeName: item.type.name,
     typeColor: item.type.color ?? "#6b7280",
     tags: item.tags.map((t) => t.tag.name),
@@ -245,11 +263,11 @@ export async function createItemInDb(
 export async function deleteItemById(
   userId: string,
   itemId: string
-): Promise<boolean> {
+): Promise<{ deleted: boolean; fileUrl: string | null }> {
   const existing = await prisma.item.findFirst({ where: { id: itemId, userId } })
-  if (!existing) return false
+  if (!existing) return { deleted: false, fileUrl: null }
   await prisma.item.delete({ where: { id: itemId } })
-  return true
+  return { deleted: true, fileUrl: existing.fileUrl }
 }
 
 export interface SidebarItemType {

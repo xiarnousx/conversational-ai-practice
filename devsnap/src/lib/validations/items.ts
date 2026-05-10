@@ -11,7 +11,7 @@ export const updateItemSchema = z.object({
 
 export type UpdateItemInput = z.infer<typeof updateItemSchema>;
 
-const ITEM_TYPE_NAMES = ["snippet", "prompt", "command", "note", "link"] as const;
+const ITEM_TYPE_NAMES = ["snippet", "prompt", "command", "note", "link", "file", "image"] as const;
 
 export const createItemSchema = z
   .object({
@@ -26,11 +26,22 @@ export const createItemSchema = z
       .url({ message: "Must be a valid URL" })
       .nullable()
       .optional(),
+    fileUrl: z.string().trim().nullable().optional(),
+    fileName: z.string().trim().nullable().optional(),
+    fileSize: z.number().int().positive().nullable().optional(),
     tags: z.array(z.string().trim().min(1)).default([]),
   })
   .refine((data) => data.typeName !== "link" || !!data.url, {
     message: "URL is required for link type",
     path: ["url"],
-  });
+  })
+  .refine(
+    (data) =>
+      (data.typeName !== "file" && data.typeName !== "image") || !!data.fileUrl,
+    {
+      message: "A file must be uploaded",
+      path: ["fileUrl"],
+    }
+  );
 
 export type CreateItemInput = z.infer<typeof createItemSchema>;
