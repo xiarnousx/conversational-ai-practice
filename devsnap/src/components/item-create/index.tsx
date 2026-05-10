@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CodeEditor } from "@/components/ui/code-editor";
+import { MarkdownEditor } from "@/components/ui/markdown-editor";
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,7 @@ export type ItemTypeName = (typeof ITEM_TYPES)[number];
 const CONTENT_TYPES = new Set<ItemTypeName>(["snippet", "prompt", "command", "note"]);
 const LANGUAGE_TYPES = new Set<ItemTypeName>(["snippet", "command"]);
 const CODE_TYPES = new Set<ItemTypeName>(["snippet", "command"]);
+const MARKDOWN_TYPES = new Set<ItemTypeName>(["note", "prompt"]);
 
 // Keys are the plural route slugs produced by Sidebar's getTypeSlug (name.toLowerCase() + "s")
 const ROUTE_TYPE_MAP: Partial<Record<string, ItemTypeName>> = {
@@ -60,6 +62,7 @@ export function NewItemDialog() {
   const showContent = CONTENT_TYPES.has(type);
   const showLanguage = LANGUAGE_TYPES.has(type);
   const showCode = CODE_TYPES.has(type);
+  const showMarkdown = MARKDOWN_TYPES.has(type);
   const isLink = type === "link";
 
   function handleOpen() {
@@ -179,6 +182,11 @@ export function NewItemDialog() {
                   <CodeEditor
                     value={form.content}
                     language={form.language || "plaintext"}
+                    onChange={(val) => setForm((f) => ({ ...f, content: val }))}
+                  />
+                ) : showMarkdown ? (
+                  <MarkdownEditor
+                    value={form.content}
                     onChange={(val) => setForm((f) => ({ ...f, content: val }))}
                   />
                 ) : (

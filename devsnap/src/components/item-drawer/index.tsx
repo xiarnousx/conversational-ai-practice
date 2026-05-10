@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CodeEditor } from "@/components/ui/code-editor";
+import { MarkdownEditor } from "@/components/ui/markdown-editor";
 import { Calendar, Copy, Layers, Pencil, Pin, Star, Tag, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { updateItem, deleteItem } from "@/actions/items";
@@ -107,6 +108,7 @@ export function ItemDrawerProvider({ children }: { children: ReactNode }) {
 const CONTENT_TYPES = new Set(["snippet", "prompt", "command", "note"]);
 const LANGUAGE_TYPES = new Set(["snippet", "command"]);
 const CODE_TYPES = new Set(["snippet", "command"]);
+const MARKDOWN_TYPES = new Set(["note", "prompt"]);
 const URL_TYPES = new Set(["url", "link"]);
 
 interface DrawerContentProps {
@@ -125,6 +127,7 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
   const showContent = CONTENT_TYPES.has(typeLower);
   const showLanguage = LANGUAGE_TYPES.has(typeLower);
   const showCode = CODE_TYPES.has(typeLower);
+  const showMarkdown = MARKDOWN_TYPES.has(typeLower);
   const showUrl = URL_TYPES.has(typeLower);
 
   const [form, setForm] = useState({
@@ -336,6 +339,11 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
                     language={form.language || "plaintext"}
                     onChange={(val) => setForm((f) => ({ ...f, content: val }))}
                   />
+                ) : showMarkdown ? (
+                  <MarkdownEditor
+                    value={form.content}
+                    onChange={(val) => setForm((f) => ({ ...f, content: val }))}
+                  />
                 ) : (
                   <Textarea
                     id="item-content"
@@ -420,6 +428,8 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
                     language={item.language ?? "plaintext"}
                     readOnly
                   />
+                ) : showMarkdown ? (
+                  <MarkdownEditor value={item.content} readOnly />
                 ) : (
                   <pre className="overflow-x-auto rounded-md bg-muted p-3 text-xs text-foreground whitespace-pre-wrap wrap-break-word">
                     {item.content}
