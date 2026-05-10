@@ -1,34 +1,12 @@
-# Current Feature: File & Image Upload with Amazon S3
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Install `@aws-sdk/client-s3` and configure S3 client
-- Create upload API route (`/api/upload`) that uploads files to S3 and returns the URL
-- Create `FileUpload` component with drag-and-drop support and upload progress indicator
-- Update New Item modal to use `FileUpload` for `file` and `image` item types
-- Display image preview for images; file info (name, size, type) for files in drawer
-- Add download button in `ItemDrawer` for file types via a proxy API route (`/api/download/[id]`) using signed URLs to avoid CORS issues
-- Delete files from S3 when items are deleted (`deleteItem` server action)
-- Stick to `src/lib/db/items.ts` for all Prisma/db functions
-
 ## Notes
-
-### File Constraints
-
-| Type   | Max Size | Extensions |
-|--------|----------|------------|
-| Images | 5 MB     | `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg` |
-| Files  | 10 MB    | `.pdf`, `.txt`, `.md`, `.json`, `.yaml`, `.yml`, `.xml`, `.csv`, `.toml`, `.ini` |
-
-### Accepted MIME Types
-
-**Images:** `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml`
-
-**Files:** `application/pdf`, `text/plain`, `text/markdown`, `application/json`, `application/x-yaml`, `text/yaml`, `application/xml`, `text/xml`, `text/csv`, `application/toml`
 
 ## History
 
@@ -61,3 +39,4 @@ In Progress
 - 2026-05-03: Item Create — "New Item" button in top bar opens shadcn Dialog; pill-style type selector (snippet/prompt/command/note/link) drives dynamic fields (content+language for snippet/command, content for prompt/note, required URL for link); createItem server action with Zod validation and auth check; createItemInDb db query; on success closes modal, refreshes list, shows toast; TopBar converted to client component; 14 new unit tests for createItemSchema and createItemInDb
 - 2026-05-09: Code Editor — CodeEditor component (Monaco/vs-dark) with macOS traffic-light dots, language label, copy button, fluid height 200–400px; replaces Textarea for snippet/command in item drawer (readonly + edit) and New Item dialog; New Item dialog pre-selects type from /items/{slug} route; Sheet made non-modal so main content stays interactive while drawer is open; drawer only closes via explicit close button (disablePointerDismissal + escape-key filter); AbortController cancels stale fetches on item switch; key={openItemId} resets DrawerContent state on item change
 - 2026-05-10: Markdown Editor — MarkdownEditor component (react-markdown + remark-gfm) with Write/Preview tabs, macOS traffic-light header, copy button, dark theme matching CodeEditor (bg-[#1e1e1e]/bg-[#2d2d2d]), fluid height 200–400px; custom .markdown-preview CSS class for headings, bold, lists, inline/fenced code, blockquotes, links, tables; replaces Textarea for note and prompt content in ItemDrawer (view + edit modes) and NewItemDialog; snippet/command types unchanged
+- 2026-05-10: File & Image Upload with Amazon S3 — @aws-sdk/client-s3 + s3-request-presigner installed; src/lib/s3.ts with uploadToS3, deleteFromS3, getSignedDownloadUrl, getSignedViewUrl, keyFromUrl; POST /api/upload (MIME/size validation, 5 MB images / 10 MB files); GET /api/download/[id] (signed URL, forced download); GET /api/view/[id] (signed URL, inline display for images); FileUpload component with drag-and-drop, progress, local object-URL preview; NewItemDialog extended with file/image type pills; ItemDrawer shows image via /api/view proxy and file info card with download link; deleteItem server action deletes S3 object on item delete; 16 new unit tests
