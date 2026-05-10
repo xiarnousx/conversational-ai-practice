@@ -9,6 +9,9 @@ export interface ItemCardData {
   tags: string[];
   isPinned: boolean;
   createdAt: string;
+  fileName: string | null;
+  fileSize: number | null;
+  fileUrl: string | null;
 }
 
 type ItemWithRelations = Awaited<ReturnType<typeof fetchItems>>[number];
@@ -38,6 +41,9 @@ function toCardData(item: ItemWithRelations): ItemCardData {
     tags: item.tags.map((t) => t.tag.name),
     isPinned: item.isPinned,
     createdAt: item.createdAt.toISOString(),
+    fileName: item.fileName,
+    fileSize: item.fileSize,
+    fileUrl: item.fileUrl,
   };
 }
 

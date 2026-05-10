@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { getItemsByType } from "@/lib/db/items";
 import ItemRow from "@/components/dashboard/ItemRow";
 import ImageThumbnailCard from "@/components/items/ImageThumbnailCard";
+import FileListRow from "@/components/items/FileListRow";
 
 function slugToTypeName(slug: string): string {
   return slug.endsWith("s") ? slug.slice(0, -1) : slug;
@@ -38,6 +39,12 @@ export default async function ItemsTypePage({
       {items.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
           <p className="text-sm text-muted-foreground">No {label.toLowerCase()} yet.</p>
+        </div>
+      ) : typeName === "file" ? (
+        <div className="flex flex-col gap-2">
+          {items.map((item) => (
+            <FileListRow key={item.id} item={item} />
+          ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
