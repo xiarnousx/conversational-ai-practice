@@ -1,18 +1,12 @@
-# Current Feature: Close Drawer on Sidebar Navigation
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- When the user clicks any sidebar navigation item (item type link or collection link), close the item drawer if it is currently open
-
 ## Notes
-
-- The drawer is managed by `ItemDrawerProvider` in `src/components/item-drawer/index.tsx`
-- Sidebar navigation items are rendered in the sidebar component — clicking them triggers a Next.js route change
-- Detect route changes with `usePathname` and close the drawer when the pathname changes
 
 ## History
 
@@ -46,3 +40,4 @@ In Progress
 - 2026-05-09: Code Editor — CodeEditor component (Monaco/vs-dark) with macOS traffic-light dots, language label, copy button, fluid height 200–400px; replaces Textarea for snippet/command in item drawer (readonly + edit) and New Item dialog; New Item dialog pre-selects type from /items/{slug} route; Sheet made non-modal so main content stays interactive while drawer is open; drawer only closes via explicit close button (disablePointerDismissal + escape-key filter); AbortController cancels stale fetches on item switch; key={openItemId} resets DrawerContent state on item change
 - 2026-05-10: Markdown Editor — MarkdownEditor component (react-markdown + remark-gfm) with Write/Preview tabs, macOS traffic-light header, copy button, dark theme matching CodeEditor (bg-[#1e1e1e]/bg-[#2d2d2d]), fluid height 200–400px; custom .markdown-preview CSS class for headings, bold, lists, inline/fenced code, blockquotes, links, tables; replaces Textarea for note and prompt content in ItemDrawer (view + edit modes) and NewItemDialog; snippet/command types unchanged
 - 2026-05-10: File & Image Upload with Amazon S3 — @aws-sdk/client-s3 + s3-request-presigner installed; src/lib/s3.ts with uploadToS3, deleteFromS3, getSignedDownloadUrl, getSignedViewUrl, keyFromUrl; POST /api/upload (MIME/size validation, 5 MB images / 10 MB files); GET /api/download/[id] (signed URL, forced download); GET /api/view/[id] (signed URL, inline display for images); FileUpload component with drag-and-drop, progress, local object-URL preview; NewItemDialog extended with file/image type pills; ItemDrawer shows image via /api/view proxy and file info card with download link; deleteItem server action deletes S3 object on item delete; 16 new unit tests
+- 2026-05-10: Close drawer on sidebar navigation — ItemDrawerProvider watches usePathname(); resets openItemId to null on any route change so the drawer closes automatically when the user navigates via the sidebar
