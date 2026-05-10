@@ -1,12 +1,34 @@
-# Current Feature
+# Current Feature: File & Image Upload with Amazon S3
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Install `@aws-sdk/client-s3` and configure S3 client
+- Create upload API route (`/api/upload`) that uploads files to S3 and returns the URL
+- Create `FileUpload` component with drag-and-drop support and upload progress indicator
+- Update New Item modal to use `FileUpload` for `file` and `image` item types
+- Display image preview for images; file info (name, size, type) for files in drawer
+- Add download button in `ItemDrawer` for file types via a proxy API route (`/api/download/[id]`) using signed URLs to avoid CORS issues
+- Delete files from S3 when items are deleted (`deleteItem` server action)
+- Stick to `src/lib/db/items.ts` for all Prisma/db functions
+
 ## Notes
+
+### File Constraints
+
+| Type   | Max Size | Extensions |
+|--------|----------|------------|
+| Images | 5 MB     | `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg` |
+| Files  | 10 MB    | `.pdf`, `.txt`, `.md`, `.json`, `.yaml`, `.yml`, `.xml`, `.csv`, `.toml`, `.ini` |
+
+### Accepted MIME Types
+
+**Images:** `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml`
+
+**Files:** `application/pdf`, `text/plain`, `text/markdown`, `application/json`, `application/x-yaml`, `text/yaml`, `application/xml`, `text/xml`, `text/csv`, `application/toml`
 
 ## History
 

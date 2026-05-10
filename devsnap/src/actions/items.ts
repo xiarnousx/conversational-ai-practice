@@ -5,6 +5,7 @@ import { updateItem as dbUpdateItem, deleteItemById, createItemInDb } from "@/li
 import type { ItemDetail } from "@/lib/db/items";
 import { updateItemSchema, createItemSchema } from "@/lib/validations/items";
 import type { UpdateItemInput, CreateItemInput } from "@/lib/validations/items";
+import { deleteFromS3, keyFromUrl } from "@/lib/s3";
 
 export type UpdateItemResult =
   | { success: true; data: ItemDetail }
@@ -65,9 +66,17 @@ export async function deleteItem(itemId: string): Promise<DeleteItemResult> {
     return { success: false, error: "Unauthorized" };
   }
 
-  const deleted = await deleteItemById(session.user.id, itemId);
-  if (!deleted) {
+  const result = await deleteItemById(session.user.id, itemId);
+  if (!result.deleted) {
     return { success: false, error: "Item not found" };
+  }
+
+  if (result.fileUrl) {
+    try {
+      await deleteFromS3(keyFromUrl(result.fileUrl));
+    } catch {
+      // best-effort — item is already deleted from DB
+    }
   }
 
   return { success: true };

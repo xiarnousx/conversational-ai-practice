@@ -21,7 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CodeEditor } from "@/components/ui/code-editor";
 import { MarkdownEditor } from "@/components/ui/markdown-editor";
-import { Calendar, Copy, Layers, Pencil, Pin, Star, Tag, Trash2 } from "lucide-react";
+import { Calendar, Copy, Download, FileText, Layers, Pencil, Pin, Star, Tag, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { updateItem, deleteItem } from "@/actions/items";
 import type { ItemDetail } from "@/lib/db/items";
@@ -110,6 +110,7 @@ const LANGUAGE_TYPES = new Set(["snippet", "command"]);
 const CODE_TYPES = new Set(["snippet", "command"]);
 const MARKDOWN_TYPES = new Set(["note", "prompt"]);
 const URL_TYPES = new Set(["url", "link"]);
+const FILE_TYPES = new Set(["file", "image"]);
 
 interface DrawerContentProps {
   item: ItemDetail;
@@ -129,6 +130,7 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
   const showCode = CODE_TYPES.has(typeLower);
   const showMarkdown = MARKDOWN_TYPES.has(typeLower);
   const showUrl = URL_TYPES.has(typeLower);
+  const showFile = FILE_TYPES.has(typeLower) && !!item.fileUrl;
 
   const [form, setForm] = useState({
     title: item.title,
@@ -275,6 +277,16 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
             <Copy />
             Copy
           </Button>
+          {showFile && (
+            <a
+              href={`/api/download/${item.id}`}
+              download
+              className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+            >
+              <Download className="size-4" />
+              Download
+            </a>
+          )}
           <Button variant="ghost" size="sm" onClick={startEdit}>
             <Pencil />
             Edit
@@ -449,6 +461,47 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
                 >
                   {item.url}
                 </a>
+              </section>
+            )}
+
+            {showFile && typeLower === "image" && (
+              <section>
+                <SectionLabel icon={<FileText className="size-3" />}>Image</SectionLabel>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/api/view/${item.id}`}
+                  alt={item.fileName ?? item.title}
+                  className="max-h-64 w-full rounded-md object-contain"
+                />
+                {item.fileName && (
+                  <p className="mt-1 text-xs text-muted-foreground">{item.fileName}</p>
+                )}
+              </section>
+            )}
+
+            {showFile && typeLower === "file" && (
+              <section>
+                <SectionLabel icon={<FileText className="size-3" />}>File</SectionLabel>
+                <div className="flex items-center gap-2 rounded-md border border-border bg-muted/40 p-3">
+                  <FileText className="size-5 shrink-0 text-muted-foreground" />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium">{item.fileName ?? "File"}</p>
+                    {item.fileSize != null && (
+                      <p className="text-xs text-muted-foreground">
+                        {item.fileSize < 1024 * 1024
+                          ? `${(item.fileSize / 1024).toFixed(1)} KB`
+                          : `${(item.fileSize / (1024 * 1024)).toFixed(1)} MB`}
+                      </p>
+                    )}
+                  </div>
+                  <a
+                    href={`/api/download/${item.id}`}
+                    download
+                    className="text-xs text-primary underline underline-offset-2"
+                  >
+                    Download
+                  </a>
+                </div>
               </section>
             )}
 

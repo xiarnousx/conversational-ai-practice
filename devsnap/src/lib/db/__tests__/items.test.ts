@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { getItemById, updateItem, createItemInDb } from "@/lib/db/items"
+import { getItemById, updateItem, createItemInDb, deleteItemById } from "@/lib/db/items"
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
@@ -7,6 +7,7 @@ vi.mock("@/lib/prisma", () => ({
       findFirst: vi.fn(),
       update: vi.fn(),
       create: vi.fn(),
+      delete: vi.fn(),
     },
     itemType: {
       findFirst: vi.fn(),
@@ -19,6 +20,7 @@ import { prisma } from "@/lib/prisma"
 const mockFindFirst = vi.mocked(prisma.item.findFirst)
 const mockUpdate = vi.mocked(prisma.item.update)
 const mockCreate = vi.mocked(prisma.item.create)
+const mockDelete = vi.mocked(prisma.item.delete)
 const mockTypeFindFirst = vi.mocked(prisma.itemType.findFirst)
 
 const BASE_ITEM = {
@@ -293,5 +295,114 @@ describe("createItemInDb", () => {
         data: expect.objectContaining({ typeId: "type-1", userId: "user-1" }),
       })
     )
+  })
+
+  it("sets contentType to 'file' when fileUrl is provided", async () => {
+    mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
+    mockCreate.mockResolvedValue({ ...CREATED_ITEM, contentType: "file" } as never)
+
+    await createItemInDb("user-1", {
+      title: "My PDF",
+      typeName: "file",
+      fileUrl: "https://bucket.s3.us-east-1.amazonaws.com/uploads/user-1/file.pdf",
+      fileName: "file.pdf",
+      fileSize: 2048,
+      tags: [],
+    })
+
+    expect(mockCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ contentType: "file" }),
+      })
+    )
+  })
+
+  it("sets contentType to 'text' when fileUrl is not provided", async () => {
+    mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
+    mockCreate.mockResolvedValue(CREATED_ITEM as never)
+
+    await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [] })
+
+    expect(mockCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ contentType: "text" }),
+      })
+    )
+  })
+
+  it("passes fileUrl, fileName, fileSize to prisma.item.create", async () => {
+    mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
+    mockCreate.mockResolvedValue(CREATED_ITEM as never)
+
+    await createItemInDb("user-1", {
+      title: "My Image",
+      typeName: "image",
+      fileUrl: "https://bucket.s3.us-east-1.amazonaws.com/uploads/user-1/photo.png",
+      fileName: "photo.png",
+      fileSize: 102400,
+      tags: [],
+    })
+
+    expect(mockCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          fileUrl: "https://bucket.s3.us-east-1.amazonaws.com/uploads/user-1/photo.png",
+          fileName: "photo.png",
+          fileSize: 102400,
+        }),
+      })
+    )
+  })
+})
+
+// ─── deleteItemById ───────────────────────────────────────────────────────────
+
+const DELETABLE_ITEM = {
+  id: "item-1",
+  userId: "user-1",
+  fileUrl: null,
+}
+
+const DELETABLE_FILE_ITEM = {
+  id: "item-2",
+  userId: "user-1",
+  fileUrl: "https://bucket.s3.us-east-1.amazonaws.com/uploads/user-1/file.pdf",
+}
+
+describe("deleteItemById", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("returns { deleted: false, fileUrl: null } when item is not found", async () => {
+    mockFindFirst.mockResolvedValue(null)
+    const result = await deleteItemById("user-1", "missing-id")
+    expect(result).toEqual({ deleted: false, fileUrl: null })
+    expect(mockDelete).not.toHaveBeenCalled()
+  })
+
+  it("returns { deleted: true, fileUrl: null } when item has no file", async () => {
+    mockFindFirst.mockResolvedValue(DELETABLE_ITEM as never)
+    mockDelete.mockResolvedValue(DELETABLE_ITEM as never)
+
+    const result = await deleteItemById("user-1", "item-1")
+    expect(result).toEqual({ deleted: true, fileUrl: null })
+  })
+
+  it("returns { deleted: true, fileUrl } when item has a file", async () => {
+    mockFindFirst.mockResolvedValue(DELETABLE_FILE_ITEM as never)
+    mockDelete.mockResolvedValue(DELETABLE_FILE_ITEM as never)
+
+    const result = await deleteItemById("user-1", "item-2")
+    expect(result).toEqual({
+      deleted: true,
+      fileUrl: "https://bucket.s3.us-east-1.amazonaws.com/uploads/user-1/file.pdf",
+    })
+  })
+
+  it("calls prisma.item.delete with the correct item id", async () => {
+    mockFindFirst.mockResolvedValue(DELETABLE_ITEM as never)
+    mockDelete.mockResolvedValue(DELETABLE_ITEM as never)
+
+    await deleteItemById("user-1", "item-1")
+    expect(mockDelete).toHaveBeenCalledWith({ where: { id: "item-1" } })
   })
 })
