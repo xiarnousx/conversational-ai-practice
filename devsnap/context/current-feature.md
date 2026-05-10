@@ -1,16 +1,25 @@
-# Current Feature
+# Current Feature: Markdown Editor
 
 ## Status
 
-<!-- Not Started|In Progress|Completed -->
+Complete
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- MarkdownEditor component with Write/Preview tabs using react-markdown + remark-gfm
+- Readonly mode shows Preview tab only; edit mode defaults to Write tab
+- Copy button in header matching CodeEditor style
+- Dark theme container matching existing CodeEditor (bg-[#1e1e1e] / bg-[#2d2d2d])
+- Custom `.markdown-preview` CSS class for reliable dark mode markdown styling (headings, code, lists, blockquotes, links, tables)
+- Fluid height up to 400px
+- Replaces Textarea for note and prompt content in NewItemDialog and ItemDrawer (edit + view modes)
+- No changes to CodeEditor or snippet/command types
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Keep CodeEditor as-is for snippet and command types
+- react-markdown with remark-gfm for GFM support (tables, strikethrough, etc.)
+- Styling via custom CSS class, not Tailwind prose plugin
 
 ## History
 
@@ -42,3 +51,4 @@
 - 2026-05-03: Delete Item — Delete button in item drawer opens ShadCN AlertDialog confirmation; on confirm calls deleteItem server action with auth/ownership check and cascade-deletes ItemTag rows before removing the item; on success closes drawer, refreshes list, shows toast; on error shows error toast; deleteItemById in src/lib/db/items.ts; alert-dialog.tsx and src/lib/validations/items.ts added
 - 2026-05-03: Item Create — "New Item" button in top bar opens shadcn Dialog; pill-style type selector (snippet/prompt/command/note/link) drives dynamic fields (content+language for snippet/command, content for prompt/note, required URL for link); createItem server action with Zod validation and auth check; createItemInDb db query; on success closes modal, refreshes list, shows toast; TopBar converted to client component; 14 new unit tests for createItemSchema and createItemInDb
 - 2026-05-09: Code Editor — CodeEditor component (Monaco/vs-dark) with macOS traffic-light dots, language label, copy button, fluid height 200–400px; replaces Textarea for snippet/command in item drawer (readonly + edit) and New Item dialog; New Item dialog pre-selects type from /items/{slug} route; Sheet made non-modal so main content stays interactive while drawer is open; drawer only closes via explicit close button (disablePointerDismissal + escape-key filter); AbortController cancels stale fetches on item switch; key={openItemId} resets DrawerContent state on item change
+- 2026-05-10: Markdown Editor — MarkdownEditor component (react-markdown + remark-gfm) with Write/Preview tabs, macOS traffic-light header, copy button, dark theme matching CodeEditor (bg-[#1e1e1e]/bg-[#2d2d2d]), fluid height 200–400px; custom .markdown-preview CSS class for headings, bold, lists, inline/fenced code, blockquotes, links, tables; replaces Textarea for note and prompt content in ItemDrawer (view + edit modes) and NewItemDialog; snippet/command types unchanged
