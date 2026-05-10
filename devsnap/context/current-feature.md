@@ -1,12 +1,18 @@
-# Current Feature
+# Current Feature: Close Drawer on Sidebar Navigation
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- When the user clicks any sidebar navigation item (item type link or collection link), close the item drawer if it is currently open
+
 ## Notes
+
+- The drawer is managed by `ItemDrawerProvider` in `src/components/item-drawer/index.tsx`
+- Sidebar navigation items are rendered in the sidebar component — clicking them triggers a Next.js route change
+- Detect route changes with `usePathname` and close the drawer when the pathname changes
 
 ## History
 
