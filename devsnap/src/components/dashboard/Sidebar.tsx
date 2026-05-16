@@ -259,6 +259,9 @@ function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collec
             <DropdownMenuItem onClick={() => router.push("/profile")}>
               Profile
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push("/settings")}>
+              Settings
+            </DropdownMenuItem>
             <DropdownMenuItem
               variant="destructive"
               onClick={() => signOut({ callbackUrl: "/sign-in" })}
