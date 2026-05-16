@@ -74,3 +74,34 @@ export async function getSidebarCollections(userId: string): Promise<SidebarColl
       dominantColor: getDominantColor(col.items),
     }));
 }
+
+export async function createCollectionInDb(
+  userId: string,
+  data: { name: string; description?: string | null }
+): Promise<CollectionCardData> {
+  const collection = await prisma.collection.create({
+    data: {
+      name: data.name,
+      description: data.description ?? null,
+      userId,
+    },
+    include: {
+      items: {
+        take: 50,
+        include: {
+          type: { select: { name: true, color: true } },
+        },
+      },
+    },
+  });
+
+  return {
+    id: collection.id,
+    name: collection.name,
+    description: collection.description ?? "",
+    itemCount: collection.items.length,
+    isFavorite: collection.isFavorite,
+    icons: [],
+    borderColor: "#6b7280",
+  };
+}

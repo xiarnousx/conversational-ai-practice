@@ -1,16 +1,23 @@
-# Current Feature
+# Current Feature: Collection Items Add
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- Add feature goals here -->
+- Add a "New Collection" button in the top bar that opens a modal
+- Modal has name and description fields with validation
+- On save: create the collection in the database, show success/error toast, and refresh the UI
+- Collections are user-scoped (owned by the signed-in user)
+- Follow existing patterns: lib/db functions for DB queries, server actions for mutations, API routes for client-side calls where applicable
 
 ## Notes
 
-<!-- Add notes here -->
+- Follow the same patterns as item creation (NewItemDialog, createItem server action, createItemInDb db function)
+- Use Zod for input validation in the server action
+- TopBar already has the "New Item" button — add "New Collection" alongside it
+- Refresh the collections list/sidebar after creation (router.refresh())
 
 
 

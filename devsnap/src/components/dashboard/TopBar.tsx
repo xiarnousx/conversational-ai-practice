@@ -3,6 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Menu, Search } from "lucide-react";
 import { NewItemDialog } from "@/components/item-create";
+import { NewCollectionDialog } from "@/components/collection-create";
 
 interface TopBarProps {
   onMenuClick?: () => void;
@@ -26,6 +27,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
         />
       </div>
       <div className="ml-auto flex items-center gap-2">
+        <NewCollectionDialog />
         <NewItemDialog />
       </div>
     </header>
