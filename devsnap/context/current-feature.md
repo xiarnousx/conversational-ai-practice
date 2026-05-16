@@ -1,12 +1,22 @@
-# Current Feature
+# Current Feature: Collection Edit/Delete
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Add Edit, Delete, and Favorite buttons on `/collections/[id]` page (Favorite: icon only, no logic yet)
+- Edit button opens a modal to update collection name and description
+- Delete button shows a confirmation dialog; deletes the collection but NOT its items (items remain, just lose the collection association)
+- On collection cards at `/collections` and `/dashboard`, a 3-dots icon opens a dropdown with Edit, Delete, and Favorite actions
+- Clicking anywhere else on the card navigates to the collection page
+
 ## Notes
+
+- Favorite action should render the UI (icon/button/dropdown entry) but not implement any logic yet
+- Items in a deleted collection should NOT be deleted — they simply lose the collection relationship (ItemCollection join rows get removed)
+- Edit/Delete actions on cards must not interfere with the card's navigation click behavior
 
 
 

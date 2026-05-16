@@ -1,11 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { getCollectionsForUser, getSidebarCollections, getCollectionById } from "@/lib/db/collections"
+import {
+  getCollectionsForUser,
+  getSidebarCollections,
+  getCollectionById,
+  updateCollectionInDb,
+  deleteCollectionInDb,
+} from "@/lib/db/collections"
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     collection: {
       findMany: vi.fn(),
       findFirst: vi.fn(),
+      update: vi.fn(),
+      deleteMany: vi.fn(),
     },
   },
 }))
@@ -14,6 +22,8 @@ import { prisma } from "@/lib/prisma"
 
 const mockFindMany = vi.mocked(prisma.collection.findMany)
 const mockFindFirst = vi.mocked(prisma.collection.findFirst)
+const mockUpdate = vi.mocked(prisma.collection.update)
+const mockDeleteMany = vi.mocked(prisma.collection.deleteMany)
 
 const SNIPPET_TYPE = { name: "Snippet", color: "#3b82f6" }
 const PROMPT_TYPE = { name: "Prompt", color: "#8b5cf6" }
@@ -254,5 +264,69 @@ describe("getCollectionById", () => {
     )
     const result = await getCollectionById("user-1", "col-1")
     expect(result?.icons).toHaveLength(4)
+  })
+})
+
+describe("updateCollectionInDb", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("returns mapped CollectionCardData on success", async () => {
+    mockUpdate.mockResolvedValue(
+      makeCollection({
+        name: "Updated Name",
+        description: "Updated desc",
+        items: [makeItemCollection(SNIPPET_TYPE)],
+      }) as never
+    )
+
+    const result = await updateCollectionInDb("user-1", "col-1", {
+      name: "Updated Name",
+      description: "Updated desc",
+    })
+
+    expect(result).toMatchObject({
+      id: "col-1",
+      name: "Updated Name",
+      description: "Updated desc",
+      itemCount: 1,
+      isFavorite: false,
+    })
+  })
+
+  it("returns null when collection is not found (P2025)", async () => {
+    mockUpdate.mockRejectedValue({ code: "P2025" })
+    const result = await updateCollectionInDb("user-1", "missing-id", { name: "X" })
+    expect(result).toBeNull()
+  })
+
+  it("rethrows unexpected errors", async () => {
+    const err = new Error("DB connection lost")
+    mockUpdate.mockRejectedValue(err)
+    await expect(updateCollectionInDb("user-1", "col-1", { name: "X" })).rejects.toThrow(
+      "DB connection lost"
+    )
+  })
+
+  it("coerces null description to empty string in returned data", async () => {
+    mockUpdate.mockResolvedValue(makeCollection({ description: null }) as never)
+    const result = await updateCollectionInDb("user-1", "col-1", { name: "X" })
+    expect(result?.description).toBe("")
+  })
+})
+
+describe("deleteCollectionInDb", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("calls deleteMany with correct userId and collectionId", async () => {
+    mockDeleteMany.mockResolvedValue({ count: 1 })
+    await deleteCollectionInDb("user-1", "col-1")
+    expect(mockDeleteMany).toHaveBeenCalledWith({
+      where: { id: "col-1", userId: "user-1" },
+    })
+  })
+
+  it("resolves without error when collection does not exist", async () => {
+    mockDeleteMany.mockResolvedValue({ count: 0 })
+    await expect(deleteCollectionInDb("user-1", "missing-id")).resolves.toBeUndefined()
   })
 })

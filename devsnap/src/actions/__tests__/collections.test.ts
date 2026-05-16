@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { createCollectionSchema } from "@/lib/validations/collections";
+import { createCollectionSchema, updateCollectionSchema } from "@/lib/validations/collections";
 
 describe("createCollectionSchema", () => {
   it("accepts a minimal valid payload (name only)", () => {
@@ -96,5 +96,60 @@ describe("createCollectionSchema", () => {
     const result = createCollectionSchema.safeParse({ name: "My Collection" });
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.description).toBeUndefined();
+  });
+});
+
+describe("updateCollectionSchema", () => {
+  it("accepts a valid name and description", () => {
+    const result = updateCollectionSchema.safeParse({
+      name: "Updated Name",
+      description: "New description",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("trims whitespace from name and description", () => {
+    const result = updateCollectionSchema.safeParse({
+      name: "  Trimmed  ",
+      description: "  trimmed desc  ",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.name).toBe("Trimmed");
+      expect(result.data.description).toBe("trimmed desc");
+    }
+  });
+
+  it("accepts null description", () => {
+    const result = updateCollectionSchema.safeParse({ name: "Valid", description: null });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.description).toBeNull();
+  });
+
+  it("rejects an empty name", () => {
+    const result = updateCollectionSchema.safeParse({ name: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.error.issues[0].message).toBe("Name is required");
+  });
+
+  it("rejects a whitespace-only name", () => {
+    const result = updateCollectionSchema.safeParse({ name: "   " });
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.error.issues[0].message).toBe("Name is required");
+  });
+
+  it("rejects a name longer than 100 characters", () => {
+    const result = updateCollectionSchema.safeParse({ name: "a".repeat(101) });
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.error.issues[0].message).toBe("Name is too long");
+  });
+
+  it("rejects a description longer than 500 characters", () => {
+    const result = updateCollectionSchema.safeParse({
+      name: "Valid",
+      description: "a".repeat(501),
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.error.issues[0].message).toBe("Description is too long");
   });
 });

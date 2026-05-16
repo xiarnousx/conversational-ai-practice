@@ -7,6 +7,7 @@ import { getItemsByCollectionId } from "@/lib/db/items";
 import ItemRow from "@/components/dashboard/ItemRow";
 import ImageThumbnailCard from "@/components/items/ImageThumbnailCard";
 import FileListRow from "@/components/items/FileListRow";
+import { CollectionDetailActions } from "@/components/collection-detail/CollectionDetailActions";
 
 export default async function CollectionDetailPage({
   params,
@@ -40,13 +41,22 @@ export default async function CollectionDetailPage({
           <ChevronLeft className="size-3" />
           All collections
         </NextLink>
-        <h1 className="text-2xl font-semibold text-foreground">{collection.name}</h1>
-        {collection.description && (
-          <p className="mt-1 text-sm text-muted-foreground">{collection.description}</p>
-        )}
-        <p className="mt-1 text-sm text-muted-foreground">
-          {items.length} {items.length === 1 ? "item" : "items"}
-        </p>
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h1 className="text-2xl font-semibold text-foreground">{collection.name}</h1>
+            {collection.description && (
+              <p className="mt-1 text-sm text-muted-foreground">{collection.description}</p>
+            )}
+            <p className="mt-1 text-sm text-muted-foreground">
+              {items.length} {items.length === 1 ? "item" : "items"}
+            </p>
+          </div>
+          <CollectionDetailActions
+            collectionId={collection.id}
+            collectionName={collection.name}
+            collectionDescription={collection.description}
+          />
+        </div>
       </div>
 
       {items.length === 0 ? (

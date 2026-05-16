@@ -108,6 +108,53 @@ export async function getCollectionById(
   };
 }
 
+export async function updateCollectionInDb(
+  userId: string,
+  collectionId: string,
+  data: { name: string; description?: string | null }
+): Promise<CollectionCardData | null> {
+  try {
+    const collection = await prisma.collection.update({
+      where: { id: collectionId, userId },
+      data: {
+        name: data.name,
+        description: data.description ?? null,
+      },
+      include: {
+        items: {
+          take: 50,
+          include: {
+            item: {
+              include: { type: { select: { name: true, color: true } } },
+            },
+          },
+        },
+      },
+    });
+    return {
+      id: collection.id,
+      name: collection.name,
+      description: collection.description ?? "",
+      itemCount: collection.items.length,
+      isFavorite: collection.isFavorite,
+      icons: [...new Set(collection.items.map((ic) => ic.item.type.name))].slice(0, 4),
+      borderColor: getDominantColor(collection.items),
+    };
+  } catch (e: unknown) {
+    if ((e as { code?: string }).code === "P2025") return null;
+    throw e;
+  }
+}
+
+export async function deleteCollectionInDb(
+  userId: string,
+  collectionId: string
+): Promise<void> {
+  await prisma.collection.deleteMany({
+    where: { id: collectionId, userId },
+  });
+}
+
 export async function createCollectionInDb(
   userId: string,
   data: { name: string; description?: string | null }
