@@ -1,9 +1,11 @@
 import { redirect, notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { getItemsByType } from "@/lib/db/items";
+import { ITEMS_PER_PAGE } from "@/lib/constants";
 import ItemRow from "@/components/dashboard/ItemRow";
 import ImageThumbnailCard from "@/components/items/ImageThumbnailCard";
 import FileListRow from "@/components/items/FileListRow";
+import Pagination from "@/components/ui/Pagination";
 
 const SLUG_TO_TYPE: Record<string, string> = {
   snippets: "snippet",
@@ -21,8 +23,10 @@ function slugToLabel(typeName: string): string {
 
 export default async function ItemsTypePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ type: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const session = await auth();
   if (!session?.user?.id) redirect("/sign-in");
@@ -30,7 +34,12 @@ export default async function ItemsTypePage({
   const { type } = await params;
   const typeName = SLUG_TO_TYPE[type];
   if (!typeName) notFound();
-  const items = await getItemsByType(session.user.id, typeName);
+
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+
+  const { items, total } = await getItemsByType(session.user.id, typeName, page);
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
   const label = slugToLabel(typeName);
 
   return (
@@ -38,7 +47,7 @@ export default async function ItemsTypePage({
       <div>
         <h1 className="text-2xl font-semibold text-foreground">{label}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          {items.length} {items.length === 1 ? "item" : "items"}
+          {total} {total === 1 ? "item" : "items"}
         </p>
       </div>
 
@@ -63,6 +72,8 @@ export default async function ItemsTypePage({
           )}
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} basePath={`/items/${type}`} />
     </div>
   );
 }

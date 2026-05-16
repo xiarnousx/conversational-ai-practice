@@ -6,6 +6,7 @@ import {
   updateCollectionInDb,
   deleteCollectionInDb,
   getCollectionsForSearch,
+  getCollectionsForUserPaginated,
 } from "@/lib/db/collections"
 
 vi.mock("@/lib/prisma", () => ({
@@ -13,6 +14,7 @@ vi.mock("@/lib/prisma", () => ({
     collection: {
       findMany: vi.fn(),
       findFirst: vi.fn(),
+      count: vi.fn(),
       update: vi.fn(),
       deleteMany: vi.fn(),
     },
@@ -23,6 +25,7 @@ import { prisma } from "@/lib/prisma"
 
 const mockFindMany = vi.mocked(prisma.collection.findMany)
 const mockFindFirst = vi.mocked(prisma.collection.findFirst)
+const mockCount = vi.mocked(prisma.collection.count)
 const mockUpdate = vi.mocked(prisma.collection.update)
 const mockDeleteMany = vi.mocked(prisma.collection.deleteMany)
 
@@ -364,5 +367,80 @@ describe("getCollectionsForSearch", () => {
     const result = await getCollectionsForSearch("user-1")
     expect(result).toHaveLength(2)
     expect(result[1].id).toBe("col-2")
+  })
+})
+
+// ─── getCollectionsForUserPaginated ──────────────────────────────────────────
+
+describe("getCollectionsForUserPaginated", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("returns empty collections and total 0 when user has no collections", async () => {
+    mockFindMany.mockResolvedValue([])
+    mockCount.mockResolvedValue(0)
+    const result = await getCollectionsForUserPaginated("user-1", 1)
+    expect(result).toEqual({ collections: [], total: 0 })
+  })
+
+  it("maps a collection to CollectionCardData shape", async () => {
+    mockFindMany.mockResolvedValue([makeCollection({ items: [makeItemCollection(SNIPPET_TYPE)] })] as never)
+    mockCount.mockResolvedValue(1)
+    const { collections } = await getCollectionsForUserPaginated("user-1", 1)
+    expect(collections[0]).toMatchObject({
+      id: "col-1",
+      name: "React Patterns",
+      description: "Useful patterns",
+      itemCount: 1,
+      isFavorite: false,
+    })
+  })
+
+  it("returns correct total from count query", async () => {
+    mockFindMany.mockResolvedValue([makeCollection()] as never)
+    mockCount.mockResolvedValue(15)
+    const { total } = await getCollectionsForUserPaginated("user-1", 1)
+    expect(total).toBe(15)
+  })
+
+  it("uses skip and take for pagination on page 2", async () => {
+    mockFindMany.mockResolvedValue([])
+    mockCount.mockResolvedValue(10)
+    await getCollectionsForUserPaginated("user-1", 2)
+    const call = mockFindMany.mock.calls[0][0] as { skip: number; take: number }
+    expect(call.skip).toBeGreaterThan(0)
+    expect(call.take).toBeGreaterThan(0)
+  })
+
+  it("uses skip 0 on page 1", async () => {
+    mockFindMany.mockResolvedValue([])
+    mockCount.mockResolvedValue(0)
+    await getCollectionsForUserPaginated("user-1", 1)
+    const call = mockFindMany.mock.calls[0][0] as { skip: number }
+    expect(call.skip).toBe(0)
+  })
+
+  it("derives borderColor from dominant item type", async () => {
+    mockFindMany.mockResolvedValue([
+      makeCollection({ items: [makeItemCollection(SNIPPET_TYPE), makeItemCollection(SNIPPET_TYPE), makeItemCollection(PROMPT_TYPE)] }),
+    ] as never)
+    mockCount.mockResolvedValue(1)
+    const { collections } = await getCollectionsForUserPaginated("user-1", 1)
+    expect(collections[0].borderColor).toBe(SNIPPET_TYPE.color)
+  })
+
+  it("falls back to #6b7280 when collection has no items", async () => {
+    mockFindMany.mockResolvedValue([makeCollection()] as never)
+    mockCount.mockResolvedValue(1)
+    const { collections } = await getCollectionsForUserPaginated("user-1", 1)
+    expect(collections[0].borderColor).toBe("#6b7280")
+  })
+
+  it("returns multiple collections", async () => {
+    const second = makeCollection({ id: "col-2", name: "Python Scripts" })
+    mockFindMany.mockResolvedValue([makeCollection(), second] as never)
+    mockCount.mockResolvedValue(2)
+    const { collections } = await getCollectionsForUserPaginated("user-1", 1)
+    expect(collections).toHaveLength(2)
+    expect(collections[1].id).toBe("col-2")
   })
 })

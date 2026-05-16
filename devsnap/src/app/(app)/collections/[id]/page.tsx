@@ -4,26 +4,35 @@ import { ChevronLeft } from "lucide-react";
 import { auth } from "@/auth";
 import { getCollectionById } from "@/lib/db/collections";
 import { getItemsByCollectionId } from "@/lib/db/items";
+import { COLLECTIONS_PER_PAGE } from "@/lib/constants";
 import ItemRow from "@/components/dashboard/ItemRow";
 import ImageThumbnailCard from "@/components/items/ImageThumbnailCard";
 import FileListRow from "@/components/items/FileListRow";
 import { CollectionDetailActions } from "@/components/collection-detail/CollectionDetailActions";
+import Pagination from "@/components/ui/Pagination";
 
 export default async function CollectionDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const session = await auth();
   if (!session?.user?.id) redirect("/sign-in");
 
   const { id } = await params;
-  const [collection, items] = await Promise.all([
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+
+  const [collection, { items, total }] = await Promise.all([
     getCollectionById(session.user.id, id),
-    getItemsByCollectionId(session.user.id, id),
+    getItemsByCollectionId(session.user.id, id, page),
   ]);
 
   if (!collection) notFound();
+
+  const totalPages = Math.ceil(total / COLLECTIONS_PER_PAGE);
 
   const fileItems = items.filter((i) => i.typeName.toLowerCase() === "file");
   const imageItems = items.filter((i) => i.typeName.toLowerCase() === "image");
@@ -48,7 +57,7 @@ export default async function CollectionDetailPage({
               <p className="mt-1 text-sm text-muted-foreground">{collection.description}</p>
             )}
             <p className="mt-1 text-sm text-muted-foreground">
-              {items.length} {items.length === 1 ? "item" : "items"}
+              {total} {total === 1 ? "item" : "items"}
             </p>
           </div>
           <CollectionDetailActions
@@ -59,7 +68,7 @@ export default async function CollectionDetailPage({
         </div>
       </div>
 
-      {items.length === 0 ? (
+      {items.length === 0 && page === 1 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
           <p className="text-sm text-muted-foreground">No items in this collection yet.</p>
         </div>
@@ -88,6 +97,8 @@ export default async function CollectionDetailPage({
           )}
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} basePath={`/collections/${id}`} />
     </div>
   );
 }

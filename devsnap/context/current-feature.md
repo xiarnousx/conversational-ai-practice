@@ -1,12 +1,22 @@
-# Current Feature
+# Current Feature: Pagination
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Add pagination to `/items/[type]` page with numbered page links, prev/next controls
+- Add pagination to `/collections/[id]` page with numbered page links, prev/next controls
+- Disable (grey out) prev/next when at first or last page
+- Use `ITEMS_PER_PAGE = 21` and `COLLECTIONS_PER_PAGE = 21` constants
+- Extract dashboard limits as constants: `DASHBOARD_COLLECTIONS_LIMIT = 6`, `DASHBOARD_RECENT_ITEMS_LIMIT = 10`
+- Fetch only the current page's data (no loading all records at once)
+
 ## Notes
+
+- Pagination is URL-based (query param `?page=N`) so pages are shareable and server-rendered
+- Dashboard limits are separate constants — dashboard does not paginate, just caps results
 
 ## History
 

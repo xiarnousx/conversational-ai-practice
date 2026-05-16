@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { getCollectionsForUser } from "@/lib/db/collections";
 import { getPinnedItems, getRecentItems } from "@/lib/db/items";
+import { DASHBOARD_COLLECTIONS_LIMIT } from "@/lib/constants";
 import StatsCards from "@/components/dashboard/StatsCards";
 import CollectionsGrid from "@/components/dashboard/CollectionsGrid";
 import PinnedItems from "@/components/dashboard/PinnedItems";
@@ -19,7 +20,7 @@ export default async function DashboardPage() {
       prisma.collection.count({ where: { userId: user.id } }),
       prisma.item.count({ where: { userId: user.id, isFavorite: true } }),
       prisma.collection.count({ where: { userId: user.id, isFavorite: true } }),
-      getCollectionsForUser(user.id),
+      getCollectionsForUser(user.id).then((cols) => cols.slice(0, DASHBOARD_COLLECTIONS_LIMIT)),
       getPinnedItems(user.id),
       getRecentItems(user.id),
     ]);

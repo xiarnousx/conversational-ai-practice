@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { prisma } from "@/lib/prisma";
+import { COLLECTIONS_PER_PAGE } from "@/lib/constants";
 
 export interface CollectionCardData {
   id: string;
@@ -78,6 +79,44 @@ export async function getCollectionsForUser(userId: string): Promise<CollectionC
     icons: [...new Set(col.items.map((ic) => ic.item.type.name))].slice(0, 4),
     borderColor: getDominantColor(col.items),
   }));
+}
+
+export async function getCollectionsForUserPaginated(
+  userId: string,
+  page: number
+): Promise<{ collections: CollectionCardData[]; total: number }> {
+  const skip = (page - 1) * COLLECTIONS_PER_PAGE;
+  const [rawCollections, total] = await Promise.all([
+    prisma.collection.findMany({
+      where: { userId },
+      include: {
+        items: {
+          take: 50,
+          include: {
+            item: {
+              include: { type: { select: { name: true, color: true } } },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: COLLECTIONS_PER_PAGE,
+    }),
+    prisma.collection.count({ where: { userId } }),
+  ]);
+  return {
+    collections: rawCollections.map((col) => ({
+      id: col.id,
+      name: col.name,
+      description: col.description ?? "",
+      itemCount: col.items.length,
+      isFavorite: col.isFavorite,
+      icons: [...new Set(col.items.map((ic) => ic.item.type.name))].slice(0, 4),
+      borderColor: getDominantColor(col.items),
+    })),
+    total,
+  };
 }
 
 export async function getSidebarCollections(userId: string): Promise<SidebarCollection[]> {

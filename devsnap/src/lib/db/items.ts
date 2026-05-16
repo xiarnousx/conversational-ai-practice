@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { ITEMS_PER_PAGE, COLLECTIONS_PER_PAGE, DASHBOARD_RECENT_ITEMS_LIMIT } from "@/lib/constants";
 
 export interface ItemCardData {
   id: string;
@@ -47,31 +48,49 @@ function toCardData(item: ItemWithRelations): ItemCardData {
   };
 }
 
-export async function getItemsByType(userId: string, typeName: string): Promise<ItemCardData[]> {
-  const items = await prisma.item.findMany({
-    where: {
-      userId,
-      type: { name: { equals: typeName, mode: "insensitive" } },
-    },
-    include: {
-      type: { select: { name: true, color: true } },
-      tags: { include: { tag: { select: { name: true } } } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
-  return items.map(toCardData);
+export interface PaginatedItems {
+  items: ItemCardData[];
+  total: number;
 }
 
-export async function getItemsByCollectionId(userId: string, collectionId: string): Promise<ItemCardData[]> {
-  const items = await prisma.item.findMany({
-    where: { userId, collections: { some: { collectionId } } },
-    include: {
-      type: { select: { name: true, color: true } },
-      tags: { include: { tag: { select: { name: true } } } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
-  return items.map(toCardData);
+export async function getItemsByType(userId: string, typeName: string, page = 1): Promise<PaginatedItems> {
+  const where = { userId, type: { name: { equals: typeName, mode: "insensitive" as const } } };
+  const [items, total] = await Promise.all([
+    prisma.item.findMany({
+      where,
+      include: {
+        type: { select: { name: true, color: true } },
+        tags: { include: { tag: { select: { name: true } } } },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * ITEMS_PER_PAGE,
+      take: ITEMS_PER_PAGE,
+    }),
+    prisma.item.count({ where }),
+  ]);
+  return { items: items.map(toCardData), total };
+}
+
+export async function getItemsByCollectionId(
+  userId: string,
+  collectionId: string,
+  page = 1
+): Promise<PaginatedItems> {
+  const where = { userId, collections: { some: { collectionId } } };
+  const [items, total] = await Promise.all([
+    prisma.item.findMany({
+      where,
+      include: {
+        type: { select: { name: true, color: true } },
+        tags: { include: { tag: { select: { name: true } } } },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * COLLECTIONS_PER_PAGE,
+      take: COLLECTIONS_PER_PAGE,
+    }),
+    prisma.item.count({ where }),
+  ]);
+  return { items: items.map(toCardData), total };
 }
 
 export async function getPinnedItems(userId: string): Promise<ItemCardData[]> {
@@ -80,7 +99,7 @@ export async function getPinnedItems(userId: string): Promise<ItemCardData[]> {
 }
 
 export async function getRecentItems(userId: string): Promise<ItemCardData[]> {
-  const items = await fetchItems(userId, { take: 10 });
+  const items = await fetchItems(userId, { take: DASHBOARD_RECENT_ITEMS_LIMIT });
   return items.map(toCardData);
 }
 
