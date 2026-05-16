@@ -1,21 +1,12 @@
-# Current Feature: Collections Page
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Create `/collections` page showing all user collections using existing collection cards
-- Create `/collections/[id]` page showing items in a specific collection using existing item cards
-- Link "View all collections" in the sidebar to `/collections`
-- Link all collection cards (dashboard + collections page) to `/collections/[id]`
-
 ## Notes
-
-- Items have a many-to-many relationship with collections (ItemCollection join table)
-- Reuse existing `CollectionCard` and item row/card components — no new card designs
-- Collection cards already exist in the dashboard; wire up their hrefs
 
 
 
@@ -57,3 +48,4 @@ In Progress
 - 2026-05-10: Code Scanner Quick Wins — TOCTOU race fixed in updateItem/deleteItemById (single atomic Prisma call, P2025 catch); fileUrl ownership validated in createItem server action; rate limiting added to /api/auth/change-password; collections.ts refactored with shared fetchCollectionsWithTypes() + React cache() (one DB query per dashboard load); slugToTypeName replaced with canonical SLUG_TO_TYPE map + notFound(); CollectionsGrid View-all and cards wired to Next Link; dead code deleted (user.ts, constants.ts); SidebarUser deduplicated into src/types/user.ts; fileName sanitized in getSignedDownloadUrl; 8 unit tests updated
 - 2026-05-16: Collection Create — "New Collection" button in top bar opens a Dialog with name + description fields; createCollectionInDb db function; createCollection server action with Zod validation and auth ownership check; NewCollectionDialog component; router.refresh() syncs collections grid and sidebar; 12 unit tests for createCollectionSchema
 - 2026-05-16: Collection Items — Add Item to Collections — schema migrated from collectionId FK to explicit ItemCollection join table (mirrors ItemTag); CollectionPicker component (shadcn Popover + Command) added to NewItemDialog and ItemDrawer edit mode; createItemInDb, updateItem, getItemById updated for many-to-many; collectionIds field added to both Zod schemas; collections fetched from AppLayoutClient and passed down to TopBar and ItemDrawerProvider; 12 new tests for getCollectionsForUser/getSidebarCollections; view mode collections display unchanged
+- 2026-05-16: Collections Page — /collections lists all user collections using existing card style; /collections/[id] shows items in that collection grouped by type (files, images, other) using FileListRow/ImageThumbnailCard/ItemRow; getCollectionById and getItemsByCollectionId added to DB layer; /collections/* added to middleware protection; 11 new unit tests
