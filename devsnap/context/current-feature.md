@@ -1,26 +1,12 @@
-# Current Feature: Global Search / Command Palette
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Open command palette with Cmd+K (Mac) / Ctrl+K (Windows)
-- Fuzzy search across all user items and collections
-- Grouped results: Items section and Collections section
-- Keyboard navigation (arrow keys, Enter to select)
-- Show item type icon and collection item count in results
-- Navigate to item drawer on item select; navigate to collection page on collection select
-- TopBar search input opens the palette on click
-- Show ⌘K hint in the search input placeholder
-
 ## Notes
-
-- Use shadcn `cmdk` component (Command)
-- Client-side fuzzy search — no server round-trips on each keystroke
-- Pre-fetch searchable data on app load (items: id, title, type, content preview; collections: id, name, itemCount)
-- Reuse existing data fetching functions from `src/lib/db/`
 
 ## History
 
@@ -63,3 +49,4 @@ In Progress
 - 2026-05-16: Collections Page — /collections lists all user collections using existing card style; /collections/[id] shows items in that collection grouped by type (files, images, other) using FileListRow/ImageThumbnailCard/ItemRow; getCollectionById and getItemsByCollectionId added to DB layer; /collections/* added to middleware protection; 11 new unit tests
 - 2026-05-16: Collection Edit/Delete — Edit/Delete/Favorite buttons on /collections/[id] detail page header; 3-dots dropdown on collection cards at /collections and /dashboard with Edit/Delete/Favorite (Favorite UI-only); EditCollectionDialog and DeleteCollectionDialog components; updateCollection and deleteCollection server actions with auth/ownership checks; updateCollectionInDb (P2025-safe) and deleteCollectionInDb in DB layer; shared CollectionCard client component replaces NextLink wrappers; 13 new unit tests
 - 2026-05-16: Settings Page — /settings route (middleware-protected); Change Password and Delete Account moved from /profile to /settings; Settings link added to sidebar user dropdown; /profile now shows user info and usage stats only
+- 2026-05-16: Global Search / Command Palette — Cmd/Ctrl+K opens cmdk CommandDialog with client-side fuzzy search across all items and collections; grouped results with type color dot and type label (items) or item count (collections); keyboard navigation via cmdk built-in; item select opens ItemDrawer, collection select navigates to /collections/[id]; centered TopBar search input triggers palette on click; getItemsForSearch and getCollectionsForSearch DB functions; state managed in AppLayoutClient (no wrapper context to avoid hydration ID mismatch); 10 new unit tests
