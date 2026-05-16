@@ -52,6 +52,21 @@ function getDominantColor(items: CollectionWithItems["items"]): string {
   return Object.values(typeCounts).sort((a, b) => b.count - a.count)[0]?.color ?? "#6b7280";
 }
 
+export interface SearchCollection {
+  id: string;
+  name: string;
+  itemCount: number;
+}
+
+export async function getCollectionsForSearch(userId: string): Promise<SearchCollection[]> {
+  const collections = await fetchCollectionsWithTypes(userId);
+  return collections.map((col) => ({
+    id: col.id,
+    name: col.name,
+    itemCount: col.items.length,
+  }));
+}
+
 export async function getCollectionsForUser(userId: string): Promise<CollectionCardData[]> {
   const collections = await fetchCollectionsWithTypes(userId);
   return collections.map((col) => ({
