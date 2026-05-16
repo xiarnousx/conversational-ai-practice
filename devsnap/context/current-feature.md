@@ -1,22 +1,12 @@
-# Current Feature: Pagination
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add pagination to `/items/[type]` page with numbered page links, prev/next controls
-- Add pagination to `/collections/[id]` page with numbered page links, prev/next controls
-- Disable (grey out) prev/next when at first or last page
-- Use `ITEMS_PER_PAGE = 21` and `COLLECTIONS_PER_PAGE = 21` constants
-- Extract dashboard limits as constants: `DASHBOARD_COLLECTIONS_LIMIT = 6`, `DASHBOARD_RECENT_ITEMS_LIMIT = 10`
-- Fetch only the current page's data (no loading all records at once)
-
 ## Notes
-
-- Pagination is URL-based (query param `?page=N`) so pages are shareable and server-rendered
-- Dashboard limits are separate constants — dashboard does not paginate, just caps results
 
 ## History
 
@@ -60,3 +50,4 @@ In Progress
 - 2026-05-16: Collection Edit/Delete — Edit/Delete/Favorite buttons on /collections/[id] detail page header; 3-dots dropdown on collection cards at /collections and /dashboard with Edit/Delete/Favorite (Favorite UI-only); EditCollectionDialog and DeleteCollectionDialog components; updateCollection and deleteCollection server actions with auth/ownership checks; updateCollectionInDb (P2025-safe) and deleteCollectionInDb in DB layer; shared CollectionCard client component replaces NextLink wrappers; 13 new unit tests
 - 2026-05-16: Settings Page — /settings route (middleware-protected); Change Password and Delete Account moved from /profile to /settings; Settings link added to sidebar user dropdown; /profile now shows user info and usage stats only
 - 2026-05-16: Global Search / Command Palette — Cmd/Ctrl+K opens cmdk CommandDialog with client-side fuzzy search across all items and collections; grouped results with type color dot and type label (items) or item count (collections); keyboard navigation via cmdk built-in; item select opens ItemDrawer, collection select navigates to /collections/[id]; centered TopBar search input triggers palette on click; getItemsForSearch and getCollectionsForSearch DB functions; state managed in AppLayoutClient (no wrapper context to avoid hydration ID mismatch); 10 new unit tests
+- 2026-05-16: Pagination — URL-based ?page=N pagination on /items/[type], /collections, and /collections/[id]; Pagination component with numbered links and disabled prev/next at boundaries; ITEMS_PER_PAGE and COLLECTIONS_PER_PAGE constants; DASHBOARD_COLLECTIONS_LIMIT and DASHBOARD_RECENT_ITEMS_LIMIT constants for dashboard caps; DB queries use skip/take (no full-table fetches); getCollectionsForUserPaginated added; 14 new unit tests
