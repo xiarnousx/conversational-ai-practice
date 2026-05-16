@@ -307,6 +307,33 @@ export interface SidebarItemType {
   itemCount: number;
 }
 
+export interface SearchItem {
+  id: string;
+  title: string;
+  typeName: string;
+  typeColor: string;
+  typeIcon: string;
+}
+
+export async function getItemsForSearch(userId: string): Promise<SearchItem[]> {
+  const items = await prisma.item.findMany({
+    where: { userId },
+    select: {
+      id: true,
+      title: true,
+      type: { select: { name: true, color: true, icon: true } },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+  return items.map((item) => ({
+    id: item.id,
+    title: item.title,
+    typeName: item.type.name,
+    typeColor: item.type.color ?? "#6b7280",
+    typeIcon: item.type.icon ?? "file",
+  }));
+}
+
 export async function getSystemItemTypes(userId: string): Promise<SidebarItemType[]> {
   const types = await prisma.itemType.findMany({
     where: { isSystem: true },

@@ -5,6 +5,7 @@ import {
   getCollectionById,
   updateCollectionInDb,
   deleteCollectionInDb,
+  getCollectionsForSearch,
 } from "@/lib/db/collections"
 
 vi.mock("@/lib/prisma", () => ({
@@ -328,5 +329,40 @@ describe("deleteCollectionInDb", () => {
   it("resolves without error when collection does not exist", async () => {
     mockDeleteMany.mockResolvedValue({ count: 0 })
     await expect(deleteCollectionInDb("user-1", "missing-id")).resolves.toBeUndefined()
+  })
+})
+
+// ─── getCollectionsForSearch ──────────────────────────────────────────────────
+
+describe("getCollectionsForSearch", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("returns empty array when user has no collections", async () => {
+    mockFindMany.mockResolvedValue([])
+    const result = await getCollectionsForSearch("user-1")
+    expect(result).toEqual([])
+  })
+
+  it("maps collections to SearchCollection shape", async () => {
+    mockFindMany.mockResolvedValue([
+      makeCollection({ items: [makeItemCollection(SNIPPET_TYPE), makeItemCollection(PROMPT_TYPE)] }),
+    ] as never)
+
+    const [col] = await getCollectionsForSearch("user-1")
+    expect(col).toEqual({ id: "col-1", name: "React Patterns", itemCount: 2 })
+  })
+
+  it("sets itemCount to 0 for empty collection", async () => {
+    mockFindMany.mockResolvedValue([makeCollection()] as never)
+    const [col] = await getCollectionsForSearch("user-1")
+    expect(col.itemCount).toBe(0)
+  })
+
+  it("returns multiple collections", async () => {
+    const second = makeCollection({ id: "col-2", name: "Python Scripts", items: [makeItemCollection(SNIPPET_TYPE)] })
+    mockFindMany.mockResolvedValue([makeCollection(), second] as never)
+    const result = await getCollectionsForSearch("user-1")
+    expect(result).toHaveLength(2)
+    expect(result[1].id).toBe("col-2")
   })
 })

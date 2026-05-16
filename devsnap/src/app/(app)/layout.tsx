@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { getSystemItemTypes } from "@/lib/db/items";
-import { getSidebarCollections } from "@/lib/db/collections";
+import { getSystemItemTypes, getItemsForSearch } from "@/lib/db/items";
+import { getSidebarCollections, getCollectionsForSearch } from "@/lib/db/collections";
 import AppLayoutClient from "@/components/dashboard/AppLayoutClient";
 
 export default async function AppLayout({
@@ -13,9 +13,11 @@ export default async function AppLayout({
   if (!session?.user?.id) redirect("/sign-in");
 
   const userId = session.user.id;
-  const [itemTypes, collections] = await Promise.all([
+  const [itemTypes, collections, searchItems, searchCollections] = await Promise.all([
     getSystemItemTypes(userId),
     getSidebarCollections(userId),
+    getItemsForSearch(userId),
+    getCollectionsForSearch(userId),
   ]);
 
   return (
@@ -27,6 +29,8 @@ export default async function AppLayout({
         email: session.user.email,
         image: session.user.image,
       }}
+      searchItems={searchItems}
+      searchCollections={searchCollections}
     >
       {children}
     </AppLayoutClient>

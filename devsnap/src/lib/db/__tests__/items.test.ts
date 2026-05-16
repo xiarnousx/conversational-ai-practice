@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { getItemById, updateItem, createItemInDb, deleteItemById, getItemsByCollectionId } from "@/lib/db/items"
+import { getItemById, updateItem, createItemInDb, deleteItemById, getItemsByCollectionId, getItemsForSearch } from "@/lib/db/items"
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
@@ -497,5 +497,68 @@ describe("getItemsByCollectionId", () => {
     ] as never)
     const [item] = await getItemsByCollectionId("user-1", "col-1")
     expect(item.typeColor).toBe("#6b7280")
+  })
+})
+
+// ─── getItemsForSearch ────────────────────────────────────────────────────────
+
+describe("getItemsForSearch", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  const SEARCH_ITEM = {
+    id: "item-1",
+    title: "useAuth Hook",
+    type: { name: "Snippet", color: "#8b5cf6", icon: "code" },
+  }
+
+  it("returns empty array when user has no items", async () => {
+    mockFindMany.mockResolvedValue([])
+    const result = await getItemsForSearch("user-1")
+    expect(result).toEqual([])
+  })
+
+  it("maps items to SearchItem shape", async () => {
+    mockFindMany.mockResolvedValue([SEARCH_ITEM] as never)
+    const [item] = await getItemsForSearch("user-1")
+
+    expect(item).toEqual({
+      id: "item-1",
+      title: "useAuth Hook",
+      typeName: "Snippet",
+      typeColor: "#8b5cf6",
+      typeIcon: "code",
+    })
+  })
+
+  it("falls back to #6b7280 when typeColor is null", async () => {
+    mockFindMany.mockResolvedValue([
+      { ...SEARCH_ITEM, type: { name: "Note", color: null, icon: "file-text" } },
+    ] as never)
+    const [item] = await getItemsForSearch("user-1")
+    expect(item.typeColor).toBe("#6b7280")
+  })
+
+  it("falls back to 'file' when typeIcon is null", async () => {
+    mockFindMany.mockResolvedValue([
+      { ...SEARCH_ITEM, type: { name: "Snippet", color: "#8b5cf6", icon: null } },
+    ] as never)
+    const [item] = await getItemsForSearch("user-1")
+    expect(item.typeIcon).toBe("file")
+  })
+
+  it("queries with the correct userId", async () => {
+    mockFindMany.mockResolvedValue([])
+    await getItemsForSearch("user-42")
+    expect(mockFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { userId: "user-42" } })
+    )
+  })
+
+  it("returns multiple items", async () => {
+    const second = { id: "item-2", title: "fetchData", type: { name: "Command", color: "#f97316", icon: "terminal" } }
+    mockFindMany.mockResolvedValue([SEARCH_ITEM, second] as never)
+    const result = await getItemsForSearch("user-1")
+    expect(result).toHaveLength(2)
+    expect(result[1].id).toBe("item-2")
   })
 })
