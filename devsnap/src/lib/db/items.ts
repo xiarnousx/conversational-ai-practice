@@ -98,7 +98,7 @@ export async function getItemById(userId: string, itemId: string): Promise<ItemD
     include: {
       type: { select: { name: true, color: true } },
       tags: { include: { tag: { select: { name: true } } } },
-      collection: { select: { id: true, name: true } },
+      collections: { include: { collection: { select: { id: true, name: true } } } },
     },
   })
   if (!item) return null
@@ -115,7 +115,7 @@ export async function getItemById(userId: string, itemId: string): Promise<ItemD
     typeName: item.type.name,
     typeColor: item.type.color ?? "#6b7280",
     tags: item.tags.map((t) => t.tag.name),
-    collections: item.collection ? [{ id: item.collection.id, name: item.collection.name }] : [],
+    collections: item.collections.map((c) => ({ id: c.collection.id, name: c.collection.name })),
     isFavorite: item.isFavorite,
     isPinned: item.isPinned,
     createdAt: item.createdAt.toISOString(),
@@ -130,6 +130,7 @@ export interface UpdateItemData {
   language?: string | null
   url?: string | null
   tags: string[]
+  collectionIds: string[]
 }
 
 export async function updateItem(
@@ -158,11 +159,15 @@ export async function updateItem(
             },
           })),
         },
+        collections: {
+          deleteMany: {},
+          create: data.collectionIds.map((collectionId) => ({ collectionId })),
+        },
       },
       include: {
         type: { select: { name: true, color: true } },
         tags: { include: { tag: { select: { name: true } } } },
-        collection: { select: { id: true, name: true } },
+        collections: { include: { collection: { select: { id: true, name: true } } } },
       },
     })
   } catch (e: unknown) {
@@ -183,9 +188,7 @@ export async function updateItem(
     typeName: updated.type.name,
     typeColor: updated.type.color ?? "#6b7280",
     tags: updated.tags.map((t) => t.tag.name),
-    collections: updated.collection
-      ? [{ id: updated.collection.id, name: updated.collection.name }]
-      : [],
+    collections: updated.collections.map((c) => ({ id: c.collection.id, name: c.collection.name })),
     isFavorite: updated.isFavorite,
     isPinned: updated.isPinned,
     createdAt: updated.createdAt.toISOString(),
@@ -204,6 +207,7 @@ export interface CreateItemData {
   fileName?: string | null
   fileSize?: number | null
   tags: string[]
+  collectionIds: string[]
 }
 
 export async function createItemInDb(
@@ -238,11 +242,14 @@ export async function createItemInDb(
           },
         })),
       },
+      collections: {
+        create: data.collectionIds.map((collectionId) => ({ collectionId })),
+      },
     },
     include: {
       type: { select: { name: true, color: true } },
       tags: { include: { tag: { select: { name: true } } } },
-      collection: { select: { id: true, name: true } },
+      collections: { include: { collection: { select: { id: true, name: true } } } },
     },
   })
 
@@ -259,9 +266,7 @@ export async function createItemInDb(
     typeName: item.type.name,
     typeColor: item.type.color ?? "#6b7280",
     tags: item.tags.map((t) => t.tag.name),
-    collections: item.collection
-      ? [{ id: item.collection.id, name: item.collection.name }]
-      : [],
+    collections: item.collections.map((c) => ({ id: c.collection.id, name: c.collection.name })),
     isFavorite: item.isFavorite,
     isPinned: item.isPinned,
     createdAt: item.createdAt.toISOString(),

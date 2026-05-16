@@ -9,7 +9,10 @@ describe("updateItemSchema", () => {
   it("accepts a minimal valid payload", () => {
     const result = updateItemSchema.safeParse({ title: "My item" });
     expect(result.success).toBe(true);
-    if (result.success) expect(result.data.tags).toEqual([]);
+    if (result.success) {
+      expect(result.data.tags).toEqual([]);
+      expect(result.data.collectionIds).toEqual([]);
+    }
   });
 
   it("rejects an empty title", () => {
@@ -83,6 +86,18 @@ describe("updateItemSchema", () => {
     const result = updateItemSchema.safeParse({ title: "t" });
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.tags).toEqual([]);
+  });
+
+  it("defaults collectionIds to empty array when omitted", () => {
+    const result = updateItemSchema.safeParse({ title: "t" });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.collectionIds).toEqual([]);
+  });
+
+  it("accepts an array of collectionIds", () => {
+    const result = updateItemSchema.safeParse({ title: "t", collectionIds: ["col-1", "col-2"] });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.collectionIds).toEqual(["col-1", "col-2"]);
   });
 });
 
@@ -166,6 +181,18 @@ describe("createItemSchema", () => {
     const result = createItemSchema.safeParse({ title: "t", typeName: "prompt" });
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.tags).toEqual([]);
+  });
+
+  it("defaults collectionIds to empty array when omitted", () => {
+    const result = createItemSchema.safeParse({ title: "t", typeName: "snippet" });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.collectionIds).toEqual([]);
+  });
+
+  it("accepts an array of collectionIds", () => {
+    const result = createItemSchema.safeParse({ title: "t", typeName: "snippet", collectionIds: ["col-1"] });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.collectionIds).toEqual(["col-1"]);
   });
 
   it("accepts file type with fileUrl", () => {

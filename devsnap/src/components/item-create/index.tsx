@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { createItem } from "@/actions/items";
+import { CollectionPicker } from "@/components/ui/collection-picker";
 
 const ITEM_TYPES = ["snippet", "prompt", "command", "note", "link", "file", "image"] as const;
 export type ItemTypeName = (typeof ITEM_TYPES)[number];
@@ -47,6 +48,11 @@ interface UploadedFile {
   fileSize: number;
 }
 
+interface CollectionPickerItem {
+  id: string;
+  name: string;
+}
+
 const INITIAL_FORM = {
   title: "",
   description: "",
@@ -56,7 +62,7 @@ const INITIAL_FORM = {
   tags: "",
 };
 
-export function NewItemDialog() {
+export function NewItemDialog({ collections }: { collections: CollectionPickerItem[] }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -67,6 +73,7 @@ export function NewItemDialog() {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<ItemTypeName>("snippet");
   const [form, setForm] = useState(INITIAL_FORM);
+  const [collectionIds, setCollectionIds] = useState<string[]>([]);
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -80,6 +87,7 @@ export function NewItemDialog() {
   function handleOpen() {
     setType(defaultType);
     setForm(INITIAL_FORM);
+    setCollectionIds([]);
     setUploadedFile(null);
     setOpen(true);
   }
@@ -88,6 +96,7 @@ export function NewItemDialog() {
     setOpen(false);
     setType(defaultType);
     setForm(INITIAL_FORM);
+    setCollectionIds([]);
     setUploadedFile(null);
   }
 
@@ -115,6 +124,7 @@ export function NewItemDialog() {
       fileName: uploadedFile?.fileName ?? null,
       fileSize: uploadedFile?.fileSize ?? null,
       tags,
+      collectionIds,
     });
 
     setSaving(false);
@@ -257,6 +267,18 @@ export function NewItemDialog() {
                   accept={type === "image" ? "image" : "file"}
                   value={uploadedFile}
                   onChange={setUploadedFile}
+                />
+              </div>
+            )}
+
+            {/* Collections */}
+            {collections.length > 0 && (
+              <div className="space-y-1.5">
+                <Label>Collections</Label>
+                <CollectionPicker
+                  collections={collections}
+                  value={collectionIds}
+                  onChange={setCollectionIds}
                 />
               </div>
             )}

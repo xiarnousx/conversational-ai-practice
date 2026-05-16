@@ -6,6 +6,28 @@ import bcrypt from "bcryptjs";
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
+type SeedItem = {
+  title: string;
+  contentType: string;
+  language?: string;
+  content?: string;
+  url?: string;
+  description?: string;
+  userId: string;
+  typeId: string;
+};
+
+async function createItemsWithCollection(items: SeedItem[], collectionId: string) {
+  for (const item of items) {
+    await prisma.item.create({
+      data: {
+        ...item,
+        collections: { create: [{ collectionId }] },
+      },
+    });
+  }
+}
+
 async function main() {
   console.log("Seeding database...");
 
@@ -76,8 +98,8 @@ async function main() {
     },
   });
 
-  await prisma.item.createMany({
-    data: [
+  await createItemsWithCollection(
+    [
       {
         title: "useDebounce & useLocalStorage Hooks",
         contentType: "text",
@@ -115,7 +137,6 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
 }`,
         userId: user.id,
         typeId: createdTypes["snippet"],
-        collectionId: reactPatterns.id,
       },
       {
         title: "Context Provider Pattern",
@@ -147,7 +168,6 @@ export function useTheme() {
 }`,
         userId: user.id,
         typeId: createdTypes["snippet"],
-        collectionId: reactPatterns.id,
       },
       {
         title: "Compound Component Pattern",
@@ -189,10 +209,10 @@ Accordion.Item = AccordionItem;
 export { Accordion };`,
         userId: user.id,
         typeId: createdTypes["snippet"],
-        collectionId: reactPatterns.id,
       },
     ],
-  });
+    reactPatterns.id
+  );
 
   // AI Workflows
   const aiWorkflows = await prisma.collection.create({
@@ -203,8 +223,8 @@ export { Accordion };`,
     },
   });
 
-  await prisma.item.createMany({
-    data: [
+  await createItemsWithCollection(
+    [
       {
         title: "Code Review Prompt",
         contentType: "text",
@@ -223,7 +243,6 @@ Be concise. List issues by severity (critical / warning / suggestion).
 \`\`\``,
         userId: user.id,
         typeId: createdTypes["prompt"],
-        collectionId: aiWorkflows.id,
       },
       {
         title: "Documentation Generator Prompt",
@@ -244,7 +263,6 @@ Keep it developer-friendly. Use TypeScript types where relevant.
 \`\`\``,
         userId: user.id,
         typeId: createdTypes["prompt"],
-        collectionId: aiWorkflows.id,
       },
       {
         title: "Refactoring Assistant Prompt",
@@ -265,10 +283,10 @@ Return the refactored code with a short bullet list of what changed and why.
 \`\`\``,
         userId: user.id,
         typeId: createdTypes["prompt"],
-        collectionId: aiWorkflows.id,
       },
     ],
-  });
+    aiWorkflows.id
+  );
 
   // DevOps
   const devops = await prisma.collection.create({
@@ -279,8 +297,8 @@ Return the refactored code with a short bullet list of what changed and why.
     },
   });
 
-  await prisma.item.createMany({
-    data: [
+  await createItemsWithCollection(
+    [
       {
         title: "Docker Compose — Next.js + PostgreSQL",
         contentType: "text",
@@ -316,7 +334,6 @@ volumes:
   postgres_data:`,
         userId: user.id,
         typeId: createdTypes["snippet"],
-        collectionId: devops.id,
       },
       {
         title: "Deploy to Vercel",
@@ -333,7 +350,6 @@ vercel ls
 vercel logs --follow`,
         userId: user.id,
         typeId: createdTypes["command"],
-        collectionId: devops.id,
       },
       {
         title: "Prisma Documentation",
@@ -342,7 +358,6 @@ vercel logs --follow`,
         description: "Official Prisma ORM documentation — migrations, queries, schema reference",
         userId: user.id,
         typeId: createdTypes["link"],
-        collectionId: devops.id,
       },
       {
         title: "Docker Documentation",
@@ -351,10 +366,10 @@ vercel logs --follow`,
         description: "Official Docker documentation — containers, compose, networking",
         userId: user.id,
         typeId: createdTypes["link"],
-        collectionId: devops.id,
       },
     ],
-  });
+    devops.id
+  );
 
   // Terminal Commands
   const terminalCommands = await prisma.collection.create({
@@ -365,8 +380,8 @@ vercel logs --follow`,
     },
   });
 
-  await prisma.item.createMany({
-    data: [
+  await createItemsWithCollection(
+    [
       {
         title: "Git Operations",
         contentType: "text",
@@ -386,7 +401,6 @@ git branch --merged | grep -v main | xargs git branch -d
 git log --oneline --graph --decorate --all`,
         userId: user.id,
         typeId: createdTypes["command"],
-        collectionId: terminalCommands.id,
       },
       {
         title: "Docker Commands",
@@ -407,7 +421,6 @@ docker logs -f <container_name>
 docker compose build --no-cache`,
         userId: user.id,
         typeId: createdTypes["command"],
-        collectionId: terminalCommands.id,
       },
       {
         title: "Process Management",
@@ -425,7 +438,6 @@ ps aux --sort=-%cpu | head -10
 watch -n 2 "ps aux | grep node"`,
         userId: user.id,
         typeId: createdTypes["command"],
-        collectionId: terminalCommands.id,
       },
       {
         title: "Package Manager Utilities",
@@ -446,10 +458,10 @@ npm list -g --depth=0
 rm -rf node_modules package-lock.json && npm install`,
         userId: user.id,
         typeId: createdTypes["command"],
-        collectionId: terminalCommands.id,
       },
     ],
-  });
+    terminalCommands.id
+  );
 
   // Design Resources
   const designResources = await prisma.collection.create({
@@ -460,8 +472,8 @@ rm -rf node_modules package-lock.json && npm install`,
     },
   });
 
-  await prisma.item.createMany({
-    data: [
+  await createItemsWithCollection(
+    [
       {
         title: "Tailwind CSS Documentation",
         contentType: "text",
@@ -469,7 +481,6 @@ rm -rf node_modules package-lock.json && npm install`,
         description: "Official Tailwind CSS docs — utility classes, configuration, plugins",
         userId: user.id,
         typeId: createdTypes["link"],
-        collectionId: designResources.id,
       },
       {
         title: "shadcn/ui Components",
@@ -478,7 +489,6 @@ rm -rf node_modules package-lock.json && npm install`,
         description: "Beautifully designed components built with Radix UI and Tailwind CSS",
         userId: user.id,
         typeId: createdTypes["link"],
-        collectionId: designResources.id,
       },
       {
         title: "Radix UI Design System",
@@ -487,7 +497,6 @@ rm -rf node_modules package-lock.json && npm install`,
         description: "Unstyled, accessible components for building high-quality design systems",
         userId: user.id,
         typeId: createdTypes["link"],
-        collectionId: designResources.id,
       },
       {
         title: "Lucide Icons",
@@ -496,10 +505,10 @@ rm -rf node_modules package-lock.json && npm install`,
         description: "Beautiful & consistent icon library — search and copy as React components",
         userId: user.id,
         typeId: createdTypes["link"],
-        collectionId: designResources.id,
       },
     ],
-  });
+    designResources.id
+  );
 
   console.log("Created collections and items");
   console.log("Seeding complete.");

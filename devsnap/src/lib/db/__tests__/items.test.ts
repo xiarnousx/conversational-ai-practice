@@ -36,7 +36,7 @@ const BASE_ITEM = {
   updatedAt: new Date("2024-01-15T00:00:00Z"),
   type: { name: "Snippet", color: "#8b5cf6" },
   tags: [{ tag: { name: "react" } }, { tag: { name: "auth" } }],
-  collection: { id: "col-1", name: "React Patterns" },
+  collections: [{ collection: { id: "col-1", name: "React Patterns" } }],
 }
 
 describe("getItemById", () => {
@@ -71,14 +71,14 @@ describe("getItemById", () => {
     expect(result?.tags).toEqual(["react", "auth"])
   })
 
-  it("wraps a single collection in an array", async () => {
+  it("maps collections from join table to id/name array", async () => {
     mockFindFirst.mockResolvedValue(BASE_ITEM as never)
     const result = await getItemById("user-1", "item-1")
     expect(result?.collections).toEqual([{ id: "col-1", name: "React Patterns" }])
   })
 
-  it("returns empty collections array when item has no collection", async () => {
-    mockFindFirst.mockResolvedValue({ ...BASE_ITEM, collection: null } as never)
+  it("returns empty collections array when item has no collections", async () => {
+    mockFindFirst.mockResolvedValue({ ...BASE_ITEM, collections: [] } as never)
     const result = await getItemById("user-1", "item-1")
     expect(result?.collections).toEqual([])
   })
@@ -125,7 +125,7 @@ const UPDATED_ITEM = {
   updatedAt: new Date("2024-06-01T00:00:00Z"),
   type: { name: "Snippet", color: "#8b5cf6" },
   tags: [{ tag: { name: "python" } }, { tag: { name: "files" } }],
-  collection: null,
+  collections: [],
 }
 
 describe("updateItem", () => {
@@ -133,7 +133,7 @@ describe("updateItem", () => {
 
   it("returns null when item does not belong to user", async () => {
     mockUpdate.mockRejectedValue({ code: "P2025" })
-    const result = await updateItem("user-1", "item-99", { title: "X", tags: [] })
+    const result = await updateItem("user-1", "item-99", { title: "X", tags: [], collectionIds: [] })
     expect(result).toBeNull()
     expect(mockUpdate).toHaveBeenCalled()
   })
@@ -148,6 +148,7 @@ describe("updateItem", () => {
       language: "python",
       url: null,
       tags: ["python", "files"],
+      collectionIds: [],
     })
 
     expect(result).not.toBeNull()
@@ -159,16 +160,26 @@ describe("updateItem", () => {
   it("maps updated item to ItemDetail shape with correct dates", async () => {
     mockUpdate.mockResolvedValue(UPDATED_ITEM as never)
 
-    const result = await updateItem("user-1", "item-1", { title: "t", tags: [] })
+    const result = await updateItem("user-1", "item-1", { title: "t", tags: [], collectionIds: [] })
     expect(result?.createdAt).toBe("2024-01-15T00:00:00.000Z")
     expect(result?.updatedAt).toBe("2024-06-01T00:00:00.000Z")
   })
 
-  it("returns empty collections array when updated item has no collection", async () => {
-    mockUpdate.mockResolvedValue({ ...UPDATED_ITEM, collection: null } as never)
+  it("returns empty collections array when updated item has no collections", async () => {
+    mockUpdate.mockResolvedValue({ ...UPDATED_ITEM, collections: [] } as never)
 
-    const result = await updateItem("user-1", "item-1", { title: "t", tags: [] })
+    const result = await updateItem("user-1", "item-1", { title: "t", tags: [], collectionIds: [] })
     expect(result?.collections).toEqual([])
+  })
+
+  it("maps collections from join table rows", async () => {
+    mockUpdate.mockResolvedValue({
+      ...UPDATED_ITEM,
+      collections: [{ collection: { id: "col-1", name: "React Patterns" } }],
+    } as never)
+
+    const result = await updateItem("user-1", "item-1", { title: "t", tags: [], collectionIds: ["col-1"] })
+    expect(result?.collections).toEqual([{ id: "col-1", name: "React Patterns" }])
   })
 
   it("falls back to default typeColor when color is null", async () => {
@@ -177,19 +188,33 @@ describe("updateItem", () => {
       type: { name: "Note", color: null },
     } as never)
 
-    const result = await updateItem("user-1", "item-1", { title: "t", tags: [] })
+    const result = await updateItem("user-1", "item-1", { title: "t", tags: [], collectionIds: [] })
     expect(result?.typeColor).toBe("#6b7280")
   })
 
   it("passes tags as disconnect-all + connect-or-create to prisma", async () => {
     mockUpdate.mockResolvedValue(UPDATED_ITEM as never)
 
-    await updateItem("user-1", "item-1", { title: "t", tags: ["react"] })
+    await updateItem("user-1", "item-1", { title: "t", tags: ["react"], collectionIds: [] })
 
     expect(mockUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           tags: expect.objectContaining({ deleteMany: {} }),
+        }),
+      })
+    )
+  })
+
+  it("passes collections as deleteMany + create to prisma", async () => {
+    mockUpdate.mockResolvedValue(UPDATED_ITEM as never)
+
+    await updateItem("user-1", "item-1", { title: "t", tags: [], collectionIds: ["col-1", "col-2"] })
+
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          collections: expect.objectContaining({ deleteMany: {} }),
         }),
       })
     )
@@ -214,7 +239,7 @@ const CREATED_ITEM = {
   updatedAt: new Date("2024-06-01T00:00:00Z"),
   type: { name: "Snippet", color: "#8b5cf6" },
   tags: [{ tag: { name: "react" } }],
-  collection: null,
+  collections: [],
 }
 
 describe("createItemInDb", () => {
@@ -226,6 +251,7 @@ describe("createItemInDb", () => {
       title: "X",
       typeName: "snippet",
       tags: [],
+      collectionIds: [],
     })
     expect(result).toBeNull()
     expect(mockCreate).not.toHaveBeenCalled()
@@ -242,6 +268,7 @@ describe("createItemInDb", () => {
       content: "const x = 1;",
       language: "typescript",
       tags: ["react"],
+      collectionIds: [],
     })
 
     expect(result).not.toBeNull()
@@ -251,12 +278,23 @@ describe("createItemInDb", () => {
     expect(result?.tags).toEqual(["react"])
   })
 
-  it("returns empty collections when item has no collection", async () => {
+  it("returns empty collections when item has no collections", async () => {
     mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
-    mockCreate.mockResolvedValue({ ...CREATED_ITEM, collection: null } as never)
+    mockCreate.mockResolvedValue({ ...CREATED_ITEM, collections: [] } as never)
 
-    const result = await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [] })
+    const result = await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [], collectionIds: [] })
     expect(result?.collections).toEqual([])
+  })
+
+  it("maps collections from join table rows", async () => {
+    mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
+    mockCreate.mockResolvedValue({
+      ...CREATED_ITEM,
+      collections: [{ collection: { id: "col-1", name: "React Patterns" } }],
+    } as never)
+
+    const result = await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [], collectionIds: ["col-1"] })
+    expect(result?.collections).toEqual([{ id: "col-1", name: "React Patterns" }])
   })
 
   it("falls back to default typeColor when color is null", async () => {
@@ -266,7 +304,7 @@ describe("createItemInDb", () => {
       type: { name: "Note", color: null },
     } as never)
 
-    const result = await createItemInDb("user-1", { title: "X", typeName: "note", tags: [] })
+    const result = await createItemInDb("user-1", { title: "X", typeName: "note", tags: [], collectionIds: [] })
     expect(result?.typeColor).toBe("#6b7280")
   })
 
@@ -274,7 +312,7 @@ describe("createItemInDb", () => {
     mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
     mockCreate.mockResolvedValue(CREATED_ITEM as never)
 
-    const result = await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [] })
+    const result = await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [], collectionIds: [] })
     expect(result?.createdAt).toBe("2024-06-01T00:00:00.000Z")
     expect(result?.updatedAt).toBe("2024-06-01T00:00:00.000Z")
   })
@@ -283,7 +321,7 @@ describe("createItemInDb", () => {
     mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
     mockCreate.mockResolvedValue(CREATED_ITEM as never)
 
-    await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [] })
+    await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [], collectionIds: [] })
 
     expect(mockCreate).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -303,6 +341,7 @@ describe("createItemInDb", () => {
       fileName: "file.pdf",
       fileSize: 2048,
       tags: [],
+      collectionIds: [],
     })
 
     expect(mockCreate).toHaveBeenCalledWith(
@@ -316,7 +355,7 @@ describe("createItemInDb", () => {
     mockTypeFindFirst.mockResolvedValue(MOCK_TYPE as never)
     mockCreate.mockResolvedValue(CREATED_ITEM as never)
 
-    await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [] })
+    await createItemInDb("user-1", { title: "X", typeName: "snippet", tags: [], collectionIds: [] })
 
     expect(mockCreate).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -336,6 +375,7 @@ describe("createItemInDb", () => {
       fileName: "photo.png",
       fileSize: 102400,
       tags: [],
+      collectionIds: [],
     })
 
     expect(mockCreate).toHaveBeenCalledWith(

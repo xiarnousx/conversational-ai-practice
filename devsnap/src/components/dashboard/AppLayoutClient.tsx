@@ -22,6 +22,7 @@ export default function AppLayoutClient({
   user,
 }: AppLayoutClientProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pickerCollections = collections.map((c) => ({ id: c.id, name: c.name }));
 
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
@@ -34,9 +35,9 @@ export default function AppLayoutClient({
       />
 
       <div className="flex flex-1 flex-col overflow-hidden">
-        <TopBar onMenuClick={() => setMobileOpen(true)} />
+        <TopBar onMenuClick={() => setMobileOpen(true)} pickerCollections={pickerCollections} />
         <main className="flex-1 overflow-auto p-6">
-          <ItemDrawerProvider>{children}</ItemDrawerProvider>
+          <ItemDrawerProvider collections={pickerCollections}>{children}</ItemDrawerProvider>
         </main>
       </div>
     </div>

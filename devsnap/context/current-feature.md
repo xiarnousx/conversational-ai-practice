@@ -1,16 +1,25 @@
-# Current Feature
+# Current Feature: Collection Items — Add Item to Collections
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- Add feature goals here -->
+- Migrate schema: remove `collectionId` from `Item`, add `ItemCollection` join table for many-to-many
+- Add a multi-select collection picker to the New Item dialog (create flow)
+- Add a multi-select collection picker to the Item Drawer edit mode (update flow)
+- Update `createItemInDb` and `updateItem` db functions to connect/disconnect `ItemCollection` rows
+- Update `getItemById` and `getItemsByType` to include collections in the returned data
+- Display the item's collections in the Item Drawer view mode
 
 ## Notes
 
-<!-- Add notes here -->
+- Spec file: `context/features/collection-items-add-item-spec.md`
+- Schema change: drop `collectionId` (nullable FK) from `Item`, add `ItemCollection` join table (itemId + collectionId PK) — mirror the existing `ItemTag` pattern
+- Do not build collection detail/listing pages as part of this feature
+- Collection data is already fetched per user via `src/lib/db/collections.ts` — reuse for the picker options
+- The existing `CollectionsGrid` on the dashboard joins via `_ItemToCollection` implicit relation — switching to explicit join table changes that query too
 
 
 
