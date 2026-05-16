@@ -1,22 +1,12 @@
-# Current Feature: Collection Edit/Delete
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add Edit, Delete, and Favorite buttons on `/collections/[id]` page (Favorite: icon only, no logic yet)
-- Edit button opens a modal to update collection name and description
-- Delete button shows a confirmation dialog; deletes the collection but NOT its items (items remain, just lose the collection association)
-- On collection cards at `/collections` and `/dashboard`, a 3-dots icon opens a dropdown with Edit, Delete, and Favorite actions
-- Clicking anywhere else on the card navigates to the collection page
-
 ## Notes
-
-- Favorite action should render the UI (icon/button/dropdown entry) but not implement any logic yet
-- Items in a deleted collection should NOT be deleted — they simply lose the collection relationship (ItemCollection join rows get removed)
-- Edit/Delete actions on cards must not interfere with the card's navigation click behavior
 
 
 
@@ -59,3 +49,4 @@ In Progress
 - 2026-05-16: Collection Create — "New Collection" button in top bar opens a Dialog with name + description fields; createCollectionInDb db function; createCollection server action with Zod validation and auth ownership check; NewCollectionDialog component; router.refresh() syncs collections grid and sidebar; 12 unit tests for createCollectionSchema
 - 2026-05-16: Collection Items — Add Item to Collections — schema migrated from collectionId FK to explicit ItemCollection join table (mirrors ItemTag); CollectionPicker component (shadcn Popover + Command) added to NewItemDialog and ItemDrawer edit mode; createItemInDb, updateItem, getItemById updated for many-to-many; collectionIds field added to both Zod schemas; collections fetched from AppLayoutClient and passed down to TopBar and ItemDrawerProvider; 12 new tests for getCollectionsForUser/getSidebarCollections; view mode collections display unchanged
 - 2026-05-16: Collections Page — /collections lists all user collections using existing card style; /collections/[id] shows items in that collection grouped by type (files, images, other) using FileListRow/ImageThumbnailCard/ItemRow; getCollectionById and getItemsByCollectionId added to DB layer; /collections/* added to middleware protection; 11 new unit tests
+- 2026-05-16: Collection Edit/Delete — Edit/Delete/Favorite buttons on /collections/[id] detail page header; 3-dots dropdown on collection cards at /collections and /dashboard with Edit/Delete/Favorite (Favorite UI-only); EditCollectionDialog and DeleteCollectionDialog components; updateCollection and deleteCollection server actions with auth/ownership checks; updateCollectionInDb (P2025-safe) and deleteCollectionInDb in DB layer; shared CollectionCard client component replaces NextLink wrappers; 13 new unit tests
