@@ -4,8 +4,6 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import UserAvatar from "@/components/UserAvatar";
-import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
-import DeleteAccountButton from "@/components/profile/DeleteAccountButton";
 
 async function getProfileData(userId: string) {
   const [user, totalItems, totalCollections, itemTypeCounts] = await Promise.all([
@@ -16,7 +14,6 @@ async function getProfileData(userId: string) {
         name: true,
         email: true,
         image: true,
-        password: true,
         createdAt: true,
       },
     }),
@@ -58,7 +55,6 @@ export default async function ProfilePage() {
     session.user.id
   );
 
-  const isEmailUser = !!user.password;
   const memberSince = new Intl.DateTimeFormat("en-US", {
     month: "long",
     year: "numeric",
@@ -143,18 +139,6 @@ export default async function ProfilePage() {
           )}
         </div>
 
-        {/* Account actions */}
-        <div className="rounded-lg border border-border bg-card p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
-            Account
-          </h2>
-
-          {isEmailUser && <ChangePasswordForm />}
-
-          <div className={isEmailUser ? "pt-4 border-t border-border" : undefined}>
-            <DeleteAccountButton />
-          </div>
-        </div>
       </div>
     </div>
   );

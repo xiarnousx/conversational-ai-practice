@@ -1,12 +1,22 @@
-# Current Feature
+# Current Feature: Collection Settings Page
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Add a `/settings` route (protected by middleware)
+- Add a "Settings" link in the user icon dropdown at the bottom of the sidebar
+- Move "Delete Account" action from `/profile` to `/settings`
+- Move "Change Password" (forgot password flow) from `/profile` to `/settings`
+- `/profile` retains user info and usage stats only
+
 ## Notes
+
+- Settings page lives at `/settings` and must be protected (add to middleware)
+- The user dropdown in `SidebarUser` is where the new link goes
+- Keep the profile page — just strip it of the account-action forms
 
 
 
