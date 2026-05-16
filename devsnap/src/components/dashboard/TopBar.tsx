@@ -7,9 +7,10 @@ import { NewCollectionDialog } from "@/components/collection-create";
 
 interface TopBarProps {
   onMenuClick?: () => void;
+  pickerCollections: { id: string; name: string }[];
 }
 
-export default function TopBar({ onMenuClick }: TopBarProps) {
+export default function TopBar({ onMenuClick, pickerCollections }: TopBarProps) {
   return (
     <header className="flex h-14 items-center gap-3 border-b border-border bg-background px-4">
       <button
@@ -28,7 +29,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
       </div>
       <div className="ml-auto flex items-center gap-2">
         <NewCollectionDialog />
-        <NewItemDialog />
+        <NewItemDialog collections={pickerCollections} />
       </div>
     </header>
   );

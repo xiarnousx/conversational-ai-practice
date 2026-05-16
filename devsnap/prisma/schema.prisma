@@ -96,7 +96,7 @@ model Collection {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  items Item[]
+  items ItemCollection[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -124,17 +124,24 @@ model Item {
   typeId String
   type   ItemType @relation(fields: [typeId], references: [id])
 
-  collectionId String?
-  collection   Collection? @relation(fields: [collectionId], references: [id])
-
-  tags ItemTag[]
+  tags        ItemTag[]
+  collections ItemCollection[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@index([typeId])
-  @@index([collectionId])
+}
+
+model ItemCollection {
+  itemId       String
+  collectionId String
+
+  item       Item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@id([itemId, collectionId])
 }
 
 model Tag {

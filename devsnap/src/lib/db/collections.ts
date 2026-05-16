@@ -28,7 +28,11 @@ const fetchCollectionsWithTypes = cache(async (userId: string) => {
       items: {
         take: 50,
         include: {
-          type: { select: { name: true, color: true } },
+          item: {
+            include: {
+              type: { select: { name: true, color: true } },
+            },
+          },
         },
       },
     },
@@ -36,12 +40,12 @@ const fetchCollectionsWithTypes = cache(async (userId: string) => {
   });
 });
 
-function getDominantColor(
-  items: { type: { name: string; color: string | null } }[]
-): string {
+type CollectionWithItems = Awaited<ReturnType<typeof fetchCollectionsWithTypes>>[number];
+
+function getDominantColor(items: CollectionWithItems["items"]): string {
   const typeCounts: Record<string, { count: number; color: string }> = {};
-  for (const item of items) {
-    const { name, color } = item.type;
+  for (const ic of items) {
+    const { name, color } = ic.item.type;
     if (!typeCounts[name]) typeCounts[name] = { count: 0, color: color ?? "#6b7280" };
     typeCounts[name].count++;
   }
@@ -56,7 +60,7 @@ export async function getCollectionsForUser(userId: string): Promise<CollectionC
     description: col.description ?? "",
     itemCount: col.items.length,
     isFavorite: col.isFavorite,
-    icons: [...new Set(col.items.map((item) => item.type.name))].slice(0, 4),
+    icons: [...new Set(col.items.map((ic) => ic.item.type.name))].slice(0, 4),
     borderColor: getDominantColor(col.items),
   }));
 }
@@ -85,21 +89,13 @@ export async function createCollectionInDb(
       description: data.description ?? null,
       userId,
     },
-    include: {
-      items: {
-        take: 50,
-        include: {
-          type: { select: { name: true, color: true } },
-        },
-      },
-    },
   });
 
   return {
     id: collection.id,
     name: collection.name,
     description: collection.description ?? "",
-    itemCount: collection.items.length,
+    itemCount: 0,
     isFavorite: collection.isFavorite,
     icons: [],
     borderColor: "#6b7280",

@@ -24,6 +24,7 @@ import { MarkdownEditor } from "@/components/ui/markdown-editor";
 import { Calendar, Copy, Download, FileText, Layers, Pencil, Pin, Star, Tag, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { updateItem, deleteItem } from "@/actions/items";
+import { CollectionPicker } from "@/components/ui/collection-picker";
 import type { ItemDetail } from "@/lib/db/items";
 import {
   AlertDialog,
@@ -53,7 +54,18 @@ export function useItemDrawer() {
 
 // ─── Provider ────────────────────────────────────────────────────────────────
 
-export function ItemDrawerProvider({ children }: { children: ReactNode }) {
+interface CollectionPickerItem {
+  id: string;
+  name: string;
+}
+
+export function ItemDrawerProvider({
+  children,
+  collections,
+}: {
+  children: ReactNode;
+  collections: CollectionPickerItem[];
+}) {
   const [openItemId, setOpenItemId] = useState<string | null>(null);
   const [item, setItem] = useState<ItemDetail | null>(null);
   const [loading, setLoading] = useState(false);
@@ -100,7 +112,7 @@ export function ItemDrawerProvider({ children }: { children: ReactNode }) {
           {loading || !item ? (
             <DrawerSkeleton />
           ) : (
-            <DrawerContent key={openItemId} item={item} onUpdate={setItem} onClose={() => setOpenItemId(null)} />
+            <DrawerContent key={openItemId} item={item} collections={collections} onUpdate={setItem} onClose={() => setOpenItemId(null)} />
           )}
         </SheetContent>
       </Sheet>
@@ -119,11 +131,12 @@ const FILE_TYPES = new Set(["file", "image"]);
 
 interface DrawerContentProps {
   item: ItemDetail;
+  collections: { id: string; name: string }[];
   onUpdate: (updated: ItemDetail) => void;
   onClose: () => void;
 }
 
-function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
+function DrawerContent({ item, collections, onUpdate, onClose }: DrawerContentProps) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -145,6 +158,9 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
     url: item.url ?? "",
     tags: item.tags.join(", "),
   });
+  const [collectionIds, setCollectionIds] = useState<string[]>(
+    item.collections.map((c) => c.id)
+  );
 
   function startEdit() {
     setForm({
@@ -155,6 +171,7 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
       url: item.url ?? "",
       tags: item.tags.join(", "),
     });
+    setCollectionIds(item.collections.map((c) => c.id));
     setIsEditing(true);
   }
 
@@ -176,6 +193,7 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
       language: form.language || null,
       url: form.url || null,
       tags,
+      collectionIds,
     });
 
     setSaving(false);
@@ -394,6 +412,17 @@ function DrawerContent({ item, onUpdate, onClose }: DrawerContentProps) {
                   value={form.url}
                   onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))}
                   placeholder="https://…"
+                />
+              </div>
+            )}
+
+            {collections.length > 0 && (
+              <div className="space-y-1.5">
+                <Label>Collections</Label>
+                <CollectionPicker
+                  collections={collections}
+                  value={collectionIds}
+                  onChange={setCollectionIds}
                 />
               </div>
             )}

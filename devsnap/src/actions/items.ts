@@ -25,7 +25,10 @@ export async function updateItem(
     return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
 
-  const updated = await dbUpdateItem(session.user.id, itemId, parsed.data);
+  const updated = await dbUpdateItem(session.user.id, itemId, {
+    ...parsed.data,
+    collectionIds: parsed.data.collectionIds ?? [],
+  });
   if (!updated) {
     return { success: false, error: "Item not found" };
   }
@@ -55,7 +58,10 @@ export async function createItem(input: CreateItemInput): Promise<CreateItemResu
     }
   }
 
-  const item = await createItemInDb(session.user.id, parsed.data);
+  const item = await createItemInDb(session.user.id, {
+    ...parsed.data,
+    collectionIds: parsed.data.collectionIds ?? [],
+  });
   if (!item) {
     return { success: false, error: "Failed to create item" };
   }
