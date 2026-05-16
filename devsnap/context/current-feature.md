@@ -1,25 +1,12 @@
-# Current Feature: Collection Items — Add Item to Collections
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Migrate schema: remove `collectionId` from `Item`, add `ItemCollection` join table for many-to-many
-- Add a multi-select collection picker to the New Item dialog (create flow)
-- Add a multi-select collection picker to the Item Drawer edit mode (update flow)
-- Update `createItemInDb` and `updateItem` db functions to connect/disconnect `ItemCollection` rows
-- Update `getItemById` and `getItemsByType` to include collections in the returned data
-- Display the item's collections in the Item Drawer view mode
-
 ## Notes
-
-- Spec file: `context/features/collection-items-add-item-spec.md`
-- Schema change: drop `collectionId` (nullable FK) from `Item`, add `ItemCollection` join table (itemId + collectionId PK) — mirror the existing `ItemTag` pattern
-- Do not build collection detail/listing pages as part of this feature
-- Collection data is already fetched per user via `src/lib/db/collections.ts` — reuse for the picker options
-- The existing `CollectionsGrid` on the dashboard joins via `_ItemToCollection` implicit relation — switching to explicit join table changes that query too
 
 
 
@@ -60,3 +47,4 @@ In Progress
 - 2026-05-10: File List View — FileListRow component replaces ItemRow at /items/files; single-column list with file-type icon (by extension), file name, file size, upload date, and download button; row click opens ItemDrawer; download button stops propagation for direct /api/download/[id] trigger; responsive stacking on mobile; other item types keep the existing grid layout
 - 2026-05-10: Code Scanner Quick Wins — TOCTOU race fixed in updateItem/deleteItemById (single atomic Prisma call, P2025 catch); fileUrl ownership validated in createItem server action; rate limiting added to /api/auth/change-password; collections.ts refactored with shared fetchCollectionsWithTypes() + React cache() (one DB query per dashboard load); slugToTypeName replaced with canonical SLUG_TO_TYPE map + notFound(); CollectionsGrid View-all and cards wired to Next Link; dead code deleted (user.ts, constants.ts); SidebarUser deduplicated into src/types/user.ts; fileName sanitized in getSignedDownloadUrl; 8 unit tests updated
 - 2026-05-16: Collection Create — "New Collection" button in top bar opens a Dialog with name + description fields; createCollectionInDb db function; createCollection server action with Zod validation and auth ownership check; NewCollectionDialog component; router.refresh() syncs collections grid and sidebar; 12 unit tests for createCollectionSchema
+- 2026-05-16: Collection Items — Add Item to Collections — schema migrated from collectionId FK to explicit ItemCollection join table (mirrors ItemTag); CollectionPicker component (shadcn Popover + Command) added to NewItemDialog and ItemDrawer edit mode; createItemInDb, updateItem, getItemById updated for many-to-many; collectionIds field added to both Zod schemas; collections fetched from AppLayoutClient and passed down to TopBar and ItemDrawerProvider; 12 new tests for getCollectionsForUser/getSidebarCollections; view mode collections display unchanged
