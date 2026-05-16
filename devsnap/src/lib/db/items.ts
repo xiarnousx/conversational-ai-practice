@@ -62,6 +62,18 @@ export async function getItemsByType(userId: string, typeName: string): Promise<
   return items.map(toCardData);
 }
 
+export async function getItemsByCollectionId(userId: string, collectionId: string): Promise<ItemCardData[]> {
+  const items = await prisma.item.findMany({
+    where: { userId, collections: { some: { collectionId } } },
+    include: {
+      type: { select: { name: true, color: true } },
+      tags: { include: { tag: { select: { name: true } } } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  return items.map(toCardData);
+}
+
 export async function getPinnedItems(userId: string): Promise<ItemCardData[]> {
   const items = await fetchItems(userId, { pinnedOnly: true });
   return items.map(toCardData);

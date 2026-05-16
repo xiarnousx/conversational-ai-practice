@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { getItemById, updateItem, createItemInDb, deleteItemById } from "@/lib/db/items"
+import { getItemById, updateItem, createItemInDb, deleteItemById, getItemsByCollectionId } from "@/lib/db/items"
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     item: {
       findFirst: vi.fn(),
+      findMany: vi.fn(),
       update: vi.fn(),
       create: vi.fn(),
       delete: vi.fn(),
@@ -18,6 +19,7 @@ vi.mock("@/lib/prisma", () => ({
 import { prisma } from "@/lib/prisma"
 
 const mockFindFirst = vi.mocked(prisma.item.findFirst)
+const mockFindMany = vi.mocked(prisma.item.findMany)
 const mockUpdate = vi.mocked(prisma.item.update)
 const mockCreate = vi.mocked(prisma.item.create)
 const mockDelete = vi.mocked(prisma.item.delete)
@@ -436,5 +438,64 @@ describe("deleteItemById", () => {
 
     await deleteItemById("user-1", "item-1")
     expect(mockDelete).toHaveBeenCalledWith({ where: { id: "item-1", userId: "user-1" } })
+  })
+})
+
+describe("getItemsByCollectionId", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  const COLLECTION_ITEM = {
+    ...BASE_ITEM,
+    fileUrl: null,
+    fileName: null,
+    fileSize: null,
+  }
+
+  it("returns empty array when collection has no items", async () => {
+    mockFindMany.mockResolvedValue([])
+    const result = await getItemsByCollectionId("user-1", "col-1")
+    expect(result).toEqual([])
+  })
+
+  it("maps items to ItemCardData shape", async () => {
+    mockFindMany.mockResolvedValue([COLLECTION_ITEM] as never)
+    const [item] = await getItemsByCollectionId("user-1", "col-1")
+
+    expect(item).toMatchObject({
+      id: "item-1",
+      title: "useAuth Hook",
+      description: "Custom auth hook",
+      typeName: "Snippet",
+      typeColor: "#8b5cf6",
+      tags: ["react", "auth"],
+      isPinned: false,
+    })
+  })
+
+  it("queries with correct userId and collectionId filter", async () => {
+    mockFindMany.mockResolvedValue([])
+    await getItemsByCollectionId("user-1", "col-1")
+
+    expect(mockFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { userId: "user-1", collections: { some: { collectionId: "col-1" } } },
+      })
+    )
+  })
+
+  it("returns multiple items", async () => {
+    const second = { ...COLLECTION_ITEM, id: "item-2", title: "Second Item" }
+    mockFindMany.mockResolvedValue([COLLECTION_ITEM, second] as never)
+    const result = await getItemsByCollectionId("user-1", "col-1")
+    expect(result).toHaveLength(2)
+    expect(result[1].id).toBe("item-2")
+  })
+
+  it("falls back to #6b7280 when typeColor is null", async () => {
+    mockFindMany.mockResolvedValue([
+      { ...COLLECTION_ITEM, type: { name: "Note", color: null } },
+    ] as never)
+    const [item] = await getItemsByCollectionId("user-1", "col-1")
+    expect(item.typeColor).toBe("#6b7280")
   })
 })
