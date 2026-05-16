@@ -1,22 +1,12 @@
-# Current Feature: Collection Settings Page
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add a `/settings` route (protected by middleware)
-- Add a "Settings" link in the user icon dropdown at the bottom of the sidebar
-- Move "Delete Account" action from `/profile` to `/settings`
-- Move "Change Password" (forgot password flow) from `/profile` to `/settings`
-- `/profile` retains user info and usage stats only
-
 ## Notes
-
-- Settings page lives at `/settings` and must be protected (add to middleware)
-- The user dropdown in `SidebarUser` is where the new link goes
-- Keep the profile page — just strip it of the account-action forms
 
 
 
@@ -60,3 +50,4 @@ In Progress
 - 2026-05-16: Collection Items — Add Item to Collections — schema migrated from collectionId FK to explicit ItemCollection join table (mirrors ItemTag); CollectionPicker component (shadcn Popover + Command) added to NewItemDialog and ItemDrawer edit mode; createItemInDb, updateItem, getItemById updated for many-to-many; collectionIds field added to both Zod schemas; collections fetched from AppLayoutClient and passed down to TopBar and ItemDrawerProvider; 12 new tests for getCollectionsForUser/getSidebarCollections; view mode collections display unchanged
 - 2026-05-16: Collections Page — /collections lists all user collections using existing card style; /collections/[id] shows items in that collection grouped by type (files, images, other) using FileListRow/ImageThumbnailCard/ItemRow; getCollectionById and getItemsByCollectionId added to DB layer; /collections/* added to middleware protection; 11 new unit tests
 - 2026-05-16: Collection Edit/Delete — Edit/Delete/Favorite buttons on /collections/[id] detail page header; 3-dots dropdown on collection cards at /collections and /dashboard with Edit/Delete/Favorite (Favorite UI-only); EditCollectionDialog and DeleteCollectionDialog components; updateCollection and deleteCollection server actions with auth/ownership checks; updateCollectionInDb (P2025-safe) and deleteCollectionInDb in DB layer; shared CollectionCard client component replaces NextLink wrappers; 13 new unit tests
+- 2026-05-16: Settings Page — /settings route (middleware-protected); Change Password and Delete Account moved from /profile to /settings; Settings link added to sidebar user dropdown; /profile now shows user info and usage stats only
