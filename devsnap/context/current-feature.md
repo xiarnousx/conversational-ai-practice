@@ -1,12 +1,21 @@
-# Current Feature
+# Current Feature: Collections Page
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Create `/collections` page showing all user collections using existing collection cards
+- Create `/collections/[id]` page showing items in a specific collection using existing item cards
+- Link "View all collections" in the sidebar to `/collections`
+- Link all collection cards (dashboard + collections page) to `/collections/[id]`
+
 ## Notes
+
+- Items have a many-to-many relationship with collections (ItemCollection join table)
+- Reuse existing `CollectionCard` and item row/card components — no new card designs
+- Collection cards already exist in the dashboard; wire up their hrefs
 
 
 

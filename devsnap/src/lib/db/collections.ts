@@ -79,6 +79,35 @@ export async function getSidebarCollections(userId: string): Promise<SidebarColl
     }));
 }
 
+export async function getCollectionById(
+  userId: string,
+  collectionId: string
+): Promise<CollectionCardData | null> {
+  const collection = await prisma.collection.findFirst({
+    where: { id: collectionId, userId },
+    include: {
+      items: {
+        take: 50,
+        include: {
+          item: {
+            include: { type: { select: { name: true, color: true } } },
+          },
+        },
+      },
+    },
+  });
+  if (!collection) return null;
+  return {
+    id: collection.id,
+    name: collection.name,
+    description: collection.description ?? "",
+    itemCount: collection.items.length,
+    isFavorite: collection.isFavorite,
+    icons: [...new Set(collection.items.map((ic) => ic.item.type.name))].slice(0, 4),
+    borderColor: getDominantColor(collection.items),
+  };
+}
+
 export async function createCollectionInDb(
   userId: string,
   data: { name: string; description?: string | null }
