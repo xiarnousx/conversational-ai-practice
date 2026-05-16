@@ -1,23 +1,16 @@
-# Current Feature: Collection Items Add
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add a "New Collection" button in the top bar that opens a modal
-- Modal has name and description fields with validation
-- On save: create the collection in the database, show success/error toast, and refresh the UI
-- Collections are user-scoped (owned by the signed-in user)
-- Follow existing patterns: lib/db functions for DB queries, server actions for mutations, API routes for client-side calls where applicable
+<!-- Add feature goals here -->
 
 ## Notes
 
-- Follow the same patterns as item creation (NewItemDialog, createItem server action, createItemInDb db function)
-- Use Zod for input validation in the server action
-- TopBar already has the "New Item" button — add "New Collection" alongside it
-- Refresh the collections list/sidebar after creation (router.refresh())
+<!-- Add notes here -->
 
 
 
@@ -57,3 +50,4 @@ In Progress
 - 2026-05-10: Image Gallery View — ImageThumbnailCard component replaces ItemRow at /items/images; 3-column grid with 16:9 aspect-video thumbnails, object-cover, 5% hover zoom (300ms), image src via /api/view/[id] signed S3 proxy
 - 2026-05-10: File List View — FileListRow component replaces ItemRow at /items/files; single-column list with file-type icon (by extension), file name, file size, upload date, and download button; row click opens ItemDrawer; download button stops propagation for direct /api/download/[id] trigger; responsive stacking on mobile; other item types keep the existing grid layout
 - 2026-05-10: Code Scanner Quick Wins — TOCTOU race fixed in updateItem/deleteItemById (single atomic Prisma call, P2025 catch); fileUrl ownership validated in createItem server action; rate limiting added to /api/auth/change-password; collections.ts refactored with shared fetchCollectionsWithTypes() + React cache() (one DB query per dashboard load); slugToTypeName replaced with canonical SLUG_TO_TYPE map + notFound(); CollectionsGrid View-all and cards wired to Next Link; dead code deleted (user.ts, constants.ts); SidebarUser deduplicated into src/types/user.ts; fileName sanitized in getSignedDownloadUrl; 8 unit tests updated
+- 2026-05-16: Collection Create — "New Collection" button in top bar opens a Dialog with name + description fields; createCollectionInDb db function; createCollection server action with Zod validation and auth ownership check; NewCollectionDialog component; router.refresh() syncs collections grid and sidebar; 12 unit tests for createCollectionSchema
