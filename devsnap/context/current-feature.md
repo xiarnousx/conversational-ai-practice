@@ -1,29 +1,12 @@
-# Current Feature: Editor Preferences Settings
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add font size dropdown to settings page
-- Add tab size dropdown to settings page
-- Add word wrap toggle (default: on)
-- Add minimap toggle (default: off)
-- Add theme dropdown: vs-dark, monokai, github-dark (default: vs-dark)
-- Store preferences in JSON column `editorPreferences` on User model via Prisma migration
-- Create server action to update preferences
-- Apply settings to Monaco CodeEditor component
-- Auto-save on change (no save button needed)
-- Show success toast on save
-- Create EditorPreferencesContext for client components to consume
-
 ## Notes
-
-- Use `prisma migrate dev` — never `db push`
-- Preferences stored as JSON in a single `editorPreferences` column on User
-- EditorPreferencesContext should be a client-side context provider
-- Auto-save means each control change triggers the server action immediately
 
 ## History
 
@@ -68,3 +51,4 @@ In Progress
 - 2026-05-16: Settings Page — /settings route (middleware-protected); Change Password and Delete Account moved from /profile to /settings; Settings link added to sidebar user dropdown; /profile now shows user info and usage stats only
 - 2026-05-16: Global Search / Command Palette — Cmd/Ctrl+K opens cmdk CommandDialog with client-side fuzzy search across all items and collections; grouped results with type color dot and type label (items) or item count (collections); keyboard navigation via cmdk built-in; item select opens ItemDrawer, collection select navigates to /collections/[id]; centered TopBar search input triggers palette on click; getItemsForSearch and getCollectionsForSearch DB functions; state managed in AppLayoutClient (no wrapper context to avoid hydration ID mismatch); 10 new unit tests
 - 2026-05-16: Pagination — URL-based ?page=N pagination on /items/[type], /collections, and /collections/[id]; Pagination component with numbered links and disabled prev/next at boundaries; ITEMS_PER_PAGE and COLLECTIONS_PER_PAGE constants; DASHBOARD_COLLECTIONS_LIMIT and DASHBOARD_RECENT_ITEMS_LIMIT constants for dashboard caps; DB queries use skip/take (no full-table fetches); getCollectionsForUserPaginated added; 14 new unit tests
+- 2026-05-17: Editor Preferences Settings — editorPreferences Json? column on User (Prisma migration); EditorPreferencesContext provider wraps AppLayoutClient; updateEditorPreferences server action with Zod validation; EditorPreferencesForm on /settings with font size, tab size, word wrap, minimap, and theme dropdowns/toggles; auto-save on each change with success toast; CodeEditor consumes context (theme, fontSize, tabSize, wordWrap, minimap); shadcn Select + Switch added; 21 new unit tests
