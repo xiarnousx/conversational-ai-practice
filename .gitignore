@@ -50,3 +50,4 @@ devsnap/.vercel
 devsnap/*.tsbuildinfo
 devsnap/next-env.d.ts
 **/.mcp.json
+devsnap/.playwright-mcp
