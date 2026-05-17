@@ -5,20 +5,20 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
 import DeleteAccountButton from "@/components/profile/DeleteAccountButton";
-
-async function getIsEmailUser(userId: string) {
-  const user = await prisma.user.findUniqueOrThrow({
-    where: { id: userId },
-    select: { password: true },
-  });
-  return !!user.password;
-}
+import EditorPreferencesForm from "@/components/settings/EditorPreferencesForm";
+import { parseEditorPreferences } from "@/types/editor-preferences";
 
 export default async function SettingsPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/sign-in");
 
-  const isEmailUser = await getIsEmailUser(session.user.id);
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { id: session.user.id },
+    select: { password: true, editorPreferences: true },
+  });
+
+  const isEmailUser = !!user.password;
+  const editorPreferences = parseEditorPreferences(user.editorPreferences);
 
   return (
     <div className="min-h-screen bg-background">
@@ -38,6 +38,13 @@ export default async function SettingsPage() {
         <div>
           <h1 className="text-xl font-semibold text-foreground">Settings</h1>
           <p className="text-sm text-muted-foreground mt-1">Manage your account settings</p>
+        </div>
+
+        <div className="rounded-lg border border-border bg-card p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+            Editor
+          </h2>
+          <EditorPreferencesForm initialPrefs={editorPreferences} />
         </div>
 
         <div className="rounded-lg border border-border bg-card p-6 space-y-4">

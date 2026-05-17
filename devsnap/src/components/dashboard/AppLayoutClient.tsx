@@ -5,9 +5,11 @@ import TopBar from "@/components/dashboard/TopBar";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { ItemDrawerProvider } from "@/components/item-drawer";
 import { CommandPalette } from "@/components/command-palette/CommandPalette";
+import { EditorPreferencesProvider } from "@/components/providers/EditorPreferencesContext";
 import type { SidebarItemType, SearchItem } from "@/lib/db/items";
 import type { SidebarCollection, SearchCollection } from "@/lib/db/collections";
 import type { SidebarUser } from "@/types/user";
+import type { EditorPreferences } from "@/types/editor-preferences";
 
 interface AppLayoutClientProps {
   children: React.ReactNode;
@@ -16,6 +18,7 @@ interface AppLayoutClientProps {
   user: SidebarUser;
   searchItems: SearchItem[];
   searchCollections: SearchCollection[];
+  editorPreferences: EditorPreferences;
 }
 
 export default function AppLayoutClient({
@@ -25,6 +28,7 @@ export default function AppLayoutClient({
   user,
   searchItems,
   searchCollections,
+  editorPreferences,
 }: AppLayoutClientProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -58,15 +62,17 @@ export default function AppLayoutClient({
           onSearchClick={() => setPaletteOpen(true)}
         />
         <main className="flex-1 overflow-auto p-6">
-          <ItemDrawerProvider collections={pickerCollections}>
-            <CommandPalette
-              open={paletteOpen}
-              onOpenChange={setPaletteOpen}
-              searchItems={searchItems}
-              searchCollections={searchCollections}
-            />
-            {children}
-          </ItemDrawerProvider>
+          <EditorPreferencesProvider initialPrefs={editorPreferences}>
+            <ItemDrawerProvider collections={pickerCollections}>
+              <CommandPalette
+                open={paletteOpen}
+                onOpenChange={setPaletteOpen}
+                searchItems={searchItems}
+                searchCollections={searchCollections}
+              />
+              {children}
+            </ItemDrawerProvider>
+          </EditorPreferencesProvider>
         </main>
       </div>
     </div>

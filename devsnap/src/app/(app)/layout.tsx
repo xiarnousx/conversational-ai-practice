@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { getSystemItemTypes, getItemsForSearch } from "@/lib/db/items";
 import { getSidebarCollections, getCollectionsForSearch } from "@/lib/db/collections";
+import { prisma } from "@/lib/prisma";
+import { parseEditorPreferences } from "@/types/editor-preferences";
 import AppLayoutClient from "@/components/dashboard/AppLayoutClient";
 
 export default async function AppLayout({
@@ -13,12 +15,15 @@ export default async function AppLayout({
   if (!session?.user?.id) redirect("/sign-in");
 
   const userId = session.user.id;
-  const [itemTypes, collections, searchItems, searchCollections] = await Promise.all([
+  const [itemTypes, collections, searchItems, searchCollections, userRow] = await Promise.all([
     getSystemItemTypes(userId),
     getSidebarCollections(userId),
     getItemsForSearch(userId),
     getCollectionsForSearch(userId),
+    prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { editorPreferences: true } }),
   ]);
+
+  const editorPreferences = parseEditorPreferences(userRow.editorPreferences);
 
   return (
     <AppLayoutClient
@@ -31,6 +36,7 @@ export default async function AppLayout({
       }}
       searchItems={searchItems}
       searchCollections={searchCollections}
+      editorPreferences={editorPreferences}
     >
       {children}
     </AppLayoutClient>
