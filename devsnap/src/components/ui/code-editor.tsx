@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import { Check, Copy } from "lucide-react";
+import { useEditorPreferences } from "@/components/providers/EditorPreferencesContext";
 
 interface CodeEditorProps {
   value: string;
@@ -17,6 +18,7 @@ export function CodeEditor({
   readOnly = false,
   onChange,
 }: CodeEditorProps) {
+  const { prefs } = useEditorPreferences();
   const [copied, setCopied] = useState(false);
   const [height, setHeight] = useState(200);
   const editorRef = useRef<Parameters<OnMount>[0] | null>(null);
@@ -76,18 +78,19 @@ export function CodeEditor({
         <Editor
           value={value}
           language={language || "plaintext"}
-          theme="vs-dark"
+          theme={prefs.theme}
           onMount={handleMount}
           onChange={(val) => onChange?.(val ?? "")}
           options={{
             readOnly,
             domReadOnly: readOnly,
-            minimap: { enabled: false },
+            minimap: { enabled: prefs.minimap },
             scrollBeyondLastLine: false,
-            fontSize: 12,
+            fontSize: prefs.fontSize,
+            tabSize: prefs.tabSize,
             lineNumbers: "on",
             folding: false,
-            wordWrap: "on",
+            wordWrap: prefs.wordWrap,
             automaticLayout: true,
             scrollbar: {
               vertical: "auto",
