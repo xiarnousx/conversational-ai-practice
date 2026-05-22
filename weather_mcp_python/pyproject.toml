@@ -1,5 +1,5 @@
 [project]
-name = "weather_mcp"
+name = "weather_mcp_python"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -10,7 +10,7 @@ dependencies = [
 ]
 
 [project.scripts]
-weather-mcp = "weather_mcp.server:main"
+weather-mcp = "weather_mcp_python.server:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["weather_mcp"]
+packages = ["weather_mcp_python"]
