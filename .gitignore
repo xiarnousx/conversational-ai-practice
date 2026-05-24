@@ -66,3 +66,6 @@ weather_mcp_python/.env.*
 weather_mcp_python/*.venv
 weather_mcp_python/.venv/
 
+hookhub/nodemodules
+hookhub/node_modules
+hookhub/.next
