@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { getItemById, updateItem, createItemInDb, deleteItemById, getItemsByCollectionId, getItemsByType, getItemsForSearch } from "@/lib/db/items"
+import { getItemById, updateItem, createItemInDb, deleteItemById, getItemsByCollectionId, getItemsByType, getItemsForSearch, getFavoriteItems } from "@/lib/db/items"
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
@@ -637,5 +637,69 @@ describe("getItemsByType", () => {
     mockCount.mockResolvedValue(1)
     const { items } = await getItemsByType("user-1", "note")
     expect(items[0].typeColor).toBe("#6b7280")
+  })
+})
+
+// ─── getFavoriteItems ─────────────────────────────────────────────────────────
+
+describe("getFavoriteItems", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  const FAV_ITEM = {
+    id: "item-1",
+    title: "useAuth Hook",
+    type: { name: "Snippet", color: "#8b5cf6" },
+    updatedAt: new Date("2024-06-01T00:00:00Z"),
+  }
+
+  it("returns empty array when user has no favorited items", async () => {
+    mockFindMany.mockResolvedValue([])
+    const result = await getFavoriteItems("user-1")
+    expect(result).toEqual([])
+  })
+
+  it("maps a favorite item to FavoriteItem shape", async () => {
+    mockFindMany.mockResolvedValue([FAV_ITEM] as never)
+    const [item] = await getFavoriteItems("user-1")
+
+    expect(item).toEqual({
+      id: "item-1",
+      title: "useAuth Hook",
+      typeName: "Snippet",
+      typeColor: "#8b5cf6",
+      updatedAt: "2024-06-01T00:00:00.000Z",
+    })
+  })
+
+  it("falls back to #6b7280 when typeColor is null", async () => {
+    mockFindMany.mockResolvedValue([
+      { ...FAV_ITEM, type: { name: "Note", color: null } },
+    ] as never)
+    const [item] = await getFavoriteItems("user-1")
+    expect(item.typeColor).toBe("#6b7280")
+  })
+
+  it("serializes updatedAt to ISO string", async () => {
+    mockFindMany.mockResolvedValue([FAV_ITEM] as never)
+    const [item] = await getFavoriteItems("user-1")
+    expect(item.updatedAt).toBe("2024-06-01T00:00:00.000Z")
+  })
+
+  it("queries with correct userId and isFavorite: true filter", async () => {
+    mockFindMany.mockResolvedValue([])
+    await getFavoriteItems("user-42")
+    expect(mockFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { userId: "user-42", isFavorite: true },
+      })
+    )
+  })
+
+  it("returns multiple favorited items", async () => {
+    const second = { ...FAV_ITEM, id: "item-2", title: "fetchData" }
+    mockFindMany.mockResolvedValue([FAV_ITEM, second] as never)
+    const result = await getFavoriteItems("user-1")
+    expect(result).toHaveLength(2)
+    expect(result[1].id).toBe("item-2")
   })
 })

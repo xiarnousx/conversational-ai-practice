@@ -133,6 +133,27 @@ export async function getSidebarCollections(userId: string): Promise<SidebarColl
     }));
 }
 
+export interface FavoriteCollection {
+  id: string;
+  name: string;
+  itemCount: number;
+  updatedAt: string;
+}
+
+export async function getFavoriteCollections(userId: string): Promise<FavoriteCollection[]> {
+  const collections = await prisma.collection.findMany({
+    where: { userId, isFavorite: true },
+    include: { _count: { select: { items: true } } },
+    orderBy: { updatedAt: "desc" },
+  });
+  return collections.map((col) => ({
+    id: col.id,
+    name: col.name,
+    itemCount: col._count.items,
+    updatedAt: col.updatedAt.toISOString(),
+  }));
+}
+
 export async function getCollectionById(
   userId: string,
   collectionId: string

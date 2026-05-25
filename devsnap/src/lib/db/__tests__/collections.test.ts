@@ -7,6 +7,7 @@ import {
   deleteCollectionInDb,
   getCollectionsForSearch,
   getCollectionsForUserPaginated,
+  getFavoriteCollections,
 } from "@/lib/db/collections"
 
 vi.mock("@/lib/prisma", () => ({
@@ -442,5 +443,69 @@ describe("getCollectionsForUserPaginated", () => {
     const { collections } = await getCollectionsForUserPaginated("user-1", 1)
     expect(collections).toHaveLength(2)
     expect(collections[1].id).toBe("col-2")
+  })
+})
+
+// ─── getFavoriteCollections ───────────────────────────────────────────────────
+
+describe("getFavoriteCollections", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  function makeFavCollection(overrides: Record<string, unknown> = {}) {
+    return {
+      id: "col-1",
+      name: "React Patterns",
+      updatedAt: new Date("2024-06-01T00:00:00Z"),
+      _count: { items: 3 },
+      ...overrides,
+    }
+  }
+
+  it("returns empty array when user has no favorited collections", async () => {
+    mockFindMany.mockResolvedValue([])
+    const result = await getFavoriteCollections("user-1")
+    expect(result).toEqual([])
+  })
+
+  it("maps a favorited collection to FavoriteCollection shape", async () => {
+    mockFindMany.mockResolvedValue([makeFavCollection()] as never)
+    const [col] = await getFavoriteCollections("user-1")
+
+    expect(col).toEqual({
+      id: "col-1",
+      name: "React Patterns",
+      itemCount: 3,
+      updatedAt: "2024-06-01T00:00:00.000Z",
+    })
+  })
+
+  it("serializes updatedAt to ISO string", async () => {
+    mockFindMany.mockResolvedValue([makeFavCollection()] as never)
+    const [col] = await getFavoriteCollections("user-1")
+    expect(col.updatedAt).toBe("2024-06-01T00:00:00.000Z")
+  })
+
+  it("uses _count.items for itemCount", async () => {
+    mockFindMany.mockResolvedValue([makeFavCollection({ _count: { items: 7 } })] as never)
+    const [col] = await getFavoriteCollections("user-1")
+    expect(col.itemCount).toBe(7)
+  })
+
+  it("queries with correct userId and isFavorite: true filter", async () => {
+    mockFindMany.mockResolvedValue([])
+    await getFavoriteCollections("user-42")
+    expect(mockFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { userId: "user-42", isFavorite: true },
+      })
+    )
+  })
+
+  it("returns multiple favorited collections", async () => {
+    const second = makeFavCollection({ id: "col-2", name: "Python Scripts", _count: { items: 1 } })
+    mockFindMany.mockResolvedValue([makeFavCollection(), second] as never)
+    const result = await getFavoriteCollections("user-1")
+    expect(result).toHaveLength(2)
+    expect(result[1].id).toBe("col-2")
   })
 })

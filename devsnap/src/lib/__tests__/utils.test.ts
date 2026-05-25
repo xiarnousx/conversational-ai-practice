@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { cn } from "@/lib/utils"
+import { cn, formatShortDate } from "@/lib/utils"
 
 describe("cn", () => {
   it("merges class names", () => {
@@ -16,5 +16,15 @@ describe("cn", () => {
 
   it("returns empty string for no args", () => {
     expect(cn()).toBe("")
+  })
+})
+
+describe("formatShortDate", () => {
+  it("formats an ISO string as 'Mon DD'", () => {
+    expect(formatShortDate("2024-06-01T00:00:00.000Z")).toBe("Jun 1")
+  })
+
+  it("formats a mid-year date correctly", () => {
+    expect(formatShortDate("2024-01-15T00:00:00.000Z")).toBe("Jan 15")
   })
 })
