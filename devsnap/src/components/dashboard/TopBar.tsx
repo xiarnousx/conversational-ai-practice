@@ -1,7 +1,8 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Menu, Search } from "lucide-react";
+import { Menu, Search, Star } from "lucide-react";
+import NextLink from "next/link";
 import { NewItemDialog } from "@/components/item-create";
 import { NewCollectionDialog } from "@/components/collection-create";
 
@@ -34,6 +35,13 @@ export default function TopBar({ onMenuClick, pickerCollections, onSearchClick }
       </div>
 
       <div className="ml-auto flex items-center gap-2">
+        <NextLink
+          href="/favorites"
+          className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-amber-400 hover:bg-muted transition-colors"
+          title="Favorites"
+        >
+          <Star className="h-4 w-4" />
+        </NextLink>
         <NewCollectionDialog />
         <NewItemDialog collections={pickerCollections} />
       </div>
