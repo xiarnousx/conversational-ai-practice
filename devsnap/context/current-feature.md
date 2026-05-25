@@ -1,25 +1,12 @@
-# Current Feature: Favorites Sorting
+# Current Feature
 
 ## Status
 
-Complete
+Not Started
 
 ## Goals
 
-- Add sort controls to the /favorites page for both the Items and Collections sections
-- Sort options: Name (A→Z), Type (items only), Date (newest/oldest)
-- Sorting is client-side — no server roundtrip, no URL params
-- Default sort: Date descending (matches current DB order)
-- Sort state is per-section (items and collections sort independently)
-
 ## Notes
-
-- FavoriteItemRow and FavoriteCollectionRow are already client components
-- The /favorites page is a server component — needs a client wrapper to hold sort state
-- Items can sort by: name (title alpha), type (typeName alpha), date (updatedAt)
-- Collections can sort by: name (alpha), date (updatedAt) — no "type" since collections have no single type
-- Sort toggle UI: small button group or select above each section; minimal, consistent with app style
-- Keep the existing compact terminal-style list layout unchanged
 
 ## History
 
@@ -67,3 +54,4 @@ Complete
 - 2026-05-17: Editor Preferences Settings — editorPreferences Json? column on User (Prisma migration); EditorPreferencesContext provider wraps AppLayoutClient; updateEditorPreferences server action with Zod validation; EditorPreferencesForm on /settings with font size, tab size, word wrap, minimap, and theme dropdowns/toggles; auto-save on each change with success toast; CodeEditor consumes context (theme, fontSize, tabSize, wordWrap, minimap); shadcn Select + Switch added; 21 new unit tests
 - 2026-05-25: Favorites Page — /favorites route (middleware-protected); getFavoriteItems and getFavoriteCollections DB queries sorted by updatedAt desc; FavoriteItemRow (opens ItemDrawer) and FavoriteCollectionRow (navigates to /collections/[id]) in compact terminal-style list; separate Items/Collections sections with counts; empty state; star icon button in TopBar with amber hover; formatShortDate extracted to src/lib/utils.ts; 14 new unit tests
 - 2026-05-25: Favorite Toggle — toggleFavoriteItem and toggleFavoriteCollection server actions with auth/ownership checks; isFavorite added to ItemCardData; optimistic amber star toggle on ItemRow, FileListRow, ImageThumbnailCard, ItemDrawer action bar, CollectionCard 3-dots dropdown, and CollectionDetailActions header; FavoriteItemRow and FavoriteCollectionRow wired to unfavorite with optimistic removal from list
+- 2026-05-25: Favorites Sorting — client-side sort controls on /favorites; FavoritesSortedList client component holds independent sort state per section; items sort by date (default)/name/type; collections sort by date (default)/name; SortPills generic pill button group; favorites/page.tsx delegates non-empty rendering to FavoritesSortedList
