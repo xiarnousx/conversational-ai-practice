@@ -1,26 +1,12 @@
-# Current Feature: Favorite Toggle
+# Current Feature
 
 ## Status
 
-Complete
+Not Started
 
 ## Goals
 
-- Add star icon button to item list rows (ItemRow, FileListRow, ImageThumbnailCard) and item drawer
-- Add star icon button to collection list rows (CollectionCard) and collection detail page header
-- Clicking star toggles isFavorite status immediately (optimistic UI: filled star ↔ outlined star)
-- Persist toggle to backend via server action
-- Favorites page already exists — toggling should keep it in sync (router.refresh or revalidatePath)
-
 ## Notes
-
-- Item rows: ItemRow (snippets/prompts/etc.), FileListRow, ImageThumbnailCard — all need the toggle
-- Collection rows: CollectionCard already has a Favorite option in the 3-dots dropdown (UI-only) — wire it up
-- Item drawer action bar already has a Favorite button — wire it up too
-- Collection detail page (/collections/[id]) header already has a Favorite button — wire it up
-- Server actions: toggleFavoriteItem and toggleFavoriteCollection with auth/ownership checks
-- Use optimistic UI (useOptimistic or local state flip + revalidate) for instant feedback
-- Star filled = amber/yellow; outlined = muted; consistent with TopBar star icon style
 
 ## History
 
@@ -67,3 +53,4 @@ Complete
 - 2026-05-16: Pagination — URL-based ?page=N pagination on /items/[type], /collections, and /collections/[id]; Pagination component with numbered links and disabled prev/next at boundaries; ITEMS_PER_PAGE and COLLECTIONS_PER_PAGE constants; DASHBOARD_COLLECTIONS_LIMIT and DASHBOARD_RECENT_ITEMS_LIMIT constants for dashboard caps; DB queries use skip/take (no full-table fetches); getCollectionsForUserPaginated added; 14 new unit tests
 - 2026-05-17: Editor Preferences Settings — editorPreferences Json? column on User (Prisma migration); EditorPreferencesContext provider wraps AppLayoutClient; updateEditorPreferences server action with Zod validation; EditorPreferencesForm on /settings with font size, tab size, word wrap, minimap, and theme dropdowns/toggles; auto-save on each change with success toast; CodeEditor consumes context (theme, fontSize, tabSize, wordWrap, minimap); shadcn Select + Switch added; 21 new unit tests
 - 2026-05-25: Favorites Page — /favorites route (middleware-protected); getFavoriteItems and getFavoriteCollections DB queries sorted by updatedAt desc; FavoriteItemRow (opens ItemDrawer) and FavoriteCollectionRow (navigates to /collections/[id]) in compact terminal-style list; separate Items/Collections sections with counts; empty state; star icon button in TopBar with amber hover; formatShortDate extracted to src/lib/utils.ts; 14 new unit tests
+- 2026-05-25: Favorite Toggle — toggleFavoriteItem and toggleFavoriteCollection server actions with auth/ownership checks; isFavorite added to ItemCardData; optimistic amber star toggle on ItemRow, FileListRow, ImageThumbnailCard, ItemDrawer action bar, CollectionCard 3-dots dropdown, and CollectionDetailActions header; FavoriteItemRow and FavoriteCollectionRow wired to unfavorite with optimistic removal from list
