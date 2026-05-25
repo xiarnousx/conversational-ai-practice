@@ -3,8 +3,7 @@ import { Star } from "lucide-react";
 import { auth } from "@/auth";
 import { getFavoriteItems } from "@/lib/db/items";
 import { getFavoriteCollections } from "@/lib/db/collections";
-import FavoriteItemRow from "@/components/favorites/FavoriteItemRow";
-import FavoriteCollectionRow from "@/components/favorites/FavoriteCollectionRow";
+import FavoritesSortedList from "@/components/favorites/FavoritesSortedList";
 
 export default async function FavoritesPage() {
   const session = await auth();
@@ -33,43 +32,7 @@ export default async function FavoritesPage() {
           </p>
         </div>
       ) : (
-        <div className="flex flex-col gap-6">
-          {items.length > 0 && (
-            <section>
-              <div className="mb-1 flex items-center gap-2 px-3 pb-1 border-b border-border">
-                <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                  Items
-                </span>
-                <span className="ml-auto font-mono text-xs text-muted-foreground">
-                  {items.length}
-                </span>
-              </div>
-              <div className="flex flex-col">
-                {items.map((item) => (
-                  <FavoriteItemRow key={item.id} item={item} />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {collections.length > 0 && (
-            <section>
-              <div className="mb-1 flex items-center gap-2 px-3 pb-1 border-b border-border">
-                <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                  Collections
-                </span>
-                <span className="ml-auto font-mono text-xs text-muted-foreground">
-                  {collections.length}
-                </span>
-              </div>
-              <div className="flex flex-col">
-                {collections.map((col) => (
-                  <FavoriteCollectionRow key={col.id} collection={col} />
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
+        <FavoritesSortedList items={items} collections={collections} />
       )}
     </div>
   );
