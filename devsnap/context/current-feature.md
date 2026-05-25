@@ -1,12 +1,25 @@
-# Current Feature
+# Current Feature: Favorites Sorting
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Add sort controls to the /favorites page for both the Items and Collections sections
+- Sort options: Name (A→Z), Type (items only), Date (newest/oldest)
+- Sorting is client-side — no server roundtrip, no URL params
+- Default sort: Date descending (matches current DB order)
+- Sort state is per-section (items and collections sort independently)
+
 ## Notes
+
+- FavoriteItemRow and FavoriteCollectionRow are already client components
+- The /favorites page is a server component — needs a client wrapper to hold sort state
+- Items can sort by: name (title alpha), type (typeName alpha), date (updatedAt)
+- Collections can sort by: name (alpha), date (updatedAt) — no "type" since collections have no single type
+- Sort toggle UI: small button group or select above each section; minimal, consistent with app style
+- Keep the existing compact terminal-style list layout unchanged
 
 ## History
 
