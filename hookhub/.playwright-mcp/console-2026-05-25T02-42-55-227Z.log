@@ -1,0 +1,15 @@
+[    2309ms] [WARNING] Specifying 'overflow: visible' on img, video and canvas tags may cause them to produce visual content outside of the element bounds. See https://github.com/WICG/view-transitions/blob/main/debugging_overflow_on_images.md for details. @ https://edition.cnn.com/:4852
+[    4543ms] [LOG] AdFuelError event fired: CustomEvent @ https://edition.cnn.com/media/sites/js/bundles/cnn-edition-adfuel-body-4f5702656cd8f4223620039026c7c6ddef28fe7bd21467289a55cfecc58ecf1f.min.js:0
+[    7338ms] [ERROR] Failed to load resource: the server responded with a status of 451 () @ https://api.rlcdn.com/api/identity/envelope?pid=13452:0
+[    9385ms] The promise timed out.
+[    9387ms] [LOG] AdFuelError event fired: CustomEvent @ https://edition.cnn.com/media/sites/js/bundles/cnn-edition-adfuel-body-4f5702656cd8f4223620039026c7c6ddef28fe7bd21467289a55cfecc58ecf1f.min.js:0
+[    9387ms] [ERROR] There was an error loading the Integral Ad Science script. The promise timed out. @ https://edition.cnn.com/media/sites/js/bundles/cnn-edition-adfuel-90b90dcb7e32397764fa35be509f8319d719b39f431d9b8271a1064a98b46190.min.js:0
+[    9396ms] The promise timed out.
+[    9560ms] [LOG] AdFuelError event fired: CustomEvent @ https://edition.cnn.com/media/sites/js/bundles/cnn-edition-adfuel-body-4f5702656cd8f4223620039026c7c6ddef28fe7bd21467289a55cfecc58ecf1f.min.js:0
+[    9561ms] [ERROR] Error in loadScript. The promise timed out. @ https://edition.cnn.com/media/sites/js/bundles/cnn-edition-adfuel-body-4f5702656cd8f4223620039026c7c6ddef28fe7bd21467289a55cfecc58ecf1f.min.js:0
+[   10259ms] [LOG] AdFuelError event fired: CustomEvent @ https://edition.cnn.com/media/sites/js/bundles/cnn-edition-adfuel-body-4f5702656cd8f4223620039026c7c6ddef28fe7bd21467289a55cfecc58ecf1f.min.js:0
+[   10260ms] [ERROR] The promise timed out. @ https://edition.cnn.com/media/sites/js/bundles/cnn-edition-adfuel-90b90dcb7e32397764fa35be509f8319d719b39f431d9b8271a1064a98b46190.min.js:0
+[   18714ms] [ERROR] [WMUC]: OneTrust Error ( 3 ):  SDK load timeout @ https://edition.cnn.com/:386
+[   24265ms] Uncaught Error: IMA SDK is either not loaded from a google domain or is not a supported version.
+    at <anonymous> (https://imasdk.googleapis.com/js/sdkloader/ima3.js:853:725)
+    at <anonymous> (https://imasdk.googleapis.com/js/sdkloader/ima3.js:854:277)

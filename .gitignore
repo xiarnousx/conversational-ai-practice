@@ -28,7 +28,7 @@
 .DS_Store
 **/Thumbs.db
 
-# devsnap (Next.js)
+# devsnap (Next.js) (Udemy Course)
 devsnap/node_modules/
 devsnap/.next/
 devsnap/out/
@@ -49,7 +49,7 @@ devsnap/.pnpm-debug.log*
 devsnap/.vercel
 devsnap/*.tsbuildinfo
 devsnap/next-env.d.ts
-**/.mcp.json
+devsnap/.mcp.json
 devsnap/.playwright-mcp
 
 weather_mcp_nodejs/node_modules/
@@ -66,6 +66,6 @@ weather_mcp_python/.env.*
 weather_mcp_python/*.venv
 weather_mcp_python/.venv/
 
-hookhub/nodemodules
+# hookhub (Next.js) (Agentic Coding With Claude Code Book)
 hookhub/node_modules
 hookhub/.next

@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Agentic Coding with Claude Code
 
-## Getting Started
+- To initialize the project with claude code `/init`
+- When a major update is made it is safe to re run `/init`. It will not delete any files but will update the CLAUDE.md file with the latest information about the project.
 
-First, run the development server:
+## Contents of the CLAUDE.md file:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- The project goal
+- The business problem being solved
+- How the project is run
+- The framework in use, including Next.js
+- The folder and directory structure
+
+## Example of adding MCP:
+
+- claude mcp add npx @playwright/mcp@latest -s user (global install)
+- claude mcp add --scope project npx @playwright/mcp@latest (project install)
+
+## Markdown Personas for AI coding assistants:
+
+- https://cursor.directory/
+
+
+## Spec Driven Design:
+
+The general idea is to create a spec file describing the application, the use case or business use case, and possibly nofunctional requirements.
+
+### Plan Mode:
+```
+I want you to help me write a spec file for a project I am building. It's called "hookhub". It's a place where cool open source Claude hooks are displayed and browsed. Search on Claude hooks and write an initial spec for this. Remember it's an MVP ATM and we need only the functionality of displaying the hooks. Hooks are found in GitHub repositories, they have name, category, description and link to repo. The main page should display the hooks in a grid-like view.
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The Plan mode:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Described HookHub as a place where open-source claude hooks are displayed and browsed.
+- Asked Claude to search for Claude Hooks and write an initial specification
+- Clarified that this is an MVP, with functionality limited to displaying hooks
+- Specified that hooks are foind in Git repositories and include name, category, discription, and link to the repository
+- Stated the main page should display hooks in a grid-like view.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
