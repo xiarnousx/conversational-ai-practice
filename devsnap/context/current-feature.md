@@ -1,12 +1,26 @@
-# Current Feature
+# Current Feature: Pinned Items
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- `toggleItemPin` server action with auth/ownership check
+- Pin button in ItemDrawer wired with onClick (currently no-op)
+- Optimistic UI toggle (instant feedback, revert on error)
+- Toast notification on success/error
+- Pinned items sort to top on `/items/[type]` listings
+- Pinned items section on dashboard populated from real data
+- Items only — no pin for collections
+- Pin icon on ItemRow/cards is a static visual indicator (not interactive)
+
 ## Notes
+
+- Follow the Favorite Toggle pattern (toggleFavoriteItem → toggleItemPin)
+- `isPinned` field already exists on Item model
+- Pin button already rendered in ItemDrawer action bar but has no onClick
+- Optimistic state lives in the component (like isFavorite star), not in a context
 
 ## History
 

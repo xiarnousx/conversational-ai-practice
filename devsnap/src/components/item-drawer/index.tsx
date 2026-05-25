@@ -23,7 +23,7 @@ import { CodeEditor } from "@/components/ui/code-editor";
 import { MarkdownEditor } from "@/components/ui/markdown-editor";
 import { Calendar, Copy, Download, FileText, Layers, Pencil, Pin, Star, Tag, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { updateItem, deleteItem, toggleFavoriteItem } from "@/actions/items";
+import { updateItem, deleteItem, toggleFavoriteItem, togglePinItem } from "@/actions/items";
 import { CollectionPicker } from "@/components/ui/collection-picker";
 import type { ItemDetail } from "@/lib/db/items";
 import {
@@ -142,6 +142,7 @@ function DrawerContent({ item, collections, onUpdate, onClose }: DrawerContentPr
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [togglingFav, setTogglingFav] = useState(false);
+  const [togglingPin, setTogglingPin] = useState(false);
 
   const typeLower = item.typeName.toLowerCase();
   const showContent = CONTENT_TYPES.has(typeLower);
@@ -235,6 +236,19 @@ function DrawerContent({ item, collections, onUpdate, onClose }: DrawerContentPr
     router.refresh();
   }
 
+  async function handleTogglePin() {
+    setTogglingPin(true);
+    const result = await togglePinItem(item.id);
+    setTogglingPin(false);
+    if (!result.success) {
+      toast.error("Failed to update pin");
+      return;
+    }
+    onUpdate({ ...item, isPinned: result.isPinned });
+    toast.success(result.isPinned ? "Item pinned" : "Item unpinned");
+    router.refresh();
+  }
+
   function handleCopy() {
     const text = item.content ?? item.url ?? item.title;
     navigator.clipboard.writeText(text);
@@ -307,9 +321,15 @@ function DrawerContent({ item, collections, onUpdate, onClose }: DrawerContentPr
             <Star className={item.isFavorite ? "fill-amber-400" : ""} />
             {item.isFavorite ? "Unfavorite" : "Favorite"}
           </Button>
-          <Button variant="ghost" size="sm">
-            <Pin />
-            Pin
+          <Button
+            variant="ghost"
+            size="sm"
+            className={item.isPinned ? "text-sky-400 hover:text-sky-400" : ""}
+            onClick={handleTogglePin}
+            disabled={togglingPin}
+          >
+            <Pin className={item.isPinned ? "fill-sky-400" : ""} />
+            {item.isPinned ? "Unpin" : "Pin"}
           </Button>
           <Button variant="ghost" size="sm" onClick={handleCopy}>
             <Copy />

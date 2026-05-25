@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { updateItem as dbUpdateItem, deleteItemById, createItemInDb, toggleItemFavorite } from "@/lib/db/items";
+import { updateItem as dbUpdateItem, deleteItemById, createItemInDb, toggleItemFavorite, toggleItemPin } from "@/lib/db/items";
 import type { ItemDetail } from "@/lib/db/items";
 import { updateItemSchema, createItemSchema } from "@/lib/validations/items";
 import type { UpdateItemInput, CreateItemInput } from "@/lib/validations/items";
@@ -81,6 +81,20 @@ export async function toggleFavoriteItem(itemId: string): Promise<ToggleFavorite
   if (result === null) return { success: false, error: "Item not found" };
 
   return { success: true, isFavorite: result };
+}
+
+export type TogglePinItemResult =
+  | { success: true; isPinned: boolean }
+  | { success: false; error: string };
+
+export async function togglePinItem(itemId: string): Promise<TogglePinItemResult> {
+  const session = await auth();
+  if (!session?.user?.id) return { success: false, error: "Unauthorized" };
+
+  const result = await toggleItemPin(session.user.id, itemId);
+  if (result === null) return { success: false, error: "Item not found" };
+
+  return { success: true, isPinned: result };
 }
 
 export type DeleteItemResult =
