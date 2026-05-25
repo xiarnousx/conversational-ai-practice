@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { getItemById, updateItem, createItemInDb, deleteItemById, getItemsByCollectionId, getItemsByType, getItemsForSearch, getFavoriteItems } from "@/lib/db/items"
+import { getItemById, updateItem, createItemInDb, deleteItemById, getItemsByCollectionId, getItemsByType, getItemsForSearch, getFavoriteItems, toggleItemPin } from "@/lib/db/items"
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
@@ -701,5 +701,67 @@ describe("getFavoriteItems", () => {
     const result = await getFavoriteItems("user-1")
     expect(result).toHaveLength(2)
     expect(result[1].id).toBe("item-2")
+  })
+})
+
+// ─── toggleItemPin ────────────────────────────────────────────────────────────
+
+describe("toggleItemPin", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("returns null when item is not found", async () => {
+    mockFindFirst.mockResolvedValue(null)
+    const result = await toggleItemPin("user-1", "missing-id")
+    expect(result).toBeNull()
+    expect(mockUpdate).not.toHaveBeenCalled()
+  })
+
+  it("flips isPinned from false to true", async () => {
+    mockFindFirst.mockResolvedValue({ isPinned: false } as never)
+    mockUpdate.mockResolvedValue({ isPinned: true } as never)
+    const result = await toggleItemPin("user-1", "item-1")
+    expect(result).toBe(true)
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({ data: { isPinned: true } })
+    )
+  })
+
+  it("flips isPinned from true to false", async () => {
+    mockFindFirst.mockResolvedValue({ isPinned: true } as never)
+    mockUpdate.mockResolvedValue({ isPinned: false } as never)
+    const result = await toggleItemPin("user-1", "item-1")
+    expect(result).toBe(false)
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({ data: { isPinned: false } })
+    )
+  })
+
+  it("queries with correct userId and itemId", async () => {
+    mockFindFirst.mockResolvedValue({ isPinned: false } as never)
+    mockUpdate.mockResolvedValue({ isPinned: true } as never)
+    await toggleItemPin("user-42", "item-99")
+    expect(mockFindFirst).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: "item-99", userId: "user-42" } })
+    )
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: "item-99", userId: "user-42" } })
+    )
+  })
+})
+
+// ─── getItemsByType — pin sort order ─────────────────────────────────────────
+
+describe("getItemsByType sort order", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("orders by isPinned desc then createdAt desc", async () => {
+    mockFindMany.mockResolvedValue([])
+    mockCount.mockResolvedValue(0)
+    await getItemsByType("user-1", "snippet")
+    expect(mockFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
+      })
+    )
   })
 })

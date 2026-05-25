@@ -9,6 +9,7 @@ import {
   File,
   ImageIcon,
   Link,
+  Pin,
   Star,
   LucideIcon,
 } from "lucide-react";
@@ -92,6 +93,9 @@ export default function ItemRow({ item }: { item: ItemCardData }) {
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-1">
+        {item.isPinned && (
+          <Pin className="size-3 fill-sky-400 text-sky-400" aria-label="Pinned" />
+        )}
         <button
           onClick={handleToggleFavorite}
           className="rounded p-1 text-muted-foreground transition-colors hover:text-amber-400"
