@@ -1,7 +1,11 @@
 "use client";
 
-import { Code, Sparkles, Terminal, FileText, File, ImageIcon, Link, LucideIcon } from "lucide-react";
+import { useState, useTransition } from "react";
+import { Code, Sparkles, Terminal, FileText, File, ImageIcon, Link, Star, LucideIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { useItemDrawer } from "@/components/item-drawer";
+import { toggleFavoriteItem } from "@/actions/items";
 import { FavoriteItem } from "@/lib/db/items";
 import { formatShortDate } from "@/lib/utils";
 
@@ -17,10 +21,30 @@ const typeIconMap: Record<string, { icon: LucideIcon; color: string }> = {
 
 export default function FavoriteItemRow({ item }: { item: FavoriteItem }) {
   const { openDrawer } = useItemDrawer();
+  const router = useRouter();
+  const [, startTransition] = useTransition();
+  const [removed, setRemoved] = useState(false);
+
   const typeKey = item.typeName.toLowerCase();
   const typeEntry = typeIconMap[typeKey];
   const Icon = typeEntry?.icon ?? File;
   const iconColor = typeEntry?.color ?? "text-muted-foreground";
+
+  function handleUnfavorite(e: React.MouseEvent) {
+    e.stopPropagation();
+    setRemoved(true);
+    startTransition(async () => {
+      const result = await toggleFavoriteItem(item.id);
+      if (!result.success || result.isFavorite) {
+        setRemoved(false);
+        toast.error("Failed to remove from favorites");
+      } else {
+        router.refresh();
+      }
+    });
+  }
+
+  if (removed) return null;
 
   return (
     <button
@@ -40,6 +64,13 @@ export default function FavoriteItemRow({ item }: { item: FavoriteItem }) {
       <span className="w-16 shrink-0 text-right font-mono text-xs text-muted-foreground">
         {formatShortDate(item.updatedAt)}
       </span>
+      <button
+        onClick={handleUnfavorite}
+        className="shrink-0 rounded p-1 text-amber-400 transition-colors hover:text-muted-foreground"
+        title="Remove from favorites"
+      >
+        <Star className="size-3.5 fill-amber-400" />
+      </button>
     </button>
   );
 }

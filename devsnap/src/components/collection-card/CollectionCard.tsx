@@ -16,6 +16,7 @@ import {
   Trash2,
   LucideIcon,
 } from "lucide-react";
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +26,7 @@ import {
 import type { CollectionCardData } from "@/lib/db/collections";
 import { EditCollectionDialog } from "@/components/collection-edit/EditCollectionDialog";
 import { DeleteCollectionDialog } from "@/components/collection-delete/DeleteCollectionDialog";
+import { toggleFavoriteCollection } from "@/actions/collections";
 
 const typeIconMap: Record<string, LucideIcon> = {
   snippet: Code,
@@ -44,6 +46,19 @@ export function CollectionCard({ collection }: CollectionCardProps) {
   const router = useRouter();
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [isFav, setIsFav] = useState(collection.isFavorite);
+
+  async function handleToggleFavorite() {
+    const next = !isFav;
+    setIsFav(next);
+    const result = await toggleFavoriteCollection(collection.id);
+    if (!result.success) {
+      setIsFav(!next);
+      toast.error("Failed to update favorite");
+    } else {
+      router.refresh();
+    }
+  }
 
   function handleCardClick() {
     router.push(`/collections/${collection.id}`);
@@ -66,8 +81,8 @@ export function CollectionCard({ collection }: CollectionCardProps) {
         <div className="mb-1 flex items-start justify-between gap-2">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="truncate font-medium text-sm text-foreground">{collection.name}</span>
-            {collection.isFavorite && (
-              <Star className="size-3 shrink-0 fill-yellow-400 text-yellow-400" />
+            {isFav && (
+              <Star className="size-3 shrink-0 fill-amber-400 text-amber-400" />
             )}
           </div>
 
@@ -86,9 +101,9 @@ export function CollectionCard({ collection }: CollectionCardProps) {
                   <Trash2 className="size-3.5 mr-2" />
                   Delete
                 </DropdownMenuItem>
-                <DropdownMenuItem disabled>
-                  <Star className="size-3.5 mr-2" />
-                  Favorite
+                <DropdownMenuItem onClick={handleToggleFavorite}>
+                  <Star className={`size-3.5 mr-2 ${isFav ? "fill-amber-400 text-amber-400" : ""}`} />
+                  {isFav ? "Unfavorite" : "Favorite"}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import {
   FileText,
   FileCode,
@@ -9,8 +10,12 @@ import {
   FileArchive,
   File,
   Download,
+  Star,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { useItemDrawer } from "@/components/item-drawer";
+import { toggleFavoriteItem } from "@/actions/items";
 import { ItemCardData } from "@/lib/db/items";
 
 function getFileIcon(fileName: string | null) {
@@ -51,6 +56,24 @@ interface FileListRowProps {
 
 export default function FileListRow({ item }: FileListRowProps) {
   const { openDrawer } = useItemDrawer();
+  const router = useRouter();
+  const [isFav, setIsFav] = useState(item.isFavorite);
+  const [, startTransition] = useTransition();
+
+  function handleToggleFavorite(e: React.MouseEvent) {
+    e.stopPropagation();
+    const next = !isFav;
+    setIsFav(next);
+    startTransition(async () => {
+      const result = await toggleFavoriteItem(item.id);
+      if (!result.success) {
+        setIsFav(!next);
+        toast.error("Failed to update favorite");
+      } else {
+        router.refresh();
+      }
+    });
+  }
 
   return (
     <div
@@ -69,6 +92,14 @@ export default function FileListRow({ item }: FileListRowProps) {
           <span className="shrink-0">{formatDate(item.createdAt)}</span>
         </div>
       </div>
+
+      <button
+        onClick={handleToggleFavorite}
+        className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:text-amber-400"
+        title={isFav ? "Unfavorite" : "Favorite"}
+      >
+        <Star className={`h-4 w-4 ${isFav ? "fill-amber-400 text-amber-400" : ""}`} />
+      </button>
 
       <a
         href={`/api/download/${item.id}`}

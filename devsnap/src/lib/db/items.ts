@@ -9,6 +9,7 @@ export interface ItemCardData {
   typeColor: string;
   tags: string[];
   isPinned: boolean;
+  isFavorite: boolean;
   createdAt: string;
   fileName: string | null;
   fileSize: number | null;
@@ -41,6 +42,7 @@ function toCardData(item: ItemWithRelations): ItemCardData {
     typeColor: item.type.color ?? "#6b7280",
     tags: item.tags.map((t) => t.tag.name),
     isPinned: item.isPinned,
+    isFavorite: item.isFavorite,
     createdAt: item.createdAt.toISOString(),
     fileName: item.fileName,
     fileSize: item.fileSize,
@@ -379,6 +381,23 @@ export async function getFavoriteItems(userId: string): Promise<FavoriteItem[]> 
     typeColor: item.type.color ?? "#6b7280",
     updatedAt: item.updatedAt.toISOString(),
   }));
+}
+
+export async function toggleItemFavorite(
+  userId: string,
+  itemId: string
+): Promise<boolean | null> {
+  const item = await prisma.item.findFirst({
+    where: { id: itemId, userId },
+    select: { isFavorite: true },
+  });
+  if (!item) return null;
+  const updated = await prisma.item.update({
+    where: { id: itemId, userId },
+    data: { isFavorite: !item.isFavorite },
+    select: { isFavorite: true },
+  });
+  return updated.isFavorite;
 }
 
 export async function getSystemItemTypes(userId: string): Promise<SidebarItemType[]> {

@@ -23,7 +23,7 @@ import { CodeEditor } from "@/components/ui/code-editor";
 import { MarkdownEditor } from "@/components/ui/markdown-editor";
 import { Calendar, Copy, Download, FileText, Layers, Pencil, Pin, Star, Tag, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { updateItem, deleteItem } from "@/actions/items";
+import { updateItem, deleteItem, toggleFavoriteItem } from "@/actions/items";
 import { CollectionPicker } from "@/components/ui/collection-picker";
 import type { ItemDetail } from "@/lib/db/items";
 import {
@@ -141,6 +141,7 @@ function DrawerContent({ item, collections, onUpdate, onClose }: DrawerContentPr
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [togglingFav, setTogglingFav] = useState(false);
 
   const typeLower = item.typeName.toLowerCase();
   const showContent = CONTENT_TYPES.has(typeLower);
@@ -222,6 +223,18 @@ function DrawerContent({ item, collections, onUpdate, onClose }: DrawerContentPr
     router.refresh();
   }
 
+  async function handleToggleFavorite() {
+    setTogglingFav(true);
+    const result = await toggleFavoriteItem(item.id);
+    setTogglingFav(false);
+    if (!result.success) {
+      toast.error("Failed to update favorite");
+      return;
+    }
+    onUpdate({ ...item, isFavorite: result.isFavorite });
+    router.refresh();
+  }
+
   function handleCopy() {
     const text = item.content ?? item.url ?? item.title;
     navigator.clipboard.writeText(text);
@@ -287,10 +300,12 @@ function DrawerContent({ item, collections, onUpdate, onClose }: DrawerContentPr
           <Button
             variant="ghost"
             size="sm"
-            className={item.isFavorite ? "text-yellow-400 hover:text-yellow-400" : ""}
+            className={item.isFavorite ? "text-amber-400 hover:text-amber-400" : ""}
+            onClick={handleToggleFavorite}
+            disabled={togglingFav}
           >
-            <Star className={item.isFavorite ? "fill-yellow-400" : ""} />
-            Favorite
+            <Star className={item.isFavorite ? "fill-amber-400" : ""} />
+            {item.isFavorite ? "Unfavorite" : "Favorite"}
           </Button>
           <Button variant="ghost" size="sm">
             <Pin />

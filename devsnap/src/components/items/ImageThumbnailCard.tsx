@@ -1,6 +1,11 @@
 "use client";
 
+import { useState, useTransition } from "react";
+import { Star } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { useItemDrawer } from "@/components/item-drawer";
+import { toggleFavoriteItem } from "@/actions/items";
 import { ItemCardData } from "@/lib/db/items";
 
 interface ImageThumbnailCardProps {
@@ -9,6 +14,24 @@ interface ImageThumbnailCardProps {
 
 export default function ImageThumbnailCard({ item }: ImageThumbnailCardProps) {
   const { openDrawer } = useItemDrawer();
+  const router = useRouter();
+  const [isFav, setIsFav] = useState(item.isFavorite);
+  const [, startTransition] = useTransition();
+
+  function handleToggleFavorite(e: React.MouseEvent) {
+    e.stopPropagation();
+    const next = !isFav;
+    setIsFav(next);
+    startTransition(async () => {
+      const result = await toggleFavoriteItem(item.id);
+      if (!result.success) {
+        setIsFav(!next);
+        toast.error("Failed to update favorite");
+      } else {
+        router.refresh();
+      }
+    });
+  }
 
   return (
     <div
@@ -22,6 +45,13 @@ export default function ImageThumbnailCard({ item }: ImageThumbnailCardProps) {
           alt={item.title}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
+        <button
+          onClick={handleToggleFavorite}
+          className="absolute right-2 top-2 rounded-full bg-black/40 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100"
+          title={isFav ? "Unfavorite" : "Favorite"}
+        >
+          <Star className={`size-3.5 ${isFav ? "fill-amber-400 text-amber-400" : ""}`} />
+        </button>
       </div>
       <div className="px-3 py-2">
         <p className="truncate text-sm font-medium text-foreground">{item.title}</p>

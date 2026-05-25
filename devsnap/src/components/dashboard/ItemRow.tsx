@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import {
   Code,
   Sparkles,
@@ -8,9 +9,14 @@ import {
   File,
   ImageIcon,
   Link,
+  Star,
   LucideIcon,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { useItemDrawer } from "@/components/item-drawer";
+import { toggleFavoriteItem } from "@/actions/items";
+import type { ItemCardData } from "@/lib/db/items";
 
 const typeIconMap: Record<string, { icon: LucideIcon; color: string }> = {
   snippet: { icon: Code, color: "text-violet-400" },
@@ -22,20 +28,6 @@ const typeIconMap: Record<string, { icon: LucideIcon; color: string }> = {
   url: { icon: Link, color: "text-sky-400" },
 };
 
-interface Item {
-  id: string;
-  title: string;
-  description: string;
-  typeName: string;
-  typeColor: string;
-  tags: string[];
-  createdAt: string;
-}
-
-interface ItemRowProps {
-  item: Item;
-}
-
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
     month: "short",
@@ -43,12 +35,31 @@ function formatDate(iso: string) {
   });
 }
 
-export default function ItemRow({ item }: ItemRowProps) {
+export default function ItemRow({ item }: { item: ItemCardData }) {
   const { openDrawer } = useItemDrawer();
+  const router = useRouter();
+  const [isFav, setIsFav] = useState(item.isFavorite);
+  const [, startTransition] = useTransition();
+
   const typeKey = item.typeName.toLowerCase();
   const typeEntry = typeIconMap[typeKey];
   const Icon = typeEntry?.icon ?? File;
   const iconColor = typeEntry?.color ?? "text-muted-foreground";
+
+  function handleToggleFavorite(e: React.MouseEvent) {
+    e.stopPropagation();
+    const next = !isFav;
+    setIsFav(next);
+    startTransition(async () => {
+      const result = await toggleFavoriteItem(item.id);
+      if (!result.success) {
+        setIsFav(!next);
+        toast.error("Failed to update favorite");
+      } else {
+        router.refresh();
+      }
+    });
+  }
 
   return (
     <div
@@ -80,9 +91,16 @@ export default function ItemRow({ item }: ItemRowProps) {
           ))}
         </div>
       </div>
-      <span className="shrink-0 text-xs text-muted-foreground">
-        {formatDate(item.createdAt)}
-      </span>
+      <div className="flex shrink-0 items-center gap-1">
+        <button
+          onClick={handleToggleFavorite}
+          className="rounded p-1 text-muted-foreground transition-colors hover:text-amber-400"
+          title={isFav ? "Unfavorite" : "Favorite"}
+        >
+          <Star className={`size-3.5 ${isFav ? "fill-amber-400 text-amber-400" : ""}`} />
+        </button>
+        <span className="text-xs text-muted-foreground">{formatDate(item.createdAt)}</span>
+      </div>
     </div>
   );
 }

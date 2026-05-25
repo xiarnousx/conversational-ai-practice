@@ -5,6 +5,7 @@ import {
   createCollectionInDb,
   updateCollectionInDb,
   deleteCollectionInDb,
+  toggleCollectionFavorite,
 } from "@/lib/db/collections";
 import type { CollectionCardData } from "@/lib/db/collections";
 import {
@@ -20,6 +21,21 @@ type ActionResult<T = void> =
 export type CreateCollectionResult = ActionResult<CollectionCardData>;
 export type UpdateCollectionResult = ActionResult<CollectionCardData>;
 export type DeleteCollectionResult = ActionResult;
+export type ToggleFavoriteCollectionResult =
+  | { success: true; isFavorite: boolean }
+  | { success: false; error: string };
+
+export async function toggleFavoriteCollection(
+  collectionId: string
+): Promise<ToggleFavoriteCollectionResult> {
+  const session = await auth();
+  if (!session?.user?.id) return { success: false, error: "Unauthorized" };
+
+  const result = await toggleCollectionFavorite(session.user.id, collectionId);
+  if (result === null) return { success: false, error: "Collection not found" };
+
+  return { success: true, isFavorite: result };
+}
 
 export async function createCollection(
   input: CreateCollectionInput

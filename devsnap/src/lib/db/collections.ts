@@ -221,6 +221,23 @@ export async function updateCollectionInDb(
   }
 }
 
+export async function toggleCollectionFavorite(
+  userId: string,
+  collectionId: string
+): Promise<boolean | null> {
+  const collection = await prisma.collection.findFirst({
+    where: { id: collectionId, userId },
+    select: { isFavorite: true },
+  });
+  if (!collection) return null;
+  const updated = await prisma.collection.update({
+    where: { id: collectionId, userId },
+    data: { isFavorite: !collection.isFavorite },
+    select: { isFavorite: true },
+  });
+  return updated.isFavorite;
+}
+
 export async function deleteCollectionInDb(
   userId: string,
   collectionId: string

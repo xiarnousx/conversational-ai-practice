@@ -1,12 +1,26 @@
-# Current Feature
+# Current Feature: Favorite Toggle
 
 ## Status
 
-Not Started
+Complete
 
 ## Goals
 
+- Add star icon button to item list rows (ItemRow, FileListRow, ImageThumbnailCard) and item drawer
+- Add star icon button to collection list rows (CollectionCard) and collection detail page header
+- Clicking star toggles isFavorite status immediately (optimistic UI: filled star ↔ outlined star)
+- Persist toggle to backend via server action
+- Favorites page already exists — toggling should keep it in sync (router.refresh or revalidatePath)
+
 ## Notes
+
+- Item rows: ItemRow (snippets/prompts/etc.), FileListRow, ImageThumbnailCard — all need the toggle
+- Collection rows: CollectionCard already has a Favorite option in the 3-dots dropdown (UI-only) — wire it up
+- Item drawer action bar already has a Favorite button — wire it up too
+- Collection detail page (/collections/[id]) header already has a Favorite button — wire it up
+- Server actions: toggleFavoriteItem and toggleFavoriteCollection with auth/ownership checks
+- Use optimistic UI (useOptimistic or local state flip + revalidate) for instant feedback
+- Star filled = amber/yellow; outlined = muted; consistent with TopBar star icon style
 
 ## History
 
