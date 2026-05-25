@@ -1,25 +1,12 @@
-# Current Feature: Favorites Page
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add star icon button to TopBar linking to /favorites
-- Create /favorites route with middleware protection
-- Fetch all user favorited items and collections (sorted by updatedAt desc)
-- Compact list view (VS Code/terminal style, not cards)
-- Each row: type icon, title, type badge, date added
-- Separate sections for items and collections with counts
-- Click item opens ItemDrawer, click collection navigates to /collections/[id]
-- Empty state when no favorites
-
 ## Notes
-
-- UI style: monospace/semi-monospace font, minimal padding, high density, subtle hover states, no cards or heavy borders
-- Sort by most recently favorited (updatedAt)
-- Favorite toggle is already wired on items (isFavorite field); collections also have isFavorite
 
 ## History
 
@@ -65,3 +52,4 @@ In Progress
 - 2026-05-16: Global Search / Command Palette — Cmd/Ctrl+K opens cmdk CommandDialog with client-side fuzzy search across all items and collections; grouped results with type color dot and type label (items) or item count (collections); keyboard navigation via cmdk built-in; item select opens ItemDrawer, collection select navigates to /collections/[id]; centered TopBar search input triggers palette on click; getItemsForSearch and getCollectionsForSearch DB functions; state managed in AppLayoutClient (no wrapper context to avoid hydration ID mismatch); 10 new unit tests
 - 2026-05-16: Pagination — URL-based ?page=N pagination on /items/[type], /collections, and /collections/[id]; Pagination component with numbered links and disabled prev/next at boundaries; ITEMS_PER_PAGE and COLLECTIONS_PER_PAGE constants; DASHBOARD_COLLECTIONS_LIMIT and DASHBOARD_RECENT_ITEMS_LIMIT constants for dashboard caps; DB queries use skip/take (no full-table fetches); getCollectionsForUserPaginated added; 14 new unit tests
 - 2026-05-17: Editor Preferences Settings — editorPreferences Json? column on User (Prisma migration); EditorPreferencesContext provider wraps AppLayoutClient; updateEditorPreferences server action with Zod validation; EditorPreferencesForm on /settings with font size, tab size, word wrap, minimap, and theme dropdowns/toggles; auto-save on each change with success toast; CodeEditor consumes context (theme, fontSize, tabSize, wordWrap, minimap); shadcn Select + Switch added; 21 new unit tests
+- 2026-05-25: Favorites Page — /favorites route (middleware-protected); getFavoriteItems and getFavoriteCollections DB queries sorted by updatedAt desc; FavoriteItemRow (opens ItemDrawer) and FavoriteCollectionRow (navigates to /collections/[id]) in compact terminal-style list; separate Items/Collections sections with counts; empty state; star icon button in TopBar with amber hover; formatShortDate extracted to src/lib/utils.ts; 14 new unit tests
