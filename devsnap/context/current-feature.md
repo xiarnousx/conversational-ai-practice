@@ -1,26 +1,12 @@
-# Current Feature: Pinned Items
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- `toggleItemPin` server action with auth/ownership check
-- Pin button in ItemDrawer wired with onClick (currently no-op)
-- Optimistic UI toggle (instant feedback, revert on error)
-- Toast notification on success/error
-- Pinned items sort to top on `/items/[type]` listings
-- Pinned items section on dashboard populated from real data
-- Items only — no pin for collections
-- Pin icon on ItemRow/cards is a static visual indicator (not interactive)
-
 ## Notes
-
-- Follow the Favorite Toggle pattern (toggleFavoriteItem → toggleItemPin)
-- `isPinned` field already exists on Item model
-- Pin button already rendered in ItemDrawer action bar but has no onClick
-- Optimistic state lives in the component (like isFavorite star), not in a context
 
 ## History
 
@@ -69,3 +55,4 @@ In Progress
 - 2026-05-25: Favorites Page — /favorites route (middleware-protected); getFavoriteItems and getFavoriteCollections DB queries sorted by updatedAt desc; FavoriteItemRow (opens ItemDrawer) and FavoriteCollectionRow (navigates to /collections/[id]) in compact terminal-style list; separate Items/Collections sections with counts; empty state; star icon button in TopBar with amber hover; formatShortDate extracted to src/lib/utils.ts; 14 new unit tests
 - 2026-05-25: Favorite Toggle — toggleFavoriteItem and toggleFavoriteCollection server actions with auth/ownership checks; isFavorite added to ItemCardData; optimistic amber star toggle on ItemRow, FileListRow, ImageThumbnailCard, ItemDrawer action bar, CollectionCard 3-dots dropdown, and CollectionDetailActions header; FavoriteItemRow and FavoriteCollectionRow wired to unfavorite with optimistic removal from list
 - 2026-05-25: Favorites Sorting — client-side sort controls on /favorites; FavoritesSortedList client component holds independent sort state per section; items sort by date (default)/name/type; collections sort by date (default)/name; SortPills generic pill button group; favorites/page.tsx delegates non-empty rendering to FavoritesSortedList
+- 2026-05-25: Pinned Items — toggleItemPin DB function and togglePinItem server action with auth/ownership check; Pin button in ItemDrawer wired with optimistic sky-blue toggle and toast on success/error; getItemsByType orderBy updated to [isPinned desc, createdAt desc] so pinned items sort to top of listings; static sky-blue Pin icon indicator on ItemRow when isPinned; dashboard PinnedItems section already wired to getPinnedItems(); 5 new unit tests
