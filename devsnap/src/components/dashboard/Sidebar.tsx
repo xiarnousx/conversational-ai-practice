@@ -71,9 +71,13 @@ function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collec
       {/* Header */}
       <div className="flex h-14 items-center gap-2 border-b border-sidebar-border px-4">
         {!collapsed && (
-          <span className="font-bold text-base tracking-tight truncate flex-1">DevSnap</span>
+          <span className="flex items-center gap-2 font-bold text-base tracking-tight truncate flex-1">
+            <span className="text-lg leading-none">⚡</span>DevStash
+          </span>
         )}
-        {collapsed && <span className="flex-1" />}
+        {collapsed && (
+          <span className="flex-1 flex items-center justify-center text-lg leading-none">⚡</span>
+        )}
         <button
           onClick={onToggleCollapse}
           className="hidden md:flex h-7 w-7 items-center justify-center rounded-md text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"

@@ -65,9 +65,9 @@ export function NewCollectionDialog() {
 
   return (
     <>
-      <Button size="sm" variant="outline" onClick={handleOpen}>
-        <FolderPlus className="h-4 w-4 mr-1" />
-        New Collection
+      <Button size="sm" variant="outline" onClick={handleOpen} title="New Collection">
+        <FolderPlus className="h-4 w-4 md:mr-1" />
+        <span className="hidden md:inline">New Collection</span>
       </Button>
 
       <Dialog open={open} onOpenChange={handleOpenChange}>

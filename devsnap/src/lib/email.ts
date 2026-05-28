@@ -6,13 +6,13 @@ export async function sendVerificationEmail(email: string, token: string) {
   const verifyUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${token}&email=${encodeURIComponent(email)}`
 
   const { data, error } = await resend.emails.send({
-    from: "DevSnap <onboarding@resend.dev>",
+    from: "DevStash <onboarding@resend.dev>",
     to: email,
-    subject: "Verify your email — DevSnap",
+    subject: "Verify your email — DevStash",
     html: `
       <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
         <h2>Verify your email</h2>
-        <p>Click the button below to verify your email address and activate your DevSnap account.</p>
+        <p>Click the button below to verify your email address and activate your DevStash account.</p>
         <a href="${verifyUrl}" style="display: inline-block; padding: 12px 24px; background: #000; color: #fff; text-decoration: none; border-radius: 6px; margin: 16px 0;">
           Verify email
         </a>
@@ -33,13 +33,13 @@ export async function sendPasswordResetEmail(email: string, token: string) {
   const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}&email=${encodeURIComponent(email)}`
 
   const { data, error } = await resend.emails.send({
-    from: "DevSnap <onboarding@resend.dev>",
+    from: "DevStash <onboarding@resend.dev>",
     to: email,
-    subject: "Reset your password — DevSnap",
+    subject: "Reset your password — DevStash",
     html: `
       <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
         <h2>Reset your password</h2>
-        <p>Click the button below to set a new password for your DevSnap account.</p>
+        <p>Click the button below to set a new password for your DevStash account.</p>
         <a href="${resetUrl}" style="display: inline-block; padding: 12px 24px; background: #000; color: #fff; text-decoration: none; border-radius: 6px; margin: 16px 0;">
           Reset password
         </a>
