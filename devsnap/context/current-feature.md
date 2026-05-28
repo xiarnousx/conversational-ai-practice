@@ -1,12 +1,33 @@
-# Current Feature
+# Current Feature: Homepage
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Replace `src/app/page.tsx` redirect with a real public marketing homepage
+- Implement `MarketingNav` with scroll-opacity effect and mobile Sheet drawer
+- Implement `HeroSection` with chaos canvas animation and static dashboard preview mockup
+- Implement `FeaturesSection` with 6 feature cards grid
+- Implement `AISection` with Pro badge, checklist, and static code editor mockup
+- Implement `PricingSection` with `PricingToggle` (monthly/yearly switch)
+- Implement `CTASection` with gradient-bordered box
+- Implement `MarketingFooter` with logo, link columns, and copyright year
+- All components placed under `src/components/marketing/`
+- Use the prototype at `prototypes/homepage/` as visual reference
+
 ## Notes
+
+- Page: `src/app/page.tsx` — public, no auth required
+- All Tailwind, no custom CSS files; use `[background:...]` arbitrary values for multi-gradient glow
+- Use ShadCN `Button` for CTAs, ShadCN `Sheet` for mobile nav
+- `HeroChaosCanvas` must be `'use client'` with `useEffect` + `requestAnimationFrame` cleanup
+- Scroll listener in `MarketingNav` must be `'use client'` with `{ passive: true }` and unmount cleanup
+- Pulsing skeletons via Tailwind `animate-pulse`
+- Pricing toggle: lift price state into `PricingSection` as client component boundary
+- Middleware at `src/middleware.ts` already handles protected routes — `/` needs no changes
+- Visual reference: `prototypes/homepage/index.html`, `styles.css`, `script.js`
 
 ## History
 
