@@ -1,34 +1,12 @@
-# Current Feature: UI Review Fixes
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Fix broken Tailwind v4 classes in `MarketingNav` (`bg-linear-to-r`, `py-2.25`, `max-w-285`)
-- Add missing `SheetTitle` / `SheetDescription` to mobile nav, sidebar, and item drawer
-- Make collection card 3-dots dropdown keyboard-accessible (`focus-visible:opacity-100`)
-- Add `aria-label` to icon-only TopBar buttons on mobile
-- Add `<label>` elements to sign-in and register form inputs
-- Remove double `p-6` padding on inner app pages (items, favorites, collections)
-- Fix footer text contrast (`#3d4460` → `text-slate-400`) to meet WCAG AA
-- Add `focus-visible` ring to pricing toggle button
-- Add `aria-hidden` to decorative `✦` character in AI section badge
-- Add active-route indicator (highlight + `aria-current`) to sidebar type links
-- Fix `Pin` icon missing `role="img"` in `ItemRow`
-- Add `aria-label="User menu"` to sidebar user avatar dropdown trigger
-- Fix hero panels potential overflow at 375px (`flex-shrink-0` → `w-full max-w-[320px]`)
-- Replace raw-pixel letter-spacing `tracking-[-2px]` with `tracking-[-0.04em]` in hero
-- Add intermediate column breakpoint to stats cards grid (2 → 3 → 4)
-- Add `role="status"` / `aria-label` to dashboard `loading.tsx` skeleton
-- Fix `>>` arrow animation fallback on mobile to use directional keyframe
-
 ## Notes
-
-- Group 1 (Tailwind class fixes) must land first — broken classes cause visible rendering failures in the nav
-- Groups 2 and 3 can be done in a single pass; no schema, DB, or API changes required
-- Verify in browser at 390px, 768px, and 1280px viewports after build passes
 
 ## History
 
@@ -82,3 +60,4 @@ In Progress
 - 2026-05-28: Homepage — Next.js public marketing homepage at /; MarketingNav (fixed, scroll-opacity bg, mobile Sheet drawer); HeroSection with HeroChaosCanvas (rAF bounce + cursor repulsion for 8 icons) and static dashboard preview mockup; FeaturesSection (6-card grid, accent hover border via CSS custom property); AISection (Pro badge, checklist, static code editor mockup with AI tags); PricingSection client component with monthly/yearly toggle; CTASection (gradient border box); MarketingFooter (logo, 3 link columns, dynamic year); all components under src/components/marketing/; >> arrow rotates 90° on mobile
 - 2026-05-28: TopBar Responsive & Logo — app renamed to DevStash across all surfaces (sidebar, layout metadata, sign-in page, emails); ⚡ emoji added to sidebar logo (collapsed state shows emoji only); mobile TopBar shows ⚡ DevStash logo between hamburger and action area; search input hidden on mobile, replaced with search icon button that opens command palette; "New Collection" and "New Item" buttons collapse to icon-only (FolderPlus / Plus) on mobile via hidden md:inline text span; custom favicon via src/app/icon.tsx and apple-icon.tsx using ImageResponse (⚡ on #0a0c14 dark background, 32×32 and 180×180); default favicon.ico removed
 - 2026-05-28: Homepage Auth-Aware CTA — page.tsx calls auth() server-side and passes isSignedIn boolean to MarketingNav, HeroSection, and CTASection; signed-in users see "View Dashboard" in the nav and "Go to Dashboard" in hero + CTA section instead of sign-up/sign-in buttons; no redirect, no middleware changes
+- 2026-05-28: UI Review Fixes — 17 fixes across homepage and dashboard: MarketingNav py-2.25→py-2.5 and max-w-285→max-w-275; SheetTitle/SheetDescription added to mobile nav, sidebar drawer, and item drawer; sidebar active-route highlight + aria-current on type links; collection card 3-dots keyboard accessible (focus-visible:opacity-100); sign-in and register forms get sr-only labels; double p-6 removed from items/favorites/collections pages; footer text color upgraded to text-slate-400 (WCAG AA); pricing toggle gets focus-visible ring; decorative ✦ aria-hidden; Pin icon gets role="img"; user menu dropdown gets aria-label; hero panels switch to min-w-0 (no overflow) and tracking-[-0.04em]; arrow uses arrowPulse on mobile; stats grid breakpoint md:grid-cols-4; dashboard skeleton gets role="status"
