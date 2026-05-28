@@ -1,12 +1,22 @@
-# Current Feature
+# Current Feature: Auth Pages — Marketing Nav
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Add `MarketingNav` to `/sign-in` and `/register` pages for consistent navigation
+- Create `src/app/(auth)/layout.tsx` as a shared server component that reads the session and renders `MarketingNav`
+- Offset each auth page's centred card below the fixed nav with `pt-16`
+- Signed-in users see "View Dashboard"; signed-out users see "Sign In" + "Get Started" — same logic as the homepage
+
 ## Notes
+
+- New file: `src/app/(auth)/layout.tsx` — server component; calls `auth()`, renders `<MarketingNav isSignedIn={!!session} />` above `{children}`
+- `sign-in/page.tsx` and `register/page.tsx`: add `pt-16` to root `<div>` (currently `min-h-screen flex items-center justify-center`)
+- No changes needed to `MarketingNav` itself — already accepts `isSignedIn`
+- Out of scope: forgot-password, reset-password, verify-email pages; redirects; fixing hash anchors to point back to homepage sections
 
 ## History
 

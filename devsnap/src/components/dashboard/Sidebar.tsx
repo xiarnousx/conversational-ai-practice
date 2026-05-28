@@ -70,14 +70,14 @@ function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collec
   return (
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       {/* Header */}
-      <div className="flex h-14 items-center gap-2 border-b border-sidebar-border px-4">
+      <div className={cn(
+        "flex h-14 items-center border-b border-sidebar-border",
+        collapsed ? "justify-center" : "gap-2 px-4"
+      )}>
         {!collapsed && (
           <span className="flex items-center gap-2 font-bold text-base tracking-tight truncate flex-1">
             <span className="text-lg leading-none">⚡</span>DevStash
           </span>
-        )}
-        {collapsed && (
-          <span className="flex-1 flex items-center justify-center text-lg leading-none">⚡</span>
         )}
         <button
           onClick={onToggleCollapse}

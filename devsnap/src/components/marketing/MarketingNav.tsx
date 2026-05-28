@@ -29,10 +29,10 @@ export default function MarketingNav({ isSignedIn }: { isSignedIn: boolean }) {
 
         {/* Desktop nav links */}
         <div className="hidden md:flex gap-7">
-          <a href="#features" className="text-[#7a8499] hover:text-[#e2e8f0] text-sm font-medium transition-colors duration-200">
+          <a href="/#features" className="text-[#7a8499] hover:text-[#e2e8f0] text-sm font-medium transition-colors duration-200">
             Features
           </a>
-          <a href="#pricing" className="text-[#7a8499] hover:text-[#e2e8f0] text-sm font-medium transition-colors duration-200">
+          <a href="/#pricing" className="text-[#7a8499] hover:text-[#e2e8f0] text-sm font-medium transition-colors duration-200">
             Pricing
           </a>
         </div>
@@ -73,10 +73,10 @@ export default function MarketingNav({ isSignedIn }: { isSignedIn: boolean }) {
             <SheetContent side="right" className="w-72 bg-[#0a0c14] border-[#1e2235]">
               <SheetTitle className="sr-only">Navigation</SheetTitle>
               <div className="flex flex-col gap-0 px-4 pt-6">
-                <a href="#features" className="text-[#7a8499] hover:text-[#e2e8f0] py-2 text-sm font-medium border-b border-[#1e2235] transition-colors">
+                <a href="/#features" className="text-[#7a8499] hover:text-[#e2e8f0] py-2 text-sm font-medium border-b border-[#1e2235] transition-colors">
                   Features
                 </a>
-                <a href="#pricing" className="text-[#7a8499] hover:text-[#e2e8f0] py-2 text-sm font-medium border-b border-[#1e2235] transition-colors">
+                <a href="/#pricing" className="text-[#7a8499] hover:text-[#e2e8f0] py-2 text-sm font-medium border-b border-[#1e2235] transition-colors">
                   Pricing
                 </a>
                 {isSignedIn ? (
