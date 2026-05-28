@@ -147,9 +147,9 @@ export function NewItemDialog({ collections }: { collections: CollectionPickerIt
 
   return (
     <>
-      <Button size="sm" onClick={handleOpen}>
-        <Plus className="h-4 w-4 mr-1" />
-        New Item
+      <Button size="sm" onClick={handleOpen} title="New Item">
+        <Plus className="h-4 w-4 md:mr-1" />
+        <span className="hidden md:inline">New Item</span>
       </Button>
 
       <Dialog open={open} onOpenChange={handleOpenChange}>

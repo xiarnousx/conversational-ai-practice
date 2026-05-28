@@ -116,7 +116,7 @@ export default function SignInPage() {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm space-y-6">
         <div className="space-y-1 text-center">
-          <h1 className="text-2xl font-bold tracking-tight">Sign in to DevSnap</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Sign in to DevStash</h1>
           <p className="text-sm text-muted-foreground">
             {"Don't have an account? "}
             <Link href="/register" className="underline underline-offset-4 hover:text-foreground">

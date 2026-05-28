@@ -1,12 +1,26 @@
-# Current Feature
+# Current Feature: TopBar Responsive & Logo
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Mobile top bar is decluttered: logo visible, search usable, action buttons icon-only
+- `⚡ DevStash` logo appears in the sidebar (with emoji) and in the top bar on mobile
+- Collapsed sidebar shows only the `⚡` emoji
+- "New Collection" and "New Item" collapse to `FolderPlus` / `Plus` icon buttons on mobile (`< md`)
+- Search input replaced by a search icon button on mobile that opens the command palette
+- Custom favicon (`src/app/icon.tsx`) renders `⚡` on a dark `#0a0c14` background using `ImageResponse`
+- Apple touch icon (`src/app/apple-icon.tsx`) at 180×180
+
 ## Notes
+
+- Naming resolved: app is **DevStash** everywhere (sidebar, layout metadata, sign-in page, emails, homepage all updated already)
+- The spec noted naming inconsistency — now fixed; spec references to "DevSnap" should be read as "DevStash"
+- Mobile breakpoint is Tailwind `md` (768px); sidebar is hidden below this threshold
+- Command palette (`onSearchClick`) already wired in `AppLayoutClient` — just need to expose the trigger on mobile
+- Existing favicon files in `src/app/` (if any) should be checked before creating new ones
 
 ## History
 
