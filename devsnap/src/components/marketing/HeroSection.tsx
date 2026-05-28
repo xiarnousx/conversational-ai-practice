@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import HeroChaosCanvas from './HeroChaosCanvas';
 
-export default function HeroSection() {
+export default function HeroSection({ isSignedIn }: { isSignedIn: boolean }) {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center pt-[110px] pb-20 px-7 gap-[72px]">
       {/* Headline + CTAs */}
@@ -14,10 +14,10 @@ export default function HeroSection() {
         </h1>
         <div className="flex gap-3 justify-center flex-wrap">
           <Link
-            href="/register"
+            href={isSignedIn ? '/dashboard' : '/register'}
             className="inline-flex items-center justify-center text-base px-[30px] py-[13px] rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 text-white font-semibold hover:opacity-90 hover:-translate-y-px transition-all"
           >
-            Start for Free
+            {isSignedIn ? 'Go to Dashboard' : 'Start for Free'}
           </Link>
           <a
             href="#features"
