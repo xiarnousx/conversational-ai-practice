@@ -1,52 +1,14 @@
-"use client"
-
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { auth } from "@/auth"
+import RegisterForm from "./RegisterForm"
 
-export default function RegisterPage() {
-  const router = useRouter()
-
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setError(null)
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.")
-      return
-    }
-
-    setLoading(true)
-
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password, confirmPassword }),
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-      setLoading(false)
-      setError(data.error ?? "Registration failed.")
-      return
-    }
-
-    setLoading(false)
-    router.push(`/verify-email?email=${encodeURIComponent(email)}`)
-  }
+export default async function RegisterPage() {
+  const session = await auth()
+  if (session) redirect("/dashboard")
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+    <div className="min-h-screen pt-16 flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm space-y-6">
         <div className="space-y-1 text-center">
           <h1 className="text-2xl font-bold tracking-tight">Create an account</h1>
@@ -57,65 +19,7 @@ export default function RegisterPage() {
             </Link>
           </p>
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <p className="text-sm text-destructive text-center">{error}</p>
-          )}
-          <div className="space-y-2">
-            <div className="space-y-1">
-              <label htmlFor="name" className="sr-only">Name</label>
-              <Input
-                id="name"
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                autoComplete="name"
-              />
-            </div>
-            <div className="space-y-1">
-              <label htmlFor="reg-email" className="sr-only">Email</label>
-              <Input
-                id="reg-email"
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                autoComplete="email"
-              />
-            </div>
-            <div className="space-y-1">
-              <label htmlFor="reg-password" className="sr-only">Password</label>
-              <Input
-                id="reg-password"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                autoComplete="new-password"
-              />
-            </div>
-            <div className="space-y-1">
-              <label htmlFor="confirm-password" className="sr-only">Confirm password</label>
-              <Input
-                id="confirm-password"
-                type="password"
-                placeholder="Confirm password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                autoComplete="new-password"
-              />
-            </div>
-          </div>
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Creating account…" : "Create account"}
-          </Button>
-        </form>
+        <RegisterForm />
       </div>
     </div>
   )

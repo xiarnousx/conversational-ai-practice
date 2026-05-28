@@ -153,149 +153,151 @@ export function NewItemDialog({ collections }: { collections: CollectionPickerIt
       </Button>
 
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="sm:max-w-md" showCloseButton={false}>
-          <DialogHeader>
+        <DialogContent className="sm:max-w-md flex flex-col max-h-[90vh] overflow-hidden" showCloseButton={false}>
+          <DialogHeader className="shrink-0">
             <DialogTitle>New Item</DialogTitle>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Type selector */}
-            <div className="space-y-1.5">
-              <Label>Type</Label>
-              <div className="flex flex-wrap gap-1.5">
-                {ITEM_TYPES.map((t) => (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => setType(t)}
-                    className={`rounded-full px-3 py-1 text-xs font-medium capitalize transition-colors ${
-                      type === t
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Title */}
-            <div className="space-y-1.5">
-              <Label htmlFor="new-item-title">Title *</Label>
-              <Input
-                id="new-item-title"
-                value={form.title}
-                onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-                placeholder="Item title"
-                required
-              />
-            </div>
-
-            {/* Description */}
-            <div className="space-y-1.5">
-              <Label htmlFor="new-item-description">Description</Label>
-              <Textarea
-                id="new-item-description"
-                value={form.description}
-                onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-                placeholder="Optional description"
-                rows={2}
-              />
-            </div>
-
-            {/* Content */}
-            {showContent && (
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+            <div className="overflow-y-auto flex-1 space-y-4 pr-1">
+              {/* Type selector */}
               <div className="space-y-1.5">
-                <Label>Content</Label>
-                {showCode ? (
-                  <CodeEditor
-                    value={form.content}
-                    language={form.language || "plaintext"}
-                    onChange={(val) => setForm((f) => ({ ...f, content: val }))}
-                  />
-                ) : showMarkdown ? (
-                  <MarkdownEditor
-                    value={form.content}
-                    onChange={(val) => setForm((f) => ({ ...f, content: val }))}
-                  />
-                ) : (
-                  <Textarea
-                    id="new-item-content"
-                    value={form.content}
-                    onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
-                    placeholder="Content"
-                    rows={6}
-                  />
-                )}
+                <Label>Type</Label>
+                <div className="flex gap-1">
+                  {ITEM_TYPES.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setType(t)}
+                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-medium capitalize transition-colors ${
+                        type === t
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
               </div>
-            )}
 
-            {/* Language */}
-            {showLanguage && (
+              {/* Title */}
               <div className="space-y-1.5">
-                <Label htmlFor="new-item-language">Language</Label>
+                <Label htmlFor="new-item-title">Title *</Label>
                 <Input
-                  id="new-item-language"
-                  value={form.language}
-                  onChange={(e) => setForm((f) => ({ ...f, language: e.target.value }))}
-                  placeholder="e.g. typescript"
-                />
-              </div>
-            )}
-
-            {/* URL */}
-            {isLink && (
-              <div className="space-y-1.5">
-                <Label htmlFor="new-item-url">URL *</Label>
-                <Input
-                  id="new-item-url"
-                  type="url"
-                  value={form.url}
-                  onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))}
-                  placeholder="https://…"
+                  id="new-item-title"
+                  value={form.title}
+                  onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                  placeholder="Item title"
                   required
                 />
               </div>
-            )}
 
-            {/* File / Image upload */}
-            {isFile && (
+              {/* Description */}
               <div className="space-y-1.5">
-                <Label>{type === "image" ? "Image *" : "File *"}</Label>
-                <FileUpload
-                  accept={type === "image" ? "image" : "file"}
-                  value={uploadedFile}
-                  onChange={setUploadedFile}
+                <Label htmlFor="new-item-description">Description</Label>
+                <Textarea
+                  id="new-item-description"
+                  value={form.description}
+                  onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                  placeholder="Optional description"
+                  rows={2}
                 />
               </div>
-            )}
 
-            {/* Collections */}
-            {collections.length > 0 && (
+              {/* Content */}
+              {showContent && (
+                <div className="space-y-1.5">
+                  <Label>Content</Label>
+                  {showCode ? (
+                    <CodeEditor
+                      value={form.content}
+                      language={form.language || "plaintext"}
+                      onChange={(val) => setForm((f) => ({ ...f, content: val }))}
+                    />
+                  ) : showMarkdown ? (
+                    <MarkdownEditor
+                      value={form.content}
+                      onChange={(val) => setForm((f) => ({ ...f, content: val }))}
+                    />
+                  ) : (
+                    <Textarea
+                      id="new-item-content"
+                      value={form.content}
+                      onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
+                      placeholder="Content"
+                      rows={6}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* Language */}
+              {showLanguage && (
+                <div className="space-y-1.5">
+                  <Label htmlFor="new-item-language">Language</Label>
+                  <Input
+                    id="new-item-language"
+                    value={form.language}
+                    onChange={(e) => setForm((f) => ({ ...f, language: e.target.value }))}
+                    placeholder="e.g. typescript"
+                  />
+                </div>
+              )}
+
+              {/* URL */}
+              {isLink && (
+                <div className="space-y-1.5">
+                  <Label htmlFor="new-item-url">URL *</Label>
+                  <Input
+                    id="new-item-url"
+                    type="url"
+                    value={form.url}
+                    onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))}
+                    placeholder="https://…"
+                    required
+                  />
+                </div>
+              )}
+
+              {/* File / Image upload */}
+              {isFile && (
+                <div className="space-y-1.5">
+                  <Label>{type === "image" ? "Image *" : "File *"}</Label>
+                  <FileUpload
+                    accept={type === "image" ? "image" : "file"}
+                    value={uploadedFile}
+                    onChange={setUploadedFile}
+                  />
+                </div>
+              )}
+
+              {/* Collections */}
+              {collections.length > 0 && (
+                <div className="space-y-1.5">
+                  <Label>Collections</Label>
+                  <CollectionPicker
+                    collections={collections}
+                    value={collectionIds}
+                    onChange={setCollectionIds}
+                  />
+                </div>
+              )}
+
+              {/* Tags */}
               <div className="space-y-1.5">
-                <Label>Collections</Label>
-                <CollectionPicker
-                  collections={collections}
-                  value={collectionIds}
-                  onChange={setCollectionIds}
+                <Label htmlFor="new-item-tags">Tags</Label>
+                <Input
+                  id="new-item-tags"
+                  value={form.tags}
+                  onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
+                  placeholder="react, typescript, hooks"
                 />
+                <p className="text-xs text-muted-foreground">Comma-separated</p>
               </div>
-            )}
-
-            {/* Tags */}
-            <div className="space-y-1.5">
-              <Label htmlFor="new-item-tags">Tags</Label>
-              <Input
-                id="new-item-tags"
-                value={form.tags}
-                onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
-                placeholder="react, typescript, hooks"
-              />
-              <p className="text-xs text-muted-foreground">Comma-separated</p>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="shrink-0 pt-4 border-t border-border mt-2">
               <Button
                 type="button"
                 variant="outline"
