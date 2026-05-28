@@ -30,7 +30,7 @@ export default function PricingSection() {
             <button
               onClick={() => setIsYearly((v) => !v)}
               aria-pressed={isYearly}
-              className={`relative w-11 h-6 rounded-full border cursor-pointer outline-none transition-all duration-200 flex-shrink-0 ${
+              className={`relative w-11 h-6 rounded-full border cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-200 flex-shrink-0 ${
                 isYearly
                   ? 'bg-indigo-500/25 border-indigo-500/50'
                   : 'bg-[#1a1d2a] border-[#2e3450]'

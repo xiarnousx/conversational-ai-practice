@@ -6,7 +6,7 @@ export default function AISection() {
           {/* Left: text */}
           <div>
             <div className="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/25 text-amber-400 text-[11px] font-bold px-3 py-1 rounded-full mb-5 uppercase tracking-[0.8px]">
-              ✦ Pro Feature
+              <span aria-hidden="true">✦</span> Pro Feature
             </div>
             <h2 className="text-[clamp(1.75rem,3vw,2.4rem)] font-extrabold tracking-[-1px] mb-4 leading-[1.2] text-[#e2e8f0]">
               AI Superpowers for<br />Your Knowledge Base
