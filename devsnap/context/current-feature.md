@@ -1,33 +1,12 @@
-# Current Feature: Homepage
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Replace `src/app/page.tsx` redirect with a real public marketing homepage
-- Implement `MarketingNav` with scroll-opacity effect and mobile Sheet drawer
-- Implement `HeroSection` with chaos canvas animation and static dashboard preview mockup
-- Implement `FeaturesSection` with 6 feature cards grid
-- Implement `AISection` with Pro badge, checklist, and static code editor mockup
-- Implement `PricingSection` with `PricingToggle` (monthly/yearly switch)
-- Implement `CTASection` with gradient-bordered box
-- Implement `MarketingFooter` with logo, link columns, and copyright year
-- All components placed under `src/components/marketing/`
-- Use the prototype at `prototypes/homepage/` as visual reference
-
 ## Notes
-
-- Page: `src/app/page.tsx` — public, no auth required
-- All Tailwind, no custom CSS files; use `[background:...]` arbitrary values for multi-gradient glow
-- Use ShadCN `Button` for CTAs, ShadCN `Sheet` for mobile nav
-- `HeroChaosCanvas` must be `'use client'` with `useEffect` + `requestAnimationFrame` cleanup
-- Scroll listener in `MarketingNav` must be `'use client'` with `{ passive: true }` and unmount cleanup
-- Pulsing skeletons via Tailwind `animate-pulse`
-- Pricing toggle: lift price state into `PricingSection` as client component boundary
-- Middleware at `src/middleware.ts` already handles protected routes — `/` needs no changes
-- Visual reference: `prototypes/homepage/index.html`, `styles.css`, `script.js`
 
 ## History
 
@@ -78,3 +57,4 @@ In Progress
 - 2026-05-25: Favorites Sorting — client-side sort controls on /favorites; FavoritesSortedList client component holds independent sort state per section; items sort by date (default)/name/type; collections sort by date (default)/name; SortPills generic pill button group; favorites/page.tsx delegates non-empty rendering to FavoritesSortedList
 - 2026-05-25: Pinned Items — toggleItemPin DB function and togglePinItem server action with auth/ownership check; Pin button in ItemDrawer wired with optimistic sky-blue toggle and toast on success/error; getItemsByType orderBy updated to [isPinned desc, createdAt desc] so pinned items sort to top of listings; static sky-blue Pin icon indicator on ItemRow when isPinned; dashboard PinnedItems section already wired to getPinnedItems(); 5 new unit tests
 - 2026-05-28: Homepage Mockup — standalone prototype at prototypes/homepage/ (index.html, styles.css, script.js); dark hero with gradient headline, rAF chaos-icon animation (8 logos bounce + repel from cursor), >> gradient arrow, dashboard preview mockup with sidebar type labels and Pinned/Recent sections with pulsing skeleton placeholders; hero visual wrapped in artistic glow container; features 6-card grid, AI section with code editor mock, pricing with monthly/yearly toggle, CTA, footer; scroll fade-in; fully responsive; homepage-spec.md written for the Next.js implementation
+- 2026-05-28: Homepage — Next.js public marketing homepage at /; MarketingNav (fixed, scroll-opacity bg, mobile Sheet drawer); HeroSection with HeroChaosCanvas (rAF bounce + cursor repulsion for 8 icons) and static dashboard preview mockup; FeaturesSection (6-card grid, accent hover border via CSS custom property); AISection (Pro badge, checklist, static code editor mockup with AI tags); PricingSection client component with monthly/yearly toggle; CTASection (gradient border box); MarketingFooter (logo, 3 link columns, dynamic year); all components under src/components/marketing/; >> arrow rotates 90° on mobile
