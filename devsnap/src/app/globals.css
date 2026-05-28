@@ -214,3 +214,15 @@
   > *:first-child { margin-top: 0; }
   > *:last-child { margin-bottom: 0; }
 }
+
+/* ===== Marketing page ===== */
+
+@keyframes arrowPulse {
+  0%, 100% { opacity: 0.5; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(4px); }
+}
+
+
+.feature-card:hover {
+  border-color: var(--feature-accent) !important;
+}
