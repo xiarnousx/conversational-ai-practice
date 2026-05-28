@@ -1,29 +1,12 @@
-# Current Feature: Homepage Mockup
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Create a standalone marketing homepage at `prototypes/homepage/` (`index.html`, `styles.css`, `script.js`)
-- Hero section showing "chaos to order" with animated floating icons (Notion, GitHub, Slack, etc.) on the left, a pulsing arrow in the center, and a dashboard preview mockup on the right
-- Chaos icons animate with requestAnimationFrame — drift, bounce off walls, repel from mouse cursor
-- Fixed top navbar with logo, Features/Pricing links, Sign In/Get Started buttons; becomes more opaque on scroll
-- Hero text with gradient headline, subheadline, and CTA buttons
-- Features section — 6 cards (Code Snippets, AI Prompts, Instant Search, Commands, Files & Docs, Collections) using item-type accent colors
-- AI section — two columns with Pro badge + AI capability checklist and a code editor mockup with "AI Generated Tags" demo
-- Pricing section — Free vs Pro cards, Pro highlighted with "Most Popular"; yearly/monthly toggle ($8/mo or $72/yr)
-- CTA and Footer sections
-- Scroll-triggered fade-in animations for sections
-- Fully responsive: chaos/arrow/dashboard stack vertically on mobile; arrow rotates 90° on mobile
-
 ## Notes
-
-- Output is a standalone prototype — no Next.js, no build step, plain HTML/CSS/JS
-- Dark theme with item-type accent colors: Snippet `#3b82f6`, Prompt `#f59e0b`, Command `#06b6d4`, Note `#22c55e`, File `#64748b`, Image `#ec4899`, URL `#6366f1`
-- Icons in chaos container: Notion, GitHub, Slack, VS Code logos + browser tabs, Terminal, Text file, Bookmark icons
-- Dashboard preview is a simplified mockup (sidebar + grid cards with colored top borders), not a real app screenshot
 
 ## History
 
@@ -73,3 +56,4 @@ In Progress
 - 2026-05-25: Favorite Toggle — toggleFavoriteItem and toggleFavoriteCollection server actions with auth/ownership checks; isFavorite added to ItemCardData; optimistic amber star toggle on ItemRow, FileListRow, ImageThumbnailCard, ItemDrawer action bar, CollectionCard 3-dots dropdown, and CollectionDetailActions header; FavoriteItemRow and FavoriteCollectionRow wired to unfavorite with optimistic removal from list
 - 2026-05-25: Favorites Sorting — client-side sort controls on /favorites; FavoritesSortedList client component holds independent sort state per section; items sort by date (default)/name/type; collections sort by date (default)/name; SortPills generic pill button group; favorites/page.tsx delegates non-empty rendering to FavoritesSortedList
 - 2026-05-25: Pinned Items — toggleItemPin DB function and togglePinItem server action with auth/ownership check; Pin button in ItemDrawer wired with optimistic sky-blue toggle and toast on success/error; getItemsByType orderBy updated to [isPinned desc, createdAt desc] so pinned items sort to top of listings; static sky-blue Pin icon indicator on ItemRow when isPinned; dashboard PinnedItems section already wired to getPinnedItems(); 5 new unit tests
+- 2026-05-28: Homepage Mockup — standalone prototype at prototypes/homepage/ (index.html, styles.css, script.js); dark hero with gradient headline, rAF chaos-icon animation (8 logos bounce + repel from cursor), >> gradient arrow, dashboard preview mockup with sidebar type labels and Pinned/Recent sections with pulsing skeleton placeholders; hero visual wrapped in artistic glow container; features 6-card grid, AI section with code editor mock, pricing with monthly/yearly toggle, CTA, footer; scroll fade-in; fully responsive; homepage-spec.md written for the Next.js implementation
