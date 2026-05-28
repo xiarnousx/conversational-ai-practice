@@ -1,22 +1,12 @@
-# Current Feature: Auth Pages — Marketing Nav
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add `MarketingNav` to `/sign-in` and `/register` pages for consistent navigation
-- Create `src/app/(auth)/layout.tsx` as a shared server component that reads the session and renders `MarketingNav`
-- Offset each auth page's centred card below the fixed nav with `pt-16`
-- Signed-in users see "View Dashboard"; signed-out users see "Sign In" + "Get Started" — same logic as the homepage
-
 ## Notes
-
-- New file: `src/app/(auth)/layout.tsx` — server component; calls `auth()`, renders `<MarketingNav isSignedIn={!!session} />` above `{children}`
-- `sign-in/page.tsx` and `register/page.tsx`: add `pt-16` to root `<div>` (currently `min-h-screen flex items-center justify-center`)
-- No changes needed to `MarketingNav` itself — already accepts `isSignedIn`
-- Out of scope: forgot-password, reset-password, verify-email pages; redirects; fixing hash anchors to point back to homepage sections
 
 ## History
 
@@ -71,3 +61,4 @@ In Progress
 - 2026-05-28: TopBar Responsive & Logo — app renamed to DevStash across all surfaces (sidebar, layout metadata, sign-in page, emails); ⚡ emoji added to sidebar logo (collapsed state shows emoji only); mobile TopBar shows ⚡ DevStash logo between hamburger and action area; search input hidden on mobile, replaced with search icon button that opens command palette; "New Collection" and "New Item" buttons collapse to icon-only (FolderPlus / Plus) on mobile via hidden md:inline text span; custom favicon via src/app/icon.tsx and apple-icon.tsx using ImageResponse (⚡ on #0a0c14 dark background, 32×32 and 180×180); default favicon.ico removed
 - 2026-05-28: Homepage Auth-Aware CTA — page.tsx calls auth() server-side and passes isSignedIn boolean to MarketingNav, HeroSection, and CTASection; signed-in users see "View Dashboard" in the nav and "Go to Dashboard" in hero + CTA section instead of sign-up/sign-in buttons; no redirect, no middleware changes
 - 2026-05-28: UI Review Fixes — 17 fixes across homepage and dashboard: MarketingNav py-2.25→py-2.5 and max-w-285→max-w-275; SheetTitle/SheetDescription added to mobile nav, sidebar drawer, and item drawer; sidebar active-route highlight + aria-current on type links; collection card 3-dots keyboard accessible (focus-visible:opacity-100); sign-in and register forms get sr-only labels; double p-6 removed from items/favorites/collections pages; footer text color upgraded to text-slate-400 (WCAG AA); pricing toggle gets focus-visible ring; decorative ✦ aria-hidden; Pin icon gets role="img"; user menu dropdown gets aria-label; hero panels switch to min-w-0 (no overflow) and tracking-[-0.04em]; arrow uses arrowPulse on mobile; stats grid breakpoint md:grid-cols-4; dashboard skeleton gets role="status"
+- 2026-05-28: Auth Pages Marketing Nav — (auth)/layout.tsx server component renders MarketingNav on /sign-in and /register; register/page.tsx converted to server component with session redirect; RegisterForm.tsx extracted as client component; MarketingNav anchors updated to /#features and /#pricing; sidebar collapse button header centering fixed; New Item modal type badges condensed to single line; modal body scrollable with pinned footer; global 4px dark slim scrollbar via ::-webkit-scrollbar and Firefox scrollbar-width/color
