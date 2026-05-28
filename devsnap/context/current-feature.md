@@ -1,12 +1,24 @@
-# Current Feature
+# Current Feature: Homepage Auth-Aware CTA
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Show a "View Dashboard" button in `MarketingNav` (desktop + mobile Sheet) when the user is already signed in, replacing "Sign In" and "Get Started"
+- Replace the "Start for Free" hero CTA with "Go to Dashboard" → `/dashboard` for signed-in users
+- Replace the "Get Started for Free" CTA section button with "Go to Dashboard" for signed-in users
+- Session check is server-side via `auth()` in `src/app/page.tsx` — no client round-trip
+
 ## Notes
+
+- 4 files to touch: `src/app/page.tsx`, `MarketingNav.tsx`, `HeroSection.tsx`, `CTASection.tsx`
+- Pass a single `isSignedIn: boolean` prop from the page down to the three marketing components
+- Do **not** auto-redirect signed-in users away from `/` — they may intentionally browse the marketing page
+- No middleware changes; no changes to the Pricing section
+- "View Dashboard" in nav: ShadCN `Button` variant `"default"`; hero + CTA buttons keep existing style, only label + href change
+- Spec: `context/features/homepage-auth-cta-spec.md`
 
 ## History
 
