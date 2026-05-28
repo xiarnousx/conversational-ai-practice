@@ -1,12 +1,34 @@
-# Current Feature
+# Current Feature: UI Review Fixes
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Fix broken Tailwind v4 classes in `MarketingNav` (`bg-linear-to-r`, `py-2.25`, `max-w-285`)
+- Add missing `SheetTitle` / `SheetDescription` to mobile nav, sidebar, and item drawer
+- Make collection card 3-dots dropdown keyboard-accessible (`focus-visible:opacity-100`)
+- Add `aria-label` to icon-only TopBar buttons on mobile
+- Add `<label>` elements to sign-in and register form inputs
+- Remove double `p-6` padding on inner app pages (items, favorites, collections)
+- Fix footer text contrast (`#3d4460` → `text-slate-400`) to meet WCAG AA
+- Add `focus-visible` ring to pricing toggle button
+- Add `aria-hidden` to decorative `✦` character in AI section badge
+- Add active-route indicator (highlight + `aria-current`) to sidebar type links
+- Fix `Pin` icon missing `role="img"` in `ItemRow`
+- Add `aria-label="User menu"` to sidebar user avatar dropdown trigger
+- Fix hero panels potential overflow at 375px (`flex-shrink-0` → `w-full max-w-[320px]`)
+- Replace raw-pixel letter-spacing `tracking-[-2px]` with `tracking-[-0.04em]` in hero
+- Add intermediate column breakpoint to stats cards grid (2 → 3 → 4)
+- Add `role="status"` / `aria-label` to dashboard `loading.tsx` skeleton
+- Fix `>>` arrow animation fallback on mobile to use directional keyframe
+
 ## Notes
+
+- Group 1 (Tailwind class fixes) must land first — broken classes cause visible rendering failures in the nav
+- Groups 2 and 3 can be done in a single pass; no schema, DB, or API changes required
+- Verify in browser at 390px, 768px, and 1280px viewports after build passes
 
 ## History
 

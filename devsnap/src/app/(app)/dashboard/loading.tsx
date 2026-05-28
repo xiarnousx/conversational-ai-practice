@@ -1,6 +1,6 @@
 export default function DashboardLoading() {
   return (
-    <div className="space-y-6 animate-pulse">
+    <div role="status" aria-label="Loading dashboard" className="space-y-6 animate-pulse">
       {/* Heading */}
       <div>
         <div className="h-5 w-32 rounded bg-muted" />

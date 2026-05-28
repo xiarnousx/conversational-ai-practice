@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   Code,
@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -62,6 +62,7 @@ function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collec
   const [typesOpen, setTypesOpen] = useState(true);
   const [collectionsOpen, setCollectionsOpen] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
 
   const favoriteCollections = collections.filter((c) => c.isFavorite);
   const recentCollections = collections.filter((c) => !c.isFavorite);
@@ -121,8 +122,12 @@ function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collec
                   <li key={type.id}>
                     <Link
                       href={`/items/${getTypeSlug(type.name)}`}
+                      aria-current={pathname === `/items/${getTypeSlug(type.name)}` ? "page" : undefined}
                       className={cn(
-                        "group flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors",
+                        "group flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors",
+                        pathname === `/items/${getTypeSlug(type.name)}`
+                          ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                          : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                         collapsed && "justify-center px-0"
                       )}
                       title={collapsed ? type.name : undefined}
@@ -247,7 +252,7 @@ function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collec
         collapsed ? "flex justify-center" : "block"
       )}>
         <DropdownMenu>
-          <DropdownMenuTrigger className={cn(
+          <DropdownMenuTrigger aria-label="User menu" className={cn(
             "flex items-center gap-2.5 w-full rounded-md hover:bg-sidebar-accent transition-colors p-1.5 text-left",
             collapsed && "justify-center p-1"
           )}>
@@ -312,6 +317,7 @@ export default function Sidebar({ mobileOpen, onMobileClose, itemTypes, collecti
       {/* Mobile drawer */}
       <Sheet open={mobileOpen} onOpenChange={(open) => !open && onMobileClose()}>
         <SheetContent side="left" className="w-60 p-0 border-r border-border bg-sidebar">
+          <SheetTitle className="sr-only">Sidebar</SheetTitle>
           <SidebarContent itemTypes={itemTypes} collections={collections} user={user} />
         </SheetContent>
       </Sheet>

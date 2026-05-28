@@ -17,7 +17,7 @@ export default async function FavoritesPage() {
   const isEmpty = items.length === 0 && collections.length === 0;
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6">
       <div className="flex items-center gap-2">
         <Star className="size-5 text-amber-400" />
         <h1 className="text-xl font-semibold text-foreground">Favorites</h1>

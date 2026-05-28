@@ -24,7 +24,7 @@ export default function MarketingFooter() {
               <span className="text-lg">⚡</span>
               <span className="font-bold text-[17px] tracking-tight text-[#e2e8f0]">DevStash</span>
             </div>
-            <p className="text-[0.875rem] text-[#3d4460]">Store Smarter. Build Faster.</p>
+            <p className="text-[0.875rem] text-slate-400">Store Smarter. Build Faster.</p>
           </div>
 
           {/* Link columns */}
@@ -35,7 +35,7 @@ export default function MarketingFooter() {
                 <a
                   key={link}
                   href="#"
-                  className="text-[0.875rem] text-[#3d4460] hover:text-[#7a8499] transition-colors duration-200"
+                  className="text-[0.875rem] text-slate-400 hover:text-[#7a8499] transition-colors duration-200"
                 >
                   {link}
                 </a>
@@ -44,7 +44,7 @@ export default function MarketingFooter() {
           ))}
         </div>
 
-        <div className="border-t border-[#1e2235] pt-6 text-[0.8125rem] text-[#3d4460]">
+        <div className="border-t border-[#1e2235] pt-6 text-[0.8125rem] text-slate-400">
           © {new Date().getFullYear()} DevStash. All rights reserved.
         </div>
       </div>

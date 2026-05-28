@@ -88,7 +88,7 @@ export function CollectionCard({ collection }: CollectionCardProps) {
 
           <div onClick={stopPropagation} onKeyDown={stopPropagation}>
             <DropdownMenu>
-              <DropdownMenuTrigger className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground p-0.5 rounded cursor-pointer bg-transparent border-0">
+              <DropdownMenuTrigger className="shrink-0 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity text-muted-foreground hover:text-foreground p-0.5 rounded cursor-pointer bg-transparent border-0">
                 <MoreHorizontal className="size-4" />
                 <span className="sr-only">Collection actions</span>
               </DropdownMenuTrigger>

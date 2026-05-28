@@ -12,6 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -280,6 +281,7 @@ function DrawerContent({ item, collections, onUpdate, onClose }: DrawerContentPr
         ) : (
           <SheetTitle>{item.title}</SheetTitle>
         )}
+        <SheetDescription className="sr-only">Item details and actions</SheetDescription>
         <div className="flex items-center gap-1.5">
           <span
             className="rounded px-1.5 py-0.5 text-xs font-medium"

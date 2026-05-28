@@ -94,7 +94,7 @@ export default function ItemRow({ item }: { item: ItemCardData }) {
       </div>
       <div className="flex shrink-0 items-center gap-1">
         {item.isPinned && (
-          <Pin className="size-3 fill-sky-400 text-sky-400" aria-label="Pinned" />
+          <Pin role="img" aria-label="Pinned" className="size-3 fill-sky-400 text-sky-400" />
         )}
         <button
           onClick={handleToggleFavorite}

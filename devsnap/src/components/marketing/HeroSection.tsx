@@ -6,7 +6,7 @@ export default function HeroSection({ isSignedIn }: { isSignedIn: boolean }) {
     <section className="min-h-screen flex flex-col items-center justify-center pt-[110px] pb-20 px-7 gap-[72px]">
       {/* Headline + CTAs */}
       <div className="text-center max-w-[720px]">
-        <h1 className="text-[clamp(2.4rem,5.5vw,3.75rem)] font-extrabold leading-[1.12] tracking-[-2px] mb-[22px]">
+        <h1 className="text-[clamp(2.4rem,5.5vw,3.75rem)] font-extrabold leading-[1.12] tracking-[-0.04em] mb-[22px]">
           Stop Losing Your<br />
           <span className="bg-gradient-to-br from-blue-500 via-indigo-400 to-pink-500 bg-clip-text text-transparent">
             Developer Knowledge
@@ -54,7 +54,7 @@ export default function HeroSection({ isSignedIn }: { isSignedIn: boolean }) {
         {/* Inner layout */}
         <div className="relative z-10 flex items-center gap-5 flex-wrap justify-center">
           {/* Chaos container */}
-          <div className="relative w-[320px] h-[290px] bg-[#12151f] border border-[#1e2235] rounded-xl overflow-hidden flex-shrink-0">
+          <div className="relative w-[320px] min-w-0 h-[290px] bg-[#12151f] border border-[#1e2235] rounded-xl overflow-hidden">
             <div className="absolute top-[10px] left-1/2 -translate-x-1/2 text-[10px] font-medium text-[#3d4460] whitespace-nowrap z-[5] bg-[#12151f] px-[10px] py-[2px] rounded-full border border-[#1e2235] tracking-[0.3px]">
               Your knowledge today...
             </div>
@@ -62,14 +62,14 @@ export default function HeroSection({ isSignedIn }: { isSignedIn: boolean }) {
           </div>
 
           {/* Arrow — rotated 90° on mobile (stacked layout), horizontal on md+ */}
-          <div className="flex items-center justify-center shrink-0 rotate-90 animate-pulse md:rotate-0 md:animate-[arrowPulse_2.2s_ease-in-out_infinite]">
+          <div className="flex items-center justify-center shrink-0 rotate-90 animate-[arrowPulse_2.2s_ease-in-out_infinite] md:rotate-0">
             <span className="font-mono text-[2.25rem] font-extrabold tracking-[-0.12em] leading-none bg-gradient-to-br from-blue-500 via-indigo-400 to-pink-500 bg-clip-text text-transparent">
               &gt;&gt;
             </span>
           </div>
 
           {/* Dashboard preview */}
-          <div className="relative w-[320px] h-[290px] bg-[#12151f] border border-[#1e2235] rounded-xl overflow-hidden flex-shrink-0">
+          <div className="relative w-[320px] min-w-0 h-[290px] bg-[#12151f] border border-[#1e2235] rounded-xl overflow-hidden">
             <div className="absolute top-[10px] left-1/2 -translate-x-1/2 text-[10px] font-medium text-[#3d4460] whitespace-nowrap z-[5] bg-[#12151f] px-[10px] py-[2px] rounded-full border border-[#1e2235] tracking-[0.3px]">
               ...with DevStash
             </div>
