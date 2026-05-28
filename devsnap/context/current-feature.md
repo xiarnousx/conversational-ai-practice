@@ -1,26 +1,12 @@
-# Current Feature: TopBar Responsive & Logo
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Mobile top bar is decluttered: logo visible, search usable, action buttons icon-only
-- `⚡ DevStash` logo appears in the sidebar (with emoji) and in the top bar on mobile
-- Collapsed sidebar shows only the `⚡` emoji
-- "New Collection" and "New Item" collapse to `FolderPlus` / `Plus` icon buttons on mobile (`< md`)
-- Search input replaced by a search icon button on mobile that opens the command palette
-- Custom favicon (`src/app/icon.tsx`) renders `⚡` on a dark `#0a0c14` background using `ImageResponse`
-- Apple touch icon (`src/app/apple-icon.tsx`) at 180×180
-
 ## Notes
-
-- Naming resolved: app is **DevStash** everywhere (sidebar, layout metadata, sign-in page, emails, homepage all updated already)
-- The spec noted naming inconsistency — now fixed; spec references to "DevSnap" should be read as "DevStash"
-- Mobile breakpoint is Tailwind `md` (768px); sidebar is hidden below this threshold
-- Command palette (`onSearchClick`) already wired in `AppLayoutClient` — just need to expose the trigger on mobile
-- Existing favicon files in `src/app/` (if any) should be checked before creating new ones
 
 ## History
 
@@ -72,3 +58,4 @@ In Progress
 - 2026-05-25: Pinned Items — toggleItemPin DB function and togglePinItem server action with auth/ownership check; Pin button in ItemDrawer wired with optimistic sky-blue toggle and toast on success/error; getItemsByType orderBy updated to [isPinned desc, createdAt desc] so pinned items sort to top of listings; static sky-blue Pin icon indicator on ItemRow when isPinned; dashboard PinnedItems section already wired to getPinnedItems(); 5 new unit tests
 - 2026-05-28: Homepage Mockup — standalone prototype at prototypes/homepage/ (index.html, styles.css, script.js); dark hero with gradient headline, rAF chaos-icon animation (8 logos bounce + repel from cursor), >> gradient arrow, dashboard preview mockup with sidebar type labels and Pinned/Recent sections with pulsing skeleton placeholders; hero visual wrapped in artistic glow container; features 6-card grid, AI section with code editor mock, pricing with monthly/yearly toggle, CTA, footer; scroll fade-in; fully responsive; homepage-spec.md written for the Next.js implementation
 - 2026-05-28: Homepage — Next.js public marketing homepage at /; MarketingNav (fixed, scroll-opacity bg, mobile Sheet drawer); HeroSection with HeroChaosCanvas (rAF bounce + cursor repulsion for 8 icons) and static dashboard preview mockup; FeaturesSection (6-card grid, accent hover border via CSS custom property); AISection (Pro badge, checklist, static code editor mockup with AI tags); PricingSection client component with monthly/yearly toggle; CTASection (gradient border box); MarketingFooter (logo, 3 link columns, dynamic year); all components under src/components/marketing/; >> arrow rotates 90° on mobile
+- 2026-05-28: TopBar Responsive & Logo — app renamed to DevStash across all surfaces (sidebar, layout metadata, sign-in page, emails); ⚡ emoji added to sidebar logo (collapsed state shows emoji only); mobile TopBar shows ⚡ DevStash logo between hamburger and action area; search input hidden on mobile, replaced with search icon button that opens command palette; "New Collection" and "New Item" buttons collapse to icon-only (FolderPlus / Plus) on mobile via hidden md:inline text span; custom favicon via src/app/icon.tsx and apple-icon.tsx using ImageResponse (⚡ on #0a0c14 dark background, 32×32 and 180×180); default favicon.ico removed
