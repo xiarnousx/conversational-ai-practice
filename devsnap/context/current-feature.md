@@ -6,7 +6,11 @@ Not Started
 
 ## Goals
 
+<!-- Add feature goals here -->
+
 ## Notes
+
+<!-- Add implementation notes here -->
 
 ## History
 
@@ -63,3 +67,4 @@ Not Started
 - 2026-05-28: UI Review Fixes — 17 fixes across homepage and dashboard: MarketingNav py-2.25→py-2.5 and max-w-285→max-w-275; SheetTitle/SheetDescription added to mobile nav, sidebar drawer, and item drawer; sidebar active-route highlight + aria-current on type links; collection card 3-dots keyboard accessible (focus-visible:opacity-100); sign-in and register forms get sr-only labels; double p-6 removed from items/favorites/collections pages; footer text color upgraded to text-slate-400 (WCAG AA); pricing toggle gets focus-visible ring; decorative ✦ aria-hidden; Pin icon gets role="img"; user menu dropdown gets aria-label; hero panels switch to min-w-0 (no overflow) and tracking-[-0.04em]; arrow uses arrowPulse on mobile; stats grid breakpoint md:grid-cols-4; dashboard skeleton gets role="status"
 - 2026-05-28: Auth Pages Marketing Nav — (auth)/layout.tsx server component renders MarketingNav on /sign-in and /register; register/page.tsx converted to server component with session redirect; RegisterForm.tsx extracted as client component; MarketingNav anchors updated to /#features and /#pricing; sidebar collapse button header centering fixed; New Item modal type badges condensed to single line; modal body scrollable with pinned footer; global 4px dark slim scrollbar via ::-webkit-scrollbar and Firefox scrollbar-width/color
 - 2026-05-31: Stripe Integration Phase 1 — stripe + @stripe/stripe-js installed; isPro: boolean added to Session/JWT types; JWT callback syncs isPro from DB on every refresh; src/lib/stripe.ts singleton (apiVersion 2026-05-27.dahlia); src/lib/db/limits.ts with FREE_ITEM_LIMIT=50, FREE_COLLECTION_LIMIT=3, getUserLimits(); POST /api/stripe/checkout (gets-or-creates Stripe customer, persists stripeCustomerId, returns checkout URL); POST /api/stripe/portal (returns 400 if no stripeCustomerId, returns portal URL); 13 unit tests for getUserLimits boundary conditions and Pro bypass
+- 2026-05-31: Stripe Integration Phase 2 — webhook handler at /api/stripe/webhook (checkout.session.completed, subscription.updated/deleted) keeps isPro in sync; createItem/createCollection enforce free-tier limits (50 items, 3 collections); /api/upload gates non-image files behind Pro; BillingSection on /settings with upgrade/manage buttons; ?upgraded=1 triggers success toast; NewItemDialog/NewCollectionDialog show upgrade prompt on limit error; sidebar Upgrade to Pro link for free users; serverExternalPackages: ["stripe"] added to next.config.ts to fix Turbopack dev 404
