@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { uploadToS3 } from "@/lib/s3";
+import { prisma } from "@/lib/prisma";
 import { randomUUID } from "crypto";
 
 const IMAGE_MIME_TYPES = new Set([
@@ -46,6 +47,16 @@ export async function POST(req: NextRequest) {
 
   if (!isImage && !isFile) {
     return NextResponse.json({ error: "Unsupported file type" }, { status: 415 });
+  }
+
+  if (!isImage) {
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { isPro: true },
+    });
+    if (!user?.isPro) {
+      return NextResponse.json({ error: "File uploads require a Pro plan." }, { status: 403 });
+    }
   }
 
   const maxBytes = isImage ? IMAGE_MAX_BYTES : FILE_MAX_BYTES;

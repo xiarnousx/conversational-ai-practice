@@ -14,8 +14,8 @@ export async function POST(request: Request) {
 
   const priceId =
     plan === "yearly"
-      ? process.env.STRIPE_PRICE_YEARLY!
-      : process.env.STRIPE_PRICE_MONTHLY!
+      ? process.env.STRIPE_PRICE_ID_YEARLY!
+      : process.env.STRIPE_PRICE_ID_MONTHLY!
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
@@ -41,8 +41,9 @@ export async function POST(request: Request) {
     customer: customerId,
     mode: "subscription",
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${process.env.NEXTAUTH_URL}/settings?upgraded=true`,
+    success_url: `${process.env.NEXTAUTH_URL}/settings?upgraded=1`,
     cancel_url: `${process.env.NEXTAUTH_URL}/settings`,
+    metadata: { userId: session.user.id },
   })
 
   return NextResponse.json({ url: checkoutSession.url })

@@ -20,7 +20,7 @@ export default async function AppLayout({
     getSidebarCollections(userId),
     getItemsForSearch(userId),
     getCollectionsForSearch(userId),
-    prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { editorPreferences: true } }),
+    prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { editorPreferences: true, isPro: true } }),
   ]);
 
   const editorPreferences = parseEditorPreferences(userRow.editorPreferences);
@@ -33,6 +33,7 @@ export default async function AppLayout({
         name: session.user.name,
         email: session.user.email,
         image: session.user.image,
+        isPro: userRow.isPro,
       }}
       searchItems={searchItems}
       searchCollections={searchCollections}

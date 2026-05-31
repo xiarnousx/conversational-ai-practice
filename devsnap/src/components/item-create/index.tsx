@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -130,7 +131,20 @@ export function NewItemDialog({ collections }: { collections: CollectionPickerIt
     setSaving(false);
 
     if (!result.success) {
-      toast.error(result.error);
+      if (result.error.startsWith("Free plan limit reached")) {
+        toast.error("Item limit reached", {
+          description: (
+            <span>
+              Upgrade to Pro for unlimited items.{" "}
+              <Link href="/settings" className="underline">
+                Upgrade
+              </Link>
+            </span>
+          ),
+        });
+      } else {
+        toast.error(result.error);
+      }
       return;
     }
 

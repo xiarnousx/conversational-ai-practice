@@ -6,6 +6,7 @@ import type { ItemDetail } from "@/lib/db/items";
 import { updateItemSchema, createItemSchema } from "@/lib/validations/items";
 import type { UpdateItemInput, CreateItemInput } from "@/lib/validations/items";
 import { deleteFromS3, keyFromUrl } from "@/lib/s3";
+import { getUserLimits } from "@/lib/db/limits";
 
 export type UpdateItemResult =
   | { success: true; data: ItemDetail }
@@ -49,6 +50,11 @@ export async function createItem(input: CreateItemInput): Promise<CreateItemResu
   const parsed = createItemSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+
+  const limits = await getUserLimits(session.user.id);
+  if (limits.atItemLimit) {
+    return { success: false, error: "Free plan limit reached (50 items). Upgrade to Pro for unlimited items." };
   }
 
   if (parsed.data.fileUrl) {
