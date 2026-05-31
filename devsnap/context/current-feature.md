@@ -1,30 +1,12 @@
-# Current Feature: Stripe Integration — Phase 1 (Core Infrastructure)
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Install Stripe SDK (`stripe`, `@stripe/stripe-js`)
-- Add `isPro: boolean` to `Session["user"]` and `JWT` in `src/types/next-auth.d.ts`
-- Sync `isPro` from DB on every JWT refresh in `src/auth.ts`
-- Create Stripe client singleton at `src/lib/stripe.ts`
-- Create free-tier limit helpers (`getUserLimits`) at `src/lib/db/limits.ts`
-- Implement auth-guarded `POST /api/stripe/checkout` route that creates a Checkout session and returns the URL
-- Implement auth-guarded `POST /api/stripe/portal` route that opens the Billing Portal and returns the URL
-- Write unit tests for `getUserLimits` covering boundary conditions and Pro bypass
-
 ## Notes
-
-- **No DB migration needed** — `isPro`, `stripeCustomerId`, `stripeSubscriptionId` are already in the schema
-- **Out of scope for Phase 1**: Stripe webhook handler, feature gating in server actions/upload, billing UI in `/settings`, upgrade prompts
-- The JWT callback DB read is intentional: ensures `isPro` syncs after a webhook fires without client-side polling
-- `STRIPE_PUBLISHABLE_KEY` added now for use in Phase 2 client components
-- Env vars needed: `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_MONTHLY`, `STRIPE_PRICE_YEARLY`
-- Stripe API version: `"2025-05-28.basil"`
-- Checkout route accepts `{ plan: "monthly" | "yearly" }`, gets or creates Stripe customer, persists `stripeCustomerId`
-- Portal route returns 400 if no `stripeCustomerId` on the user
 
 ## History
 
@@ -80,3 +62,4 @@ In Progress
 - 2026-05-28: Homepage Auth-Aware CTA — page.tsx calls auth() server-side and passes isSignedIn boolean to MarketingNav, HeroSection, and CTASection; signed-in users see "View Dashboard" in the nav and "Go to Dashboard" in hero + CTA section instead of sign-up/sign-in buttons; no redirect, no middleware changes
 - 2026-05-28: UI Review Fixes — 17 fixes across homepage and dashboard: MarketingNav py-2.25→py-2.5 and max-w-285→max-w-275; SheetTitle/SheetDescription added to mobile nav, sidebar drawer, and item drawer; sidebar active-route highlight + aria-current on type links; collection card 3-dots keyboard accessible (focus-visible:opacity-100); sign-in and register forms get sr-only labels; double p-6 removed from items/favorites/collections pages; footer text color upgraded to text-slate-400 (WCAG AA); pricing toggle gets focus-visible ring; decorative ✦ aria-hidden; Pin icon gets role="img"; user menu dropdown gets aria-label; hero panels switch to min-w-0 (no overflow) and tracking-[-0.04em]; arrow uses arrowPulse on mobile; stats grid breakpoint md:grid-cols-4; dashboard skeleton gets role="status"
 - 2026-05-28: Auth Pages Marketing Nav — (auth)/layout.tsx server component renders MarketingNav on /sign-in and /register; register/page.tsx converted to server component with session redirect; RegisterForm.tsx extracted as client component; MarketingNav anchors updated to /#features and /#pricing; sidebar collapse button header centering fixed; New Item modal type badges condensed to single line; modal body scrollable with pinned footer; global 4px dark slim scrollbar via ::-webkit-scrollbar and Firefox scrollbar-width/color
+- 2026-05-31: Stripe Integration Phase 1 — stripe + @stripe/stripe-js installed; isPro: boolean added to Session/JWT types; JWT callback syncs isPro from DB on every refresh; src/lib/stripe.ts singleton (apiVersion 2026-05-27.dahlia); src/lib/db/limits.ts with FREE_ITEM_LIMIT=50, FREE_COLLECTION_LIMIT=3, getUserLimits(); POST /api/stripe/checkout (gets-or-creates Stripe customer, persists stripeCustomerId, returns checkout URL); POST /api/stripe/portal (returns 400 if no stripeCustomerId, returns portal URL); 13 unit tests for getUserLimits boundary conditions and Pro bypass
