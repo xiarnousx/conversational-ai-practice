@@ -1,12 +1,30 @@
-# Current Feature
+# Current Feature: Stripe Integration — Phase 1 (Core Infrastructure)
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Install Stripe SDK (`stripe`, `@stripe/stripe-js`)
+- Add `isPro: boolean` to `Session["user"]` and `JWT` in `src/types/next-auth.d.ts`
+- Sync `isPro` from DB on every JWT refresh in `src/auth.ts`
+- Create Stripe client singleton at `src/lib/stripe.ts`
+- Create free-tier limit helpers (`getUserLimits`) at `src/lib/db/limits.ts`
+- Implement auth-guarded `POST /api/stripe/checkout` route that creates a Checkout session and returns the URL
+- Implement auth-guarded `POST /api/stripe/portal` route that opens the Billing Portal and returns the URL
+- Write unit tests for `getUserLimits` covering boundary conditions and Pro bypass
+
 ## Notes
+
+- **No DB migration needed** — `isPro`, `stripeCustomerId`, `stripeSubscriptionId` are already in the schema
+- **Out of scope for Phase 1**: Stripe webhook handler, feature gating in server actions/upload, billing UI in `/settings`, upgrade prompts
+- The JWT callback DB read is intentional: ensures `isPro` syncs after a webhook fires without client-side polling
+- `STRIPE_PUBLISHABLE_KEY` added now for use in Phase 2 client components
+- Env vars needed: `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_MONTHLY`, `STRIPE_PRICE_YEARLY`
+- Stripe API version: `"2025-05-28.basil"`
+- Checkout route accepts `{ plan: "monthly" | "yearly" }`, gets or creates Stripe customer, persists `stripeCustomerId`
+- Portal route returns 400 if no `stripeCustomerId` on the user
 
 ## History
 
