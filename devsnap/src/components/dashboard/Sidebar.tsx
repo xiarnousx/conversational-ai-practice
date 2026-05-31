@@ -17,6 +17,7 @@ import {
   PanelLeft,
   ChevronRight,
   LogOut,
+  Zap,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
@@ -245,6 +246,19 @@ function SidebarContent({ collapsed = false, onToggleCollapse, itemTypes, collec
           </div>
         )}
       </nav>
+
+      {/* Upgrade prompt for free users */}
+      {!collapsed && !user.isPro && (
+        <div className="px-3 pb-2">
+          <Link
+            href="/settings"
+            className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs text-amber-400/80 hover:text-amber-400 hover:bg-sidebar-accent transition-colors"
+          >
+            <Zap className="h-3.5 w-3.5 shrink-0" />
+            Upgrade to Pro
+          </Link>
+        </div>
+      )}
 
       {/* User area */}
       <div className={cn(

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { FolderPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,7 +53,20 @@ export function NewCollectionDialog() {
     setSaving(false);
 
     if (!result.success) {
-      toast.error(result.error);
+      if (result.error.startsWith("Free plan limit reached")) {
+        toast.error("Collection limit reached", {
+          description: (
+            <span>
+              Upgrade to Pro for unlimited collections.{" "}
+              <Link href="/settings" className="underline">
+                Upgrade
+              </Link>
+            </span>
+          ),
+        });
+      } else {
+        toast.error(result.error);
+      }
       return;
     }
 

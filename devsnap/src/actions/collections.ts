@@ -13,6 +13,7 @@ import {
   updateCollectionSchema,
 } from "@/lib/validations/collections";
 import type { CreateCollectionInput, UpdateCollectionInput } from "@/lib/validations/collections";
+import { getUserLimits } from "@/lib/db/limits";
 
 type ActionResult<T = void> =
   | { success: true; data: T }
@@ -46,6 +47,11 @@ export async function createCollection(
   const parsed = createCollectionSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+
+  const limits = await getUserLimits(session.user.id);
+  if (limits.atCollectionLimit) {
+    return { success: false, error: "Free plan limit reached (3 collections). Upgrade to Pro for unlimited collections." };
   }
 
   const collection = await createCollectionInDb(session.user.id, parsed.data);
