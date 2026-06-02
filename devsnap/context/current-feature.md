@@ -1,29 +1,20 @@
-# Current Feature: Refactor Actions Deduplication
+# Current Feature
 
 ## Status
 
-Complete
+Not Started
 
 ## Goals
 
-- Create `src/types/action-result.ts` with shared `ActionResult<T>` type and `fail()` helper
-- Create `src/lib/auth-guard.ts` with `requireUserId()` to replace repeated auth boilerplate
-- Update all 8 server action functions in `items.ts`, `collections.ts`, and `editor-preferences.ts` to use `requireUserId()` and `ActionResult<T>`
-- Create `src/lib/validations/shared.ts` with reusable Zod field constants
-- Update `src/lib/validations/items.ts` and `collections.ts` to use shared fields
-- Build passes and all tests pass with no regressions
+<!-- Add feature goals here -->
 
 ## Notes
 
-- Based on refactor scan: docs/refactor-actions-2026-06-02.md
-- Auth guard: 8 occurrences across 3 action files — `items.ts` (5), `collections.ts` (4), `editor-preferences.ts` (1)
-- Toggle result shapes (`{ success: true; isFavorite: boolean }`, `{ success: true; isPinned: boolean }`) differ from the generic — keep as-is, do not force into `ActionResult<T>`
-- `collections.ts` already has a local `ActionResult<T>` — move it to the shared type file
-- Zod schemas: `createItemSchema` and `updateItemSchema` share identical field definitions; `createCollectionSchema` and `updateCollectionSchema` are byte-for-byte identical
+<!-- Add implementation notes here -->
 
 ## History
 
-- 2026-06-02: Refactor Actions Deduplication — shared `ActionResult<T>` + `fail()` in `src/types/action-result.ts`; `requireUserId()` auth guard in `src/lib/auth-guard.ts`; all 8 server actions in `items.ts`, `collections.ts`, `editor-preferences.ts` updated; shared Zod fields extracted to `src/lib/validations/shared.ts`; `collections.ts` and `items.ts` validations refactored to use shared fields; 195 tests pass, build clean
+- 2026-06-02: Refactor Actions Deduplication — shared `ActionResult<T>` + `fail()` in `src/types/action-result.ts`; `requireUserId()` auth guard in `src/lib/auth-guard.ts`; all 8 server actions in `items.ts`, `collections.ts`, `editor-preferences.ts` updated; shared Zod fields extracted to `src/lib/validations/shared.ts`; `collections.ts` and `items.ts` validations refactored to use shared fields; 8 new tests, 203 total passing, build clean
 
 - 2026-03-19: Initial Next.js project setup and boilerplate cleanup
 - 2026-03-21: Dashboard UI Phase 1 completed — ShadCN init, dark mode, /dashboard route with topbar, sidebar and main placeholders
