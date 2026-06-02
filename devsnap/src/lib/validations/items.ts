@@ -1,13 +1,14 @@
 import { z } from "zod";
+import { titleField, descriptionField, tagsField, collectionIdsField } from "./shared";
 
 export const updateItemSchema = z.object({
-  title: z.string().trim().min(1, "Title is required"),
-  description: z.string().trim().nullable().optional(),
+  title: titleField,
+  description: descriptionField,
   content: z.string().trim().nullable().optional(),
   language: z.string().trim().nullable().optional(),
   url: z.string().trim().url({ message: "Must be a valid URL" }).nullable().optional(),
-  tags: z.array(z.string().trim().min(1)).default([]),
-  collectionIds: z.array(z.string()).default([]),
+  tags: tagsField,
+  collectionIds: collectionIdsField,
 });
 
 export type UpdateItemInput = z.infer<typeof updateItemSchema>;
@@ -16,9 +17,9 @@ const ITEM_TYPE_NAMES = ["snippet", "prompt", "command", "note", "link", "file",
 
 export const createItemSchema = z
   .object({
-    title: z.string().trim().min(1, "Title is required"),
+    title: titleField,
     typeName: z.enum(ITEM_TYPE_NAMES, { error: "Type is required" }),
-    description: z.string().trim().nullable().optional(),
+    description: descriptionField,
     content: z.string().trim().nullable().optional(),
     language: z.string().trim().nullable().optional(),
     url: z
@@ -30,8 +31,8 @@ export const createItemSchema = z
     fileUrl: z.string().trim().nullable().optional(),
     fileName: z.string().trim().nullable().optional(),
     fileSize: z.number().int().positive().nullable().optional(),
-    tags: z.array(z.string().trim().min(1)).default([]),
-    collectionIds: z.array(z.string()).default([]),
+    tags: tagsField,
+    collectionIds: collectionIdsField,
   })
   .refine((data) => data.typeName !== "link" || !!data.url, {
     message: "URL is required for link type",
