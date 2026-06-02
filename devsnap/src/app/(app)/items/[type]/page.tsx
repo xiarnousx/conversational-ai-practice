@@ -6,6 +6,9 @@ import ItemRow from "@/components/dashboard/ItemRow";
 import ImageThumbnailCard from "@/components/items/ImageThumbnailCard";
 import FileListRow from "@/components/items/FileListRow";
 import Pagination from "@/components/ui/Pagination";
+import ProGate from "@/components/items/ProGate";
+
+const PRO_ONLY_TYPES = new Set(["file", "image"]);
 
 const SLUG_TO_TYPE: Record<string, string> = {
   snippets: "snippet",
@@ -34,6 +37,18 @@ export default async function ItemsTypePage({
   const { type } = await params;
   const typeName = SLUG_TO_TYPE[type];
   if (!typeName) notFound();
+
+  if (PRO_ONLY_TYPES.has(typeName) && !session.user.isPro) {
+    const label = slugToLabel(typeName);
+    return (
+      <div className="flex flex-col gap-6">
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">{label}</h1>
+        </div>
+        <ProGate typeName={typeName} />
+      </div>
+    );
+  }
 
   const { page: pageParam } = await searchParams;
   const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);

@@ -20,8 +20,10 @@ export default async function AppLayout({
     getSidebarCollections(userId),
     getItemsForSearch(userId),
     getCollectionsForSearch(userId),
-    prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { editorPreferences: true, isPro: true } }),
+    prisma.user.findUnique({ where: { id: userId }, select: { editorPreferences: true, isPro: true } }),
   ]);
+
+  if (!userRow) redirect("/sign-in");
 
   const editorPreferences = parseEditorPreferences(userRow.editorPreferences);
 

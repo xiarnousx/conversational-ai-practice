@@ -26,15 +26,18 @@ export async function updateItem(
     return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
 
-  const updated = await dbUpdateItem(session.user.id, itemId, {
-    ...parsed.data,
-    collectionIds: parsed.data.collectionIds ?? [],
-  });
-  if (!updated) {
-    return { success: false, error: "Item not found" };
+  try {
+    const updated = await dbUpdateItem(session.user.id, itemId, {
+      ...parsed.data,
+      collectionIds: parsed.data.collectionIds ?? [],
+    });
+    if (!updated) {
+      return { success: false, error: "Item not found" };
+    }
+    return { success: true, data: updated };
+  } catch {
+    return { success: false, error: "Failed to update item. Please try again." };
   }
-
-  return { success: true, data: updated };
 }
 
 export type CreateItemResult =
@@ -64,15 +67,18 @@ export async function createItem(input: CreateItemInput): Promise<CreateItemResu
     }
   }
 
-  const item = await createItemInDb(session.user.id, {
-    ...parsed.data,
-    collectionIds: parsed.data.collectionIds ?? [],
-  });
-  if (!item) {
-    return { success: false, error: "Failed to create item" };
+  try {
+    const item = await createItemInDb(session.user.id, {
+      ...parsed.data,
+      collectionIds: parsed.data.collectionIds ?? [],
+    });
+    if (!item) {
+      return { success: false, error: "Failed to create item" };
+    }
+    return { success: true, data: item };
+  } catch {
+    return { success: false, error: "Failed to create item. Please try again." };
   }
-
-  return { success: true, data: item };
 }
 
 export type ToggleFavoriteItemResult =

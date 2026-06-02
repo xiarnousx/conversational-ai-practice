@@ -54,8 +54,12 @@ export async function createCollection(
     return { success: false, error: "Free plan limit reached (3 collections). Upgrade to Pro for unlimited collections." };
   }
 
-  const collection = await createCollectionInDb(session.user.id, parsed.data);
-  return { success: true, data: collection };
+  try {
+    const collection = await createCollectionInDb(session.user.id, parsed.data);
+    return { success: true, data: collection };
+  } catch {
+    return { success: false, error: "Failed to create collection. Please try again." };
+  }
 }
 
 export async function updateCollection(

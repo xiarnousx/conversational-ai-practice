@@ -13,6 +13,8 @@
     "db:studio": "prisma studio",
     "db:status": "prisma migrate status",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed-mark": "tsx prisma/seed-mark.ts",
+    "db:clear-users": "tsx prisma/clear-users.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
