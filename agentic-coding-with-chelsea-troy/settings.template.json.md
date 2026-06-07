@@ -23,6 +23,7 @@
                 "NODE_ENV": "development"
         },
         // Hooks
+        // list of hooks`
         // Sandbox
         "sandbox" : {
                 "enabled": true,
