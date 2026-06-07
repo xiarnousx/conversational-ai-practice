@@ -1,5 +1,5 @@
 If you want global command for all repositories
 
 ```
- cd ~/.claude/commands
+ cd ~/.claude/commands test
 ```
