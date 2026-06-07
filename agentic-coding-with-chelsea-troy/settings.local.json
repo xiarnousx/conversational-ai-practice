@@ -1,0 +1,9 @@
+{
+    "hooks": {
+        "PostToolUse": {
+            "matcher": "*",
+            "type": "command",
+            "command": "echo 'Tool used: {tool_name}'"
+        }
+    }
+}
