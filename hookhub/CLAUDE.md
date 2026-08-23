@@ -2,6 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **Important:** `hookhub` is a standalone project, independent of the parent `conversational-ai`
+> git repository it lives under. That parent folder is just a directory containing multiple
+> separate, unrelated projects — do not assume conventions, dependencies, or context from other
+> subprojects in `conversational-ai` apply here.
+
 ## Commands
 
 ```bash

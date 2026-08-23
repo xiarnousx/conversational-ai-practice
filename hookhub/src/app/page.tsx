@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CATEGORY_LABELS, hooks, type Category } from "@/data/hooks";
 import HookCard from "@/components/HookCard";
+import Hero from "@/components/heros/Hero";
 import Footer from "@/components/Footer";
 
 const CATEGORY_COUNTS = Object.fromEntries(
@@ -10,8 +11,13 @@ const CATEGORY_COUNTS = Object.fromEntries(
   ])
 ) as Record<Category, number>;
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ hero?: string }>;
+}) {
   const featured = hooks.slice(0, 3);
+  const { hero } = await searchParams;
 
   return (
     <div className="min-h-screen bg-zinc-50">
@@ -29,32 +35,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <section className="mx-auto max-w-6xl px-6 py-20 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">
-          Discover open-source hooks for Claude Code
-        </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-zinc-600">
-          A curated directory of {hooks.length} hooks for security, code
-          quality, session management, notifications, logging, and workflow
-          automation — ready to drop into your project.
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link
-            href="/browse"
-            className="rounded-full bg-zinc-900 px-6 py-2.5 text-sm font-semibold text-white hover:bg-zinc-800"
-          >
-            Browse hooks
-          </Link>
-          <a
-            href="https://github.com/anthropics/claude-code-hooks-examples"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-zinc-900 ring-1 ring-zinc-200 hover:bg-zinc-100"
-          >
-            View examples on GitHub
-          </a>
-        </div>
-      </section>
+      <Hero hookCount={hooks.length} variant={hero} />
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
