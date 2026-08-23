@@ -1,0 +1,1 @@
+/statusline I want you to create a statusline that displays the current used output-style. You should implement it in python and run it through uv.

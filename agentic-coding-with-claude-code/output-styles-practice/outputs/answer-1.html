@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>:: WHAT IS MY OUTPUT STYLE ::</title>
+<style>
+  body {
+    background: #1a1a1a;
+    color: #33ff33;
+    font-family: 'Courier New', Monaco, Consolas, monospace;
+    text-shadow: 0 0 4px #33ff3399;
+    padding: 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+  h1, h2 { color: #ffb000; text-shadow: 0 0 5px #ffb00099; }
+  pre {
+    color: #33ff33;
+    white-space: pre-wrap;
+  }
+  .box {
+    border: 1px solid #33ff33;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 0 8px #33ff3333 inset;
+  }
+  .divider { color: #ffb000; margin: 1.5rem 0; }
+  code {
+    color: #ffb000;
+    background: #262626;
+    padding: 0 .3rem;
+  }
+  ul { list-style: none; padding-left: 0; }
+  ul li::before { content: "» "; color: #ffb000; }
+  footer { color: #666; text-align: center; margin-top: 3rem; }
+</style>
+</head>
+<body>
+
+<header>
+<pre>
+╔══════════════════════════════════════════════════════╗
+║   Q U E R Y :   " W H A T   I S   Y O U R             ║
+║                   O U T P U T   S T Y L E ? "         ║
+╚══════════════════════════════════════════════════════╝
+</pre>
+</header>
+
+<main>
+
+<section class="box">
+<h1>▓▓ ANSWER ▓▓</h1>
+<p>My active output style this session is <code>HTML-1</code> —
+a retro, ASCII-decorated, terminal/BBS-styled HTML format.
+Every chat reply I send (not tool calls, not files I write
+unless asked) gets rendered as a complete, self-contained
+HTML5 document dressed up like a late-1990s hacker
+bulletin board.</p>
+</section>
+
+<pre class="divider">──────────────────────────────────────────────────────────</pre>
+
+<section>
+<h2>◆ WHERE IT CAME FROM</h2>
+<p>Output styles are a Claude Code feature: reusable
+system-prompt overlays stored as markdown files with
+YAML frontmatter. Mine lives at:</p>
+<pre>~/.claude/output-styles/html-1.md</pre>
+<p>Frontmatter:</p>
+<pre>---
+name: HTML-1
+description: Format responses as retro HTML pages with
+             ASCII art styling like a vintage blog
+keep-coding-instructions: true
+---</pre>
+<p><code>keep-coding-instructions: true</code> means the
+style layers on top of my normal engineering behavior —
+it changes presentation, not judgment, code quality, or
+tool usage.</p>
+</section>
+
+<pre class="divider">──────────────────────────────────────────────────────────</pre>
+
+<section>
+<h2>◆ WHAT THE STYLE ACTUALLY MANDATES</h2>
+<ul>
+  <li>Complete HTML5 documents — DOCTYPE, head, body, a
+      real &lt;title&gt;, semantic tags (header/main/section/
+      footer)</li>
+  <li>ASCII-art banners and box-drawing dividers
+      (═ ║ ╔ ╗ ╚ ╝ ─ * #) for headers and section breaks</li>
+  <li>Embedded &lt;style&gt; block: monospace font stack,
+      dark background (#1a1a1a / #2d2d2d), light retro
+      text (green-on-black / amber-on-black), subtle
+      text-shadow "glow"</li>
+  <li>Blog-post-like structure: sections, dividers between
+      topics, a decorative footer</li>
+  <li>Terminal flourishes where they fit — prompts,
+      progress-bar-looking ASCII, BBS-menu vibes</li>
+</ul>
+</section>
+
+<pre class="divider">──────────────────────────────────────────────────────────</pre>
+
+<section>
+<h2>◆ SCOPE &amp; LIFETIME</h2>
+<ul>
+  <li>Applies to my conversational replies only</li>
+  <li>Does <em>not</em> change code I write, commands I
+      run, or files I create unless the task itself is
+      "write me HTML in this style"</li>
+  <li>Persists for this session until <code>/clear</code>
+      is issued</li>
+</ul>
+</section>
+
+</main>
+
+<pre class="divider">──────────────────────────────────────────────────────────</pre>
+
+<footer>
+<pre>
+*  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *
+  saved to: outputs/answer-1.html
+  style engine: HTML-1 | status: ACTIVE
+*  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *
+</pre>
+</footer>
+
+</body>
+</html>
